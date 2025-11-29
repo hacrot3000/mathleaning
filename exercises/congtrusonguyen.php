@@ -24,6 +24,7 @@
     var problemCount = 0;
     var historyManager = null;
     var storage = createLocalStorageManager('congtru');
+    var problemCountManager = createProblemCountManager('congtru');
 
     // Initialize
     $(function () {
@@ -39,7 +40,7 @@
         });
         
         loadFromLocalStorage();
-        problemCount = 0;
+        problemCount = problemCountManager.get();
         
         if (currentProblem === null) {
             generateNewProblem();
@@ -137,7 +138,7 @@
         if (userAnswer === currentProblem.correctAnswer) {
             showFeedback(true);
             
-            problemCount++;
+            problemCount = problemCountManager.increment();
             saveProblemToHistoryLocal(false);
             
             setTimeout(function() {

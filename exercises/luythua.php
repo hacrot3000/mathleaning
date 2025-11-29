@@ -29,6 +29,7 @@
     var problemCount = 0;
     var historyManager = null;
     var storage = createLocalStorageManager('luythua');
+    var problemCountManager = createProblemCountManager('luythua');
 
     // Initialize
     $(function () {
@@ -44,7 +45,7 @@
         });
         
         loadFromLocalStorage();
-        problemCount = 0;
+        problemCount = problemCountManager.get();
         
         if (currentProblem === null) {
             generateNewProblem();
@@ -439,7 +440,7 @@
         if (Math.abs(userAnswer - correctAnswer) < 0.01) {
             showFeedback(true);
             
-            problemCount++;
+            problemCount = problemCountManager.increment();
             saveProblemToHistoryLocal(false);
             
             setTimeout(function() {

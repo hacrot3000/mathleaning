@@ -38,7 +38,9 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
     var problemCount = 0;
     var historyManager = null;
     var FORCE_MIXED_MODE = <?php echo $FORCE_MIXED_MODE ? 'true' : 'false'; ?>;
-    var storage = createLocalStorageManager(FORCE_MIXED_MODE ? 'phanso_mixed' : 'phanso');
+    var storageKey = FORCE_MIXED_MODE ? 'phanso_mixed' : 'phanso';
+    var storage = createLocalStorageManager(storageKey);
+    var problemCountManager = createProblemCountManager(storageKey);
 
     // Initialize
     $(function () {
@@ -54,7 +56,7 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
         });
         
         loadFromLocalStorage();
-        problemCount = 0;
+        problemCount = problemCountManager.get();
         
         if (currentProblem === null) {
             generateNewProblem();
@@ -312,7 +314,7 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
         if (userAnswer.num === correctAnswer.num && userAnswer.den === correctAnswer.den) {
             showFeedback(true);
             
-            problemCount++;
+            problemCount = problemCountManager.increment();
             saveProblemToHistoryLocal(false);
             
             setTimeout(function() {

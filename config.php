@@ -5,13 +5,27 @@
  * Thay đổi các giá trị này để điều chỉnh độ khó của bài toán
  */
 
+
+// Cấu hình ngưỡng "Perfect Answers" (câu trả lời đúng ngay lần đầu) cho mỗi exercise type
+// Khi số câu đúng ngay lần đầu >= ngưỡng này, tab ngày đó sẽ được highlight màu xanh
+$config_perfect_threshold = [
+    'congtrusonguyen' => 50,        // Ngưỡng cho Cộng Trừ Số Nguyên
+    'nhanchiasonguyen' => 50,       // Ngưỡng cho Nhân Chia Số Nguyên
+    'phanso' => 30,                  // Ngưỡng cho Cộng Trừ Phân Số
+    'phanso_mixed' => 30,            // Ngưỡng cho Cộng Trừ Hỗn Số
+    'nhanchiaphanso' => 30,          // Ngưỡng cho Nhân Chia Phân Số
+    'nhanchiaphanso_mixed' => 20,    // Ngưỡng cho Nhân Chia Hỗn Số
+    'luythua' => 50                  // Ngưỡng cho Luỹ Thừa
+];
+
+
 // Cấu hình cho Cộng Trừ Số Nguyên
 $config_congtru = [
     // Độ khó Dễ (Câu 1-5)
     'easy' => [
         'threshold' => 5,           // Số câu hỏi ở độ khó này
-        'min' => -99,               // Số nhỏ nhất
-        'max' => 99,                // Số lớn nhất
+        'min' => -15,               // Số nhỏ nhất
+        'max' => 15,                // Số lớn nhất
         'num_operands' => 2,        // Số toán hạng (2 = 1 toán tử)
         'require_negative' => false // Bắt buộc có số âm
     ],
@@ -69,18 +83,6 @@ $config_nhanchia = [
 $config_general = [
     'decimal_places' => 2,          // Số chữ số thập phân tối đa cho phép chia
     'division_integer_ratio' => 0.7 // Tỉ lệ kết quả chia là số nguyên (70%)
-];
-
-// Cấu hình ngưỡng "Perfect Answers" (câu trả lời đúng ngay lần đầu) cho mỗi exercise type
-// Khi số câu đúng ngay lần đầu >= ngưỡng này, tab ngày đó sẽ được highlight màu xanh
-$config_perfect_threshold = [
-    'congtrusonguyen' => 10,        // Ngưỡng cho Cộng Trừ Số Nguyên
-    'nhanchiasonguyen' => 10,       // Ngưỡng cho Nhân Chia Số Nguyên
-    'phanso' => 8,                  // Ngưỡng cho Cộng Trừ Phân Số
-    'phanso_mixed' => 8,            // Ngưỡng cho Cộng Trừ Hỗn Số
-    'nhanchiaphanso' => 8,          // Ngưỡng cho Nhân Chia Phân Số
-    'nhanchiaphanso_mixed' => 8,    // Ngưỡng cho Nhân Chia Hỗn Số
-    'luythua' => 5                  // Ngưỡng cho Luỹ Thừa
 ];
 
 // Cấu hình cho Cộng Trừ Phân Số

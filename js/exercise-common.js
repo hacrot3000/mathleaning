@@ -498,6 +498,68 @@ function formatNumber(num) {
 // ============================================================================
 
 /**
+ * Get today's date string (YYYY-MM-DD)
+ * @returns {string} Today's date string
+ */
+function getTodayDateString() {
+    var today = new Date();
+    return today.getFullYear() + '-' + 
+           String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+           String(today.getDate()).padStart(2, '0');
+}
+
+/**
+ * Create problemCount manager that resets daily
+ * @param {string} keyPrefix - Prefix for localStorage keys
+ * @returns {object} Object with get, increment, and reset functions
+ */
+function createProblemCountManager(keyPrefix) {
+    var storageKey = keyPrefix + '_problemCount';
+    var dateKey = keyPrefix + '_problemCountDate';
+    
+    return {
+        /**
+         * Get current problemCount (resets if date changed)
+         * @returns {number} Current problemCount
+         */
+        get: function() {
+            var savedDate = loadFromStorage(dateKey);
+            var today = getTodayDateString();
+            
+            // If date changed, reset problemCount
+            if (savedDate !== today) {
+                saveToStorage(storageKey, 0);
+                saveToStorage(dateKey, today);
+                return 0;
+            }
+            
+            // Return saved problemCount or 0
+            return parseInt(loadFromStorage(storageKey) || '0', 10);
+        },
+        
+        /**
+         * Increment problemCount and save
+         * @returns {number} New problemCount
+         */
+        increment: function() {
+            var current = this.get();
+            var newCount = current + 1;
+            saveToStorage(storageKey, newCount);
+            saveToStorage(dateKey, getTodayDateString());
+            return newCount;
+        },
+        
+        /**
+         * Reset problemCount to 0
+         */
+        reset: function() {
+            saveToStorage(storageKey, 0);
+            saveToStorage(dateKey, getTodayDateString());
+        }
+    };
+}
+
+/**
  * Create localStorage management functions
  * @param {string} keyPrefix - Prefix for localStorage keys
  * @returns {object} Object with save and load functions
