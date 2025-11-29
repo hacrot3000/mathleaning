@@ -174,15 +174,16 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
             var num = frac.mixedNumerator;
             var den = frac.mixedDenominator;
             
-            var mixedLatex;
-            if (whole < 0) {
-                mixedLatex = whole + '\\dfrac{' + num + '}{' + den + '}';
-                if (addParentheses) {
-                    mixedLatex = '\\left(' + mixedLatex + '\\right)';
-                }
-            } else {
-                mixedLatex = whole + '\\dfrac{' + num + '}{' + den + '}';
+            var mixedLatex = whole + '\\dfrac{' + num + '}{' + den + '}';
+            
+            // Calculate total value to check if negative
+            var sign = whole >= 0 ? 1 : -1;
+            var totalValue = whole + sign * (num / den);
+            
+            if (addParentheses && totalValue < 0) {
+                mixedLatex = '\\left(' + mixedLatex + '\\right)';
             }
+            
             return mixedLatex;
         }
         
@@ -215,8 +216,13 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
             }
         }
         
-        if (addParentheses && hasExternalNegativeSign) {
-            fractionLatex = '\\left(' + fractionLatex + '\\right)';
+        // Add parentheses if requested and fraction is negative
+        if (addParentheses) {
+            var fractionValue = frac.num / frac.den;
+            if (fractionValue < 0) {
+                // Always wrap negative fractions in parentheses when addParentheses is true
+                fractionLatex = '\\left(' + fractionLatex + '\\right)';
+            }
         }
         
         return fractionLatex;

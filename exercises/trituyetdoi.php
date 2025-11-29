@@ -361,10 +361,16 @@
                 // Wrap operand in absolute value bars
                 operandLatex = '\\left|' + operandLatex + '\\right|';
             } else if (i > 0) {
-                // Only add parentheses for negative numbers when NOT using absolute value
-                if ((currentProblem.operands[i].type === 'integer' && currentProblem.operands[i].value < 0) ||
-                    (currentProblem.operands[i].type === 'decimal' && currentProblem.operands[i].value < 0)) {
-                    operandLatex = '(' + operandLatex + ')';
+                // Add parentheses for negative numbers when NOT using absolute value
+                var operandValue = calculateOperand(currentProblem.operands[i]);
+                if (operandValue < 0) {
+                    // For fractions and mixed numbers, wrap in parentheses
+                    if (currentProblem.operands[i].type === 'fraction' || currentProblem.operands[i].type === 'mixed') {
+                        operandLatex = '\\left(' + operandLatex + '\\right)';
+                    } else {
+                        // For integers and decimals, simple parentheses
+                        operandLatex = '(' + operandLatex + ')';
+                    }
                 }
             }
             
@@ -443,6 +449,15 @@
             
             if (currentProblem.hasAbsolute[i]) {
                 operandText = '|' + operandText + '|';
+            } else if (i > 0) {
+                // Add parentheses for negative fractions/mixed numbers after operators
+                var operandValue = calculateOperand(currentProblem.operands[i]);
+                if (operandValue < 0 && (currentProblem.operands[i].type === 'fraction' || currentProblem.operands[i].type === 'mixed')) {
+                    // Check if already has parentheses (from formatOperandText)
+                    if (operandText.charAt(0) !== '(') {
+                        operandText = '(' + operandText + ')';
+                    }
+                }
             }
             
             if (i > 0) {
