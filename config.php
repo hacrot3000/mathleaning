@@ -106,10 +106,10 @@ $config_phanso = [
         'start_from' => 12,         // Bắt đầu xuất hiện hỗn số từ câu thứ n
         'probability' => 0.3,       // Xác suất xuất hiện hỗn số (30%)
         'whole_min' => 1,           // Phần nguyên tối thiểu
-        'whole_max' => 20,          // Phần nguyên tối đa
-        'numerator_max' => 99,      // Tử số tối đa (2 chữ số)
+        'whole_max' => 6,          // Phần nguyên tối đa
+        'numerator_max' => 30,      // Tử số tối đa (2 chữ số)
         'denominator_min' => 5,     // Mẫu số tối thiểu
-        'denominator_max' => 30     // Mẫu số tối đa
+        'denominator_max' => 15     // Mẫu số tối đa
     ]
 ];
 
@@ -148,10 +148,10 @@ $config_nhanchiaphanso = [
         'start_from' => 12,         // Bắt đầu xuất hiện hỗn số từ câu thứ n
         'probability' => 0.3,       // Xác suất xuất hiện hỗn số (30%)
         'whole_min' => 1,           // Phần nguyên tối thiểu
-        'whole_max' => 15,          // Phần nguyên tối đa
-        'numerator_max' => 99,      // Tử số tối đa (2 chữ số)
+        'whole_max' => 6,          // Phần nguyên tối đa
+        'numerator_max' => 30,      // Tử số tối đa (2 chữ số)
         'denominator_min' => 5,     // Mẫu số tối thiểu
-        'denominator_max' => 30     // Mẫu số tối đa
+        'denominator_max' => 15     // Mẫu số tối đa
     ]
 ];
 
