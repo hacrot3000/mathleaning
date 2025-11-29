@@ -71,9 +71,40 @@ $config_general = [
     'division_integer_ratio' => 0.7 // Tỉ lệ kết quả chia là số nguyên (70%)
 ];
 
+// Cấu hình cho Cộng Trừ Phân Số
+$config_phanso = [
+    // Độ khó Dễ (Câu 1-5)
+    'easy' => [
+        'threshold' => 5,           // Số câu hỏi ở độ khó này
+        'min' => -20,               // Giá trị nhỏ nhất cho tử/mẫu
+        'max' => 20,                // Giá trị lớn nhất cho tử/mẫu
+        'num_operands' => 2,        // Số toán hạng (2 = 1 toán tử)
+        'require_negative' => false // Bắt buộc có phân số âm
+    ],
+    
+    // Độ khó Trung bình (Câu 6-15)
+    'medium' => [
+        'threshold' => 15,          // Tổng câu hỏi đến hết độ khó này
+        'min' => -50,
+        'max' => 50,
+        'num_operands_min' => 2,    // Số toán hạng tối thiểu
+        'num_operands_max' => 3,    // Số toán hạng tối đa
+        'require_negative' => true
+    ],
+    
+    // Độ khó Khó (Câu 16+)
+    'hard' => [
+        'min' => -100,              // Có thể thay đổi giới hạn tùy ý
+        'max' => 100,               // Có thể thay đổi giới hạn tùy ý
+        'num_operands_min' => 2,
+        'num_operands_max' => 3,
+        'require_negative' => true
+    ]
+];
+
 // Export config dưới dạng JSON để JavaScript có thể sử dụng
 function getConfigAsJSON($config_name) {
-    global $config_congtru, $config_nhanchia, $config_general;
+    global $config_congtru, $config_nhanchia, $config_general, $config_phanso;
     
     $config = null;
     switch ($config_name) {
@@ -82,6 +113,9 @@ function getConfigAsJSON($config_name) {
             break;
         case 'nhanchia':
             $config = $config_nhanchia;
+            break;
+        case 'phanso':
+            $config = $config_phanso;
             break;
         case 'general':
             $config = $config_general;

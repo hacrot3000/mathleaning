@@ -68,8 +68,8 @@
         <script src="../lib/ion.sound-3.0.7/ion.sound.min.js"></script>
         <?php require_once '../config.php'; ?>
         <script type="text/javascript">
-            // Load config from PHP - use congtru config for difficulty levels
-            var CONFIG = <?php echo getConfigAsJSON('congtru'); ?>;
+            // Load config from PHP
+            var CONFIG = <?php echo getConfigAsJSON('phanso'); ?>;
         </script>
     </head>
     <body class="with-padding">
@@ -158,7 +158,7 @@
             }
 
             function simplifyFraction(num, den) {
-                if (den === 0) return {num: 0, den: 1};
+                if (den === 0) return {num: 0, den: 1, normalized: true};
                 
                 var g = gcd(num, den);
                 num = num / g;
@@ -170,19 +170,39 @@
                     den = -den;
                 }
                 
-                return {num: num, den: den};
+                return {num: num, den: den, normalized: true};
+            }
+            
+            function createFractionVariant(num, den) {
+                // Tạo biến thể phân số với dấu âm ở các vị trí khác nhau
+                // normalized = false để giữ nguyên dạng không chuẩn hóa
+                
+                if (num === 0 || den === 1) {
+                    return {num: num, den: den, normalized: true};
+                }
+                
+                // 30% giữ dấu âm ở mẫu thay vì tử
+                if (Math.random() < 0.3 && num < 0) {
+                    return {num: -num, den: -den, normalized: false};
+                }
+                
+                return {num: num, den: den, normalized: true};
             }
 
             function addFractions(f1, f2) {
                 var num = f1.num * f2.den + f2.num * f1.den;
                 var den = f1.den * f2.den;
-                return simplifyFraction(num, den);
+                var result = simplifyFraction(num, den);
+                result.normalized = true; // Kết quả luôn chuẩn hóa
+                return result;
             }
 
             function subtractFractions(f1, f2) {
                 var num = f1.num * f2.den - f2.num * f1.den;
                 var den = f1.den * f2.den;
-                return simplifyFraction(num, den);
+                var result = simplifyFraction(num, den);
+                result.normalized = true; // Kết quả luôn chuẩn hóa
+                return result;
             }
 
             function generateRandomFraction(minVal, maxVal) {
@@ -203,7 +223,11 @@
                     break;
                 } while (true);
                 
-                return simplifyFraction(num, den);
+                // Rút gọn phân số
+                var simplified = simplifyFraction(num, den);
+                
+                // Tạo biến thể ngẫu nhiên (đôi khi giữ dấu ở mẫu)
+                return createFractionVariant(simplified.num, simplified.den);
             }
 
             function generateNewProblem() {
@@ -212,24 +236,24 @@
                 var requireNegative = false;
                 var difficultyLevel = '';
                 
-                // Xác định độ khó
+                // Xác định độ khó dựa trên config
                 if (problemCount < CONFIG.easy.threshold) {
                     numOperands = CONFIG.easy.num_operands;
-                    minVal = -20;
-                    maxVal = 20;
-                    requireNegative = false;
+                    minVal = CONFIG.easy.min;
+                    maxVal = CONFIG.easy.max;
+                    requireNegative = CONFIG.easy.require_negative;
                     difficultyLevel = 'easy';
                 } else if (problemCount < CONFIG.medium.threshold) {
                     numOperands = getRndInteger(CONFIG.medium.num_operands_min, CONFIG.medium.num_operands_max);
-                    minVal = -50;
-                    maxVal = 50;
-                    requireNegative = true;
+                    minVal = CONFIG.medium.min;
+                    maxVal = CONFIG.medium.max;
+                    requireNegative = CONFIG.medium.require_negative;
                     difficultyLevel = 'medium';
                 } else {
                     numOperands = getRndInteger(CONFIG.hard.num_operands_min, CONFIG.hard.num_operands_max);
-                    minVal = -100;
-                    maxVal = 100;
-                    requireNegative = true;
+                    minVal = CONFIG.hard.min;
+                    maxVal = CONFIG.hard.max;
+                    requireNegative = CONFIG.hard.require_negative;
                     difficultyLevel = 'hard';
                 }
                 
@@ -288,7 +312,9 @@
 
             function formatFractionLatex(frac, addParentheses) {
                 // Tạo LaTeX syntax cho KaTeX
-                // addParentheses = true để thêm dấu ngoặc cho phân số âm
+                // addParentheses = true để thêm dấu ngoặc CHỈ KHI dấu âm ở ngoài phân số
+                
+                // Trường hợp số nguyên (mẫu = 1)
                 if (frac.den === 1) {
                     if (addParentheses && frac.num < 0) {
                         return '(' + frac.num + ')';
@@ -296,18 +322,47 @@
                     return frac.num.toString();
                 }
                 
-                var isNegative = frac.num < 0;
-                var absNum = Math.abs(frac.num);
                 var fractionLatex;
+                var hasExternalNegativeSign = false; // Dấu âm có nằm ngoài phân số không?
                 
-                if (isNegative) {
-                    fractionLatex = '-\\dfrac{' + absNum + '}{' + frac.den + '}';
-                    // Thêm dấu ngoặc nếu cần (để tránh nhầm lẫn với toán tử)
-                    if (addParentheses) {
-                        fractionLatex = '\\left(' + fractionLatex + '\\right)';
+                // Kiểm tra phân số có được chuẩn hóa chưa
+                if (frac.normalized === false && frac.den < 0) {
+                    // Trường hợp dấu âm ở mẫu: a/(-b) hoặc (-a)/(-b)
+                    if (frac.num < 0) {
+                        // (-a)/(-b) - dấu âm ở cả tử và mẫu (trong phân số)
+                        fractionLatex = '\\dfrac{(' + frac.num + ')}{(' + frac.den + ')}';
+                        hasExternalNegativeSign = false; // Dấu đã trong phân số
+                    } else {
+                        // a/(-b) - dấu âm ở mẫu (trong phân số)
+                        fractionLatex = '\\dfrac{' + frac.num + '}{(' + frac.den + ')}';
+                        hasExternalNegativeSign = false; // Dấu đã trong phân số
                     }
                 } else {
-                    fractionLatex = '\\dfrac{' + absNum + '}{' + frac.den + '}';
+                    // Trường hợp chuẩn (mẫu dương)
+                    var isNegative = frac.num < 0;
+                    var absNum = Math.abs(frac.num);
+                    
+                    if (isNegative) {
+                        // Đôi khi hiển thị dạng (-a)/b (dấu trong tử)
+                        if (Math.random() < 0.3) {
+                            fractionLatex = '\\dfrac{(' + frac.num + ')}{' + frac.den + '}';
+                            hasExternalNegativeSign = false; // Dấu đã trong tử
+                        } else {
+                            // Dạng -a/b (dấu ở ngoài phân số)
+                            fractionLatex = '-\\dfrac{' + absNum + '}{' + frac.den + '}';
+                            hasExternalNegativeSign = true; // Dấu nằm ngoài
+                        }
+                    } else {
+                        fractionLatex = '\\dfrac{' + absNum + '}{' + frac.den + '}';
+                        hasExternalNegativeSign = false;
+                    }
+                }
+                
+                // CHỈ thêm ngoặc khi:
+                // 1. addParentheses = true (không phải phân số đầu)
+                // 2. hasExternalNegativeSign = true (dấu âm nằm ngoài phân số)
+                if (addParentheses && hasExternalNegativeSign) {
+                    fractionLatex = '\\left(' + fractionLatex + '\\right)';
                 }
                 
                 return fractionLatex;
@@ -348,10 +403,9 @@
                 
                 for (var i = 0; i < currentProblem.operators.length; i++) {
                     latex += ' ' + currentProblem.operators[i] + ' ';
-                    // Các phân số sau cần thêm dấu ngoặc nếu âm
-                    var needParentheses = currentProblem.fractions[i + 1].num < 0 || 
-                                         (currentProblem.fractions[i + 1].den === 1 && currentProblem.fractions[i + 1].num < 0);
-                    latex += formatFractionLatex(currentProblem.fractions[i + 1], needParentheses);
+                    // Các phân số sau: luôn cho phép thêm ngoặc
+                    // Logic bên trong formatFractionLatex sẽ quyết định có thêm ngoặc hay không
+                    latex += formatFractionLatex(currentProblem.fractions[i + 1], true);
                 }
                 
                 latex += ' = ?';
@@ -367,11 +421,11 @@
                 // Hiển thị độ khó
                 var difficultyText = '';
                 if (problemCount < CONFIG.easy.threshold) {
-                    difficultyText = 'Dễ (tử/mẫu -20 đến 20, ' + (CONFIG.easy.num_operands - 1) + ' toán tử)';
+                    difficultyText = 'Dễ (tử/mẫu ' + CONFIG.easy.min + ' đến ' + CONFIG.easy.max + ', ' + (CONFIG.easy.num_operands - 1) + ' toán tử)';
                 } else if (problemCount < CONFIG.medium.threshold) {
-                    difficultyText = 'Trung bình (có phân số âm, -50 đến 50, ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' toán tử)';
+                    difficultyText = 'Trung bình (có phân số âm, ' + CONFIG.medium.min + ' đến ' + CONFIG.medium.max + ', ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' toán tử)';
                 } else {
-                    difficultyText = 'Khó (có phân số âm, -100 đến 100, ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' toán tử)';
+                    difficultyText = 'Khó (có phân số âm, ' + CONFIG.hard.min + ' đến ' + CONFIG.hard.max + ', ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' toán tử)';
                 }
                 
                 $('#difficulty-level').html(difficultyText);
