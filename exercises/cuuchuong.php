@@ -6,7 +6,7 @@ $use_katex = false;
 $use_user = false;
 $use_history = false;
 $config_general = false;
-include '../includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
         <?php
         if (empty($_GET['cuuchuong']))

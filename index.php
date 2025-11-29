@@ -68,7 +68,7 @@ $lang_code = getLangCode();
                 <p class="subtitle"><?php echo $lang['select_exercise']; ?></p>
                 
                 <div class="features">                
-                    <a href="cuuchuong/" class="feature-card green">
+                    <a href="exercises/cuuchuong" class="feature-card green">
                         <div class="feature-icon">✖️</div>
                         <div class="feature-title"><?php echo $lang['multiplication_table']; ?></div>
                         <div class="feature-description">
@@ -76,7 +76,7 @@ $lang_code = getLangCode();
                         </div>
                     </a>
                     
-                    <a href="congtrusonguyen/" class="feature-card blue">
+                    <a href="exercises/congtrusonguyen" class="feature-card blue">
                         <div class="feature-icon">➕➖</div>
                         <div class="feature-title"><?php echo $lang['add_subtract_integers']; ?></div>
                         <div class="feature-description">
@@ -84,7 +84,7 @@ $lang_code = getLangCode();
                         </div>
                     </a>
                     
-                    <a href="nhanchiasonguyen/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: -moz-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: -o-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);">
+                    <a href="exercises/nhanchiasonguyen" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: -moz-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: -o-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);">
                         <div class="feature-icon">✖️➗</div>
                         <div class="feature-title"><?php echo $lang['multiply_divide_integers']; ?></div>
                         <div class="feature-description">
@@ -92,7 +92,7 @@ $lang_code = getLangCode();
                         </div>
                     </a>
                     
-                    <a href="phanso/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -moz-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -o-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);">
+                    <a href="exercises/phanso" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -moz-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -o-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);">
                         <div class="feature-icon">➕➖</div>
                         <div class="feature-title"><?php echo $lang['add_subtract_fractions']; ?></div>
                         <div class="feature-description">
@@ -100,7 +100,7 @@ $lang_code = getLangCode();
                         </div>
                     </a>
                     
-                    <a href="nhanchiaphanso/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -moz-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -o-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: linear-gradient(135deg, #a044ff 0%, #6a3093 100%);">
+                    <a href="exercises/nhanchiaphanso" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -moz-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -o-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: linear-gradient(135deg, #a044ff 0%, #6a3093 100%);">
                         <div class="feature-icon">✖️➗</div>
                         <div class="feature-title"><?php echo $lang['multiply_divide_fractions']; ?></div>
                         <div class="feature-description">
@@ -108,7 +108,7 @@ $lang_code = getLangCode();
                         </div>
                     </a>
                     
-                    <a href="phanso/?mode=mixed" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%); background: -moz-linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%); background: -o-linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%); background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);">
+                    <a href="exercises/phanso-mixed" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%); background: -moz-linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%); background: -o-linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%); background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);">
                         <div class="feature-icon">➕➖</div>
                         <div class="feature-title"><?php echo $lang['add_subtract_mixed']; ?></div>
                         <div class="feature-description">
@@ -116,7 +116,7 @@ $lang_code = getLangCode();
                         </div>
                     </a>
                     
-                    <a href="nhanchiaphanso/?mode=mixed" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #00796B 0%, #00695C 100%); background: -moz-linear-gradient(135deg, #00796B 0%, #00695C 100%); background: -o-linear-gradient(135deg, #00796B 0%, #00695C 100%); background: linear-gradient(135deg, #00796B 0%, #00695C 100%);">
+                    <a href="exercises/nhanchiaphanso-mixed" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #00796B 0%, #00695C 100%); background: -moz-linear-gradient(135deg, #00796B 0%, #00695C 100%); background: -o-linear-gradient(135deg, #00796B 0%, #00695C 100%); background: linear-gradient(135deg, #00796B 0%, #00695C 100%);">
                         <div class="feature-icon">✖️➗</div>
                         <div class="feature-title"><?php echo $lang['multiply_divide_mixed']; ?></div>
                         <div class="feature-description">

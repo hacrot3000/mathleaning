@@ -1,0 +1,13 @@
+RewriteEngine On
+RewriteBase /hoctoan/
+
+# Ẩn phần mở rộng .php cho exercises
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^exercises/([^/]+)$ exercises/index.php?type=$1 [QSA,L]
+
+# Ẩn phần mở rộng .php cho các file khác (nếu cần)
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule ^(.*)$ $1.php [L]
+
