@@ -3,25 +3,25 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-        <title>Cộng Trừ Phân Số</title>
+        <title>Nhân Chia Phân Số</title>
         <link rel="stylesheet" href="../css/common.css">
         <link rel="stylesheet" href="../lib/katex-0.16.9/katex/katex.min.css">
         <style type="text/css">
-            /* Override colors for fraction operations */
+            /* Override colors for fraction multiplication/division */
             .submit-btn {
-                background-color: #E91E63;
+                background-color: #9C27B0;
             }
             .submit-btn:hover {
-                background-color: #C2185B;
+                background-color: #7B1FA2;
             }
             .history h3 {
-                border-bottom-color: #E91E63;
+                border-bottom-color: #9C27B0;
             }
             .history-item {
-                border-left-color: #E91E63;
+                border-left-color: #9C27B0;
             }
             .history-problem {
-                color: #E91E63;
+                color: #9C27B0;
             }
             .problem {
                 font-size: 200%;
@@ -31,10 +31,10 @@
                 justify-content: center;
             }
             .fraction-input-group input {
-                border-color: #E91E63;
+                border-color: #9C27B0;
             }
             .fraction-line {
-                background-color: #E91E63;
+                background-color: #9C27B0;
             }
         </style>
         <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -45,14 +45,14 @@
         <?php require_once '../config.php'; ?>
         <script type="text/javascript">
             // Load config from PHP
-            var CONFIG = <?php echo getConfigAsJSON('phanso'); ?>;
+            var CONFIG = <?php echo getConfigAsJSON('nhanchiaphanso'); ?>;
         </script>
     </head>
     <body class="with-padding">
         <a href="../" class="home-btn">🏠 Trang chủ</a>
         
         <div class="container">
-            <h1>Luyện Tập Cộng Trừ Phân Số</h1>
+            <h1>Luyện Tập Nhân Chia Phân Số</h1>
             
             <div style="font-size: 100%; color: #666; margin-bottom: 20px;">
                 <strong>Độ khó:</strong> <span id="difficulty-level"></span>
@@ -109,10 +109,6 @@
                 displayHistory();
             });
 
-            function getRndInteger(min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
-            }
-
             function gcd(a, b) {
                 a = Math.abs(a);
                 b = Math.abs(b);
@@ -156,17 +152,18 @@
                 return {num: num, den: den, normalized: true};
             }
 
-            function addFractions(f1, f2) {
-                var num = f1.num * f2.den + f2.num * f1.den;
+            function multiplyFractions(f1, f2) {
+                var num = f1.num * f2.num;
                 var den = f1.den * f2.den;
                 var result = simplifyFraction(num, den);
                 result.normalized = true; // Kết quả luôn chuẩn hóa
                 return result;
             }
 
-            function subtractFractions(f1, f2) {
-                var num = f1.num * f2.den - f2.num * f1.den;
-                var den = f1.den * f2.den;
+            function divideFractions(f1, f2) {
+                // Chia = nhân với nghịch đảo
+                var num = f1.num * f2.den;
+                var den = f1.den * f2.num;
                 var result = simplifyFraction(num, den);
                 result.normalized = true; // Kết quả luôn chuẩn hóa
                 return result;
@@ -185,7 +182,10 @@
                     if (num < 0 && den < 0) continue;
                     
                     // Tránh tử = 0 quá nhiều
-                    if (num === 0 && Math.random() < 0.7) continue;
+                    if (num === 0 && Math.random() < 0.8) continue;
+                    
+                    // Tránh tử hoặc mẫu = 1 quá nhiều (đặc biệt cho nhân chia)
+                    if ((Math.abs(num) === 1 || Math.abs(den) === 1) && Math.random() < 0.5) continue;
                     
                     break;
                 } while (true);
@@ -231,7 +231,12 @@
                 for (var i = 0; i < numOperands; i++) {
                     fractions.push(generateRandomFraction(minVal, maxVal));
                     if (i < numOperands - 1) {
-                        operators.push(Math.random() < 0.5 ? '+' : '-');
+                        // Độ dễ: chỉ nhân, độ trung bình và khó: cả nhân và chia
+                        if (difficultyLevel === 'easy') {
+                            operators.push('×');
+                        } else {
+                            operators.push(Math.random() < 0.5 ? '×' : '÷');
+                        }
                     }
                 }
                 
@@ -257,10 +262,10 @@
                 // Tính toán kết quả đúng
                 var result = fractions[0];
                 for (var i = 0; i < operators.length; i++) {
-                    if (operators[i] === '+') {
-                        result = addFractions(result, fractions[i + 1]);
+                    if (operators[i] === '×') {
+                        result = multiplyFractions(result, fractions[i + 1]);
                     } else {
-                        result = subtractFractions(result, fractions[i + 1]);
+                        result = divideFractions(result, fractions[i + 1]);
                     }
                 }
                 
@@ -387,12 +392,16 @@
                 
                 // Hiển thị độ khó
                 var difficultyText = '';
+                var operatorName = '';
                 if (problemCount < CONFIG.easy.threshold) {
-                    difficultyText = 'Dễ (tử/mẫu ' + CONFIG.easy.min + ' đến ' + CONFIG.easy.max + ', ' + (CONFIG.easy.num_operands - 1) + ' toán tử)';
+                    operatorName = 'chỉ nhân';
+                    difficultyText = 'Dễ (' + operatorName + ', tử/mẫu ' + CONFIG.easy.min + ' đến ' + CONFIG.easy.max + ', ' + (CONFIG.easy.num_operands - 1) + ' toán tử)';
                 } else if (problemCount < CONFIG.medium.threshold) {
-                    difficultyText = 'Trung bình (có phân số âm, ' + CONFIG.medium.min + ' đến ' + CONFIG.medium.max + ', ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' toán tử)';
+                    operatorName = 'nhân/chia';
+                    difficultyText = 'Trung bình (' + operatorName + ', có phân số âm, ' + CONFIG.medium.min + ' đến ' + CONFIG.medium.max + ', ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' toán tử)';
                 } else {
-                    difficultyText = 'Khó (có phân số âm, ' + CONFIG.hard.min + ' đến ' + CONFIG.hard.max + ', ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' toán tử)';
+                    operatorName = 'nhân/chia';
+                    difficultyText = 'Khó (' + operatorName + ', có phân số âm, ' + CONFIG.hard.min + ' đến ' + CONFIG.hard.max + ', ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' toán tử)';
                 }
                 
                 $('#difficulty-level').html(difficultyText);
@@ -501,21 +510,21 @@
             }
 
             function saveToLocalStorage() {
-                saveToStorage('currentProblemFraction', currentProblem);
-                saveToStorage('currentWrongAnswersFraction', currentWrongAnswers);
-                saveToStorage('problemHistoryFraction', problemHistory);
+                saveToStorage('currentProblemFractionMultDiv', currentProblem);
+                saveToStorage('currentWrongAnswersFractionMultDiv', currentWrongAnswers);
+                saveToStorage('problemHistoryFractionMultDiv', problemHistory);
             }
 
             function loadFromLocalStorage() {
-                currentProblem = loadFromStorage('currentProblemFraction');
-                currentWrongAnswers = loadFromStorage('currentWrongAnswersFraction') || [];
-                problemHistory = loadFromStorage('problemHistoryFraction') || [];
+                currentProblem = loadFromStorage('currentProblemFractionMultDiv');
+                currentWrongAnswers = loadFromStorage('currentWrongAnswersFractionMultDiv') || [];
+                problemHistory = loadFromStorage('problemHistoryFractionMultDiv') || [];
             }
 
             function clearHistory() {
                 if (confirmClearHistory()) {
                     problemHistory = [];
-                    removeFromStorage('problemHistoryFraction');
+                    removeFromStorage('problemHistoryFractionMultDiv');
                     displayHistory();
                 }
             }
@@ -537,4 +546,5 @@
         </script>
     </body>
 </html>
+
 

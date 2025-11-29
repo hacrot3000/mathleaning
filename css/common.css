@@ -230,3 +230,43 @@ body.with-padding {
     }
 }
 
+/* Fraction specific styles */
+.fraction-input-group {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 10px;
+}
+
+.fraction-input-group input {
+    font-size: 150%;
+    padding: 8px 15px;
+    width: 174px;
+    text-align: center;
+    border: 2px solid #E91E63;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.fraction-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #E91E63;
+    margin: 5px 0;
+}
+
+.fraction-label {
+    font-size: 90%;
+    color: #666;
+}
+
+/* KaTeX custom styling */
+.katex {
+    font-size: 1.5em;
+}
+
+.katex-display {
+    margin: 20px 0;
+}
+

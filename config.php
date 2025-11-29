@@ -102,9 +102,40 @@ $config_phanso = [
     ]
 ];
 
+// Cấu hình cho Nhân Chia Phân Số
+$config_nhanchiaphanso = [
+    // Độ khó Dễ (Câu 1-5) - Chỉ nhân
+    'easy' => [
+        'threshold' => 5,           // Số câu hỏi ở độ khó này
+        'min' => -10,               // Giá trị nhỏ nhất cho tử/mẫu
+        'max' => 10,                // Giá trị lớn nhất cho tử/mẫu
+        'num_operands' => 2,        // Số toán hạng (2 = 1 toán tử)
+        'require_negative' => false // Bắt buộc có phân số âm
+    ],
+    
+    // Độ khó Trung bình (Câu 6-15) - Nhân và chia
+    'medium' => [
+        'threshold' => 15,          // Tổng câu hỏi đến hết độ khó này
+        'min' => -20,
+        'max' => 20,
+        'num_operands_min' => 2,    // Số toán hạng tối thiểu
+        'num_operands_max' => 3,    // Số toán hạng tối đa
+        'require_negative' => true
+    ],
+    
+    // Độ khó Khó (Câu 16+)
+    'hard' => [
+        'min' => -50,               // Có thể thay đổi giới hạn tùy ý
+        'max' => 50,                // Có thể thay đổi giới hạn tùy ý
+        'num_operands_min' => 2,
+        'num_operands_max' => 3,
+        'require_negative' => true
+    ]
+];
+
 // Export config dưới dạng JSON để JavaScript có thể sử dụng
 function getConfigAsJSON($config_name) {
-    global $config_congtru, $config_nhanchia, $config_general, $config_phanso;
+    global $config_congtru, $config_nhanchia, $config_general, $config_phanso, $config_nhanchiaphanso;
     
     $config = null;
     switch ($config_name) {
@@ -116,6 +147,9 @@ function getConfigAsJSON($config_name) {
             break;
         case 'phanso':
             $config = $config_phanso;
+            break;
+        case 'nhanchiaphanso':
+            $config = $config_nhanchiaphanso;
             break;
         case 'general':
             $config = $config_general;

@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="../css/common.css">
         <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
         <script src="../lib/ion.sound-3.0.7/ion.sound.min.js"></script>
+        <script src="../js/common.js"></script>
         <?php require_once '../config.php'; ?>
         <script type="text/javascript">
             // Load config from PHP
@@ -52,16 +53,7 @@
 
             // Initialize sounds
             $(function () {
-                ion.sound({
-                    sounds: [
-                        {name: "light_bulb_breaking"},
-                        {name: "bell_ring"},
-                    ],
-                    path: "../lib/ion.sound-3.0.7/sounds/",
-                    preload: true,
-                    multiplay: true,
-                    volume: 1
-                });
+                initializeSounds("../lib/ion.sound-3.0.7/sounds/");
 
                 // Load lịch sử và bài toán hiện tại từ localStorage
                 loadFromLocalStorage();
@@ -80,10 +72,12 @@
                 displayHistory();
             });
 
-            function getRndInteger(min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
+            function formatNumber(num) {
+                if (num < 0) {
+                    return '(' + num + ')';
+                }
+                return num;
             }
-
             function generateNewProblem() {
                 var numOperands;
                 var minNum, maxNum;
@@ -188,9 +182,9 @@
                 // problemText += ' = ???';
                 
                 $('#problem-display').html(problemText);
-                $('#answer-input').val('');
-                $('#answer-input').focus();
-                $('#feedback').hide();
+                clearAnswerInput();
+                focusAnswerInput();
+                hideFeedback();
                 
                 // Hiển thị độ khó và số câu hỏi
                 var difficultyText = '';
@@ -215,10 +209,7 @@
                 }
                 
                 if (userAnswer === currentProblem.correctAnswer) {
-                    $('#feedback').removeClass('incorrect').addClass('correct');
-                    $('#feedback').html('✓ Chính xác!');
-                    $('#feedback').show();
-                    ion.sound.play("bell_ring");
+                    showFeedback(true);
                     
                     // Tăng số câu đã làm
                     problemCount++;
@@ -231,16 +222,13 @@
                         generateNewProblem();
                     }, 1500);
                 } else {
-                    $('#feedback').removeClass('correct').addClass('incorrect');
-                    $('#feedback').html('✗ Sai rồi! Thử lại.');
-                    $('#feedback').show();
-                    ion.sound.play("light_bulb_breaking");
+                    showFeedback(false);
                     
                     // Track wrong answer
                     currentWrongAnswers.push(userAnswer);
                     saveToLocalStorage();
                     
-                    $('#answer-input').select();
+                    selectAnswerInput();
                 }
             }
 
@@ -315,34 +303,22 @@
 
             function saveToLocalStorage() {
                 // Lưu cả bài toán hiện tại, câu trả lời sai, và lịch sử
-                localStorage.setItem('currentProblem', JSON.stringify(currentProblem));
-                localStorage.setItem('currentWrongAnswers', JSON.stringify(currentWrongAnswers));
-                localStorage.setItem('problemHistory', JSON.stringify(problemHistory));
+                saveToStorage('currentProblem', currentProblem);
+                saveToStorage('currentWrongAnswers', currentWrongAnswers);
+                saveToStorage('problemHistory', problemHistory);
             }
 
             function loadFromLocalStorage() {
                 // Load cả bài toán hiện tại, câu trả lời sai, và lịch sử
-                var savedProblem = localStorage.getItem('currentProblem');
-                var savedWrongAnswers = localStorage.getItem('currentWrongAnswers');
-                var savedHistory = localStorage.getItem('problemHistory');
-                
-                if (savedProblem) {
-                    currentProblem = JSON.parse(savedProblem);
-                }
-                
-                if (savedWrongAnswers) {
-                    currentWrongAnswers = JSON.parse(savedWrongAnswers);
-                }
-                
-                if (savedHistory) {
-                    problemHistory = JSON.parse(savedHistory);
-                }
+                currentProblem = loadFromStorage('currentProblem');
+                currentWrongAnswers = loadFromStorage('currentWrongAnswers') || [];
+                problemHistory = loadFromStorage('problemHistory') || [];
             }
 
             function clearHistory() {
-                if (confirm('Bạn có chắc muốn xóa toàn bộ lịch sử?')) {
+                if (confirmClearHistory()) {
                     problemHistory = [];
-                    localStorage.removeItem('problemHistory');
+                    removeFromStorage('problemHistory');
                     displayHistory();
                 }
             }
@@ -356,11 +332,7 @@
                 skipProblem();
             });
 
-            $('#answer-input').keypress(function(e) {
-                if (e.which === 13) { // Enter key
-                    checkAnswer();
-                }
-            });
+            setupEnterKeyHandler('#answer-input', checkAnswer);
 
             $('#clear-history-btn').click(function() {
                 clearHistory();

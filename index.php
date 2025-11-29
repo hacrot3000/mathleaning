@@ -162,7 +162,16 @@
             <h1>🎓 Học Toán</h1>
             <p class="subtitle">Chọn bài luyện tập để bắt đầu</p>
             
-            <div class="features">
+            <div class="features">                
+                <a href="cuuchuong/" class="feature-card green">
+                    <div class="feature-icon">✖️</div>
+                    <div class="feature-title">Bảng Cửu Chương</div>
+                    <div class="feature-description">
+                        Luyện tập bảng cửu chương từ 2 đến 9.<br>
+                        Chọn bảng cửu chương muốn học.
+                    </div>
+                </a>
+                
                 <a href="congtrusonguyen/" class="feature-card blue">
                     <div class="feature-icon">➕➖</div>
                     <div class="feature-title">Cộng Trừ Số Nguyên</div>
@@ -172,16 +181,7 @@
                     </div>
                 </a>
                 
-                <a href="phanso/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -moz-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -o-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);">
-                    <div class="feature-icon">➗</div>
-                    <div class="feature-title">Cộng Trừ Phân Số</div>
-                    <div class="feature-description">
-                        Luyện tập cộng trừ phân số (có thể âm).<br>
-                        Kết quả rút gọn về dạng tối giản.
-                    </div>
-                </a>
-                
-                <a href="nhanchiasonguyen/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -moz-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -o-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: linear-gradient(135deg, #a044ff 0%, #6a3093 100%);">
+                <a href="nhanchiasonguyen/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: -moz-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: -o-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);">
                     <div class="feature-icon">✖️➗</div>
                     <div class="feature-title">Nhân Chia Số Nguyên</div>
                     <div class="feature-description">
@@ -190,14 +190,24 @@
                     </div>
                 </a>
                 
-                <a href="cuuchuong/" class="feature-card green">
-                    <div class="feature-icon">✖️</div>
-                    <div class="feature-title">Bảng Cửu Chương</div>
+                <a href="phanso/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -moz-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -o-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);">
+                    <div class="feature-icon">➕➖</div>
+                    <div class="feature-title">Cộng Trừ Phân Số</div>
                     <div class="feature-description">
-                        Luyện tập bảng cửu chương từ 2 đến 9.<br>
-                        Chọn bảng cửu chương muốn học.
+                        Luyện tập cộng trừ phân số (có thể âm).<br>
+                        Kết quả rút gọn về dạng tối giản.
                     </div>
                 </a>
+                
+                <a href="nhanchiaphanso/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -moz-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -o-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: linear-gradient(135deg, #a044ff 0%, #6a3093 100%);">
+                    <div class="feature-icon">✖️➗</div>
+                    <div class="feature-title">Nhân Chia Phân Số</div>
+                    <div class="feature-description">
+                        Luyện tập nhân chia phân số (có thể âm).<br>
+                        Kết quả rút gọn về dạng tối giản.
+                    </div>
+                </a>                
+
             </div>
             
             <div class="footer">
