@@ -1,0 +1,18 @@
+#!/bin/bash
+# FTP Deployment Configuration
+# This file contains FTP server settings for deploy.sh
+# You can customize these values according to your FTP server settings
+
+# FTP Server Credentials
+FTP_USER="userfpt"
+FTP_PASS="passwordfpt"
+FTP_HOST="hostfpt"
+
+# FTP Remote Directory
+# Root directory on FTP server (corresponds to /var/www/html/hoctoan locally)
+FTP_REMOTE_DIR="/path/to/your/remote/directory"
+
+# Local Base Directory
+# The local project directory that corresponds to FTP_REMOTE_DIR
+LOCAL_BASE_DIR="/path/to/your/project"
+
