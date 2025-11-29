@@ -77,6 +77,7 @@
                 padding: 40px 30px;
                 text-decoration: none;
                 color: white;
+                font-size: 16px; /* Reset font-size */
                 -webkit-transition: all 0.3s ease;
                 -moz-transition: all 0.3s ease;
                 -o-transition: all 0.3s ease;

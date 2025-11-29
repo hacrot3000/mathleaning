@@ -28,7 +28,7 @@
             #answer-input {
                 font-size: 200%;
                 padding: 10px 20px;
-                width: 200px;
+                width: 272px;
                 text-align: center;
                 border: 3px solid #4CAF50;
                 border-radius: 5px;
@@ -109,17 +109,17 @@
     </head>
     <body>
         <div class="container">
-            <h1>Luyện Tập Cộng Trừ Số Nguyên</h1>
+            <!-- <h1>Luyện Tập Cộng Trừ Số Nguyên</h1> -->
             
             <div style="font-size: 100%; color: #666; margin-bottom: 20px;">
-                <strong>Độ khó:</strong> <span id="difficulty-level"></span> | 
+                <strong style="display: none;">Độ khó:</strong> <span id="difficulty-level" style="display: none;"></span>
                 <strong>Câu hỏi:</strong> <span id="question-number"></span>
             </div>
             
             <div class="problem" id="problem-display"></div>
             
             <div>
-                <input type="number" id="answer-input" placeholder="Nhập kết quả" autocomplete="off">
+                <input type="number" id="answer-input" placeholder="Kết quả" autocomplete="off">
             </div>
             
             <div>
@@ -272,7 +272,7 @@
                     problemText += ' ' + currentProblem.operators[i] + ' ' + formatNumber(currentProblem.numbers[i + 1]);
                 }
                 
-                problemText += ' = ???';
+                // problemText += ' = ???';
                 
                 $('#problem-display').html(problemText);
                 $('#answer-input').val('');
