@@ -9,8 +9,8 @@ $lang_code = getLangCode();
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
         <title><?php echo $lang['app_title']; ?> - <?php echo $lang['home']; ?></title>
-        <link rel="stylesheet" href="css/common.css">
-        <link rel="stylesheet" href="css/home.css">
+        <link rel="stylesheet" href="css/common.css?v=1">
+        <link rel="stylesheet" href="css/home.css?v=1">
         <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
         <script src="js/user.js"></script>
         <script src="js/common.js"></script>
