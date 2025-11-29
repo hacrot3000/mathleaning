@@ -2,7 +2,9 @@
 
 A comprehensive web-based math learning platform designed for primary and lower secondary students. Practice addition, subtraction, multiplication, and division with integers and fractions through interactive exercises.
 
-**Repository:** [https://github.com/hacrot3000/mathleaning](https://github.com/hacrot3000/mathleaning)
+**🌐 Live Demo:** [https://www.chuongduong.net/hoctoan/](https://www.chuongduong.net/hoctoan/)
+
+**📦 Repository:** [https://github.com/hacrot3000/mathleaning](https://github.com/hacrot3000/mathleaning)
 
 ## ✨ Features
 
@@ -31,6 +33,28 @@ A comprehensive web-based math learning platform designed for primary and lower 
 5. **Multiply/Divide Fractions** (Nhân Chia Phân Số)
    - Practice multiplication and division of fractions
    - Results simplified to lowest terms
+   - Beautiful math rendering with KaTeX
+
+6. **Add/Subtract Mixed Numbers** (Cộng Trừ Hỗn Số)
+   - Practice with mixed numbers
+   - Always includes 1-2 mixed numbers per problem
+   - Beautiful math rendering with KaTeX
+
+7. **Multiply/Divide Mixed Numbers** (Nhân Chia Hỗn Số)
+   - Practice multiplication and division of mixed numbers
+   - Always includes 1-2 mixed numbers per problem
+   - Beautiful math rendering with KaTeX
+
+8. **Power/Exponent Practice** (Luyện Tập Luỹ Thừa)
+   - Practice calculations with exponents (powers)
+   - Supports integers, decimals, fractions, mixed numbers, and composite expressions
+   - Powers range from 0 to 7
+   - Beautiful math rendering with KaTeX
+
+9. **Absolute Value Practice** (Luyện Tập Trị Tuyệt Đối)
+   - Practice calculations with absolute values
+   - Supports integers, decimals, fractions, mixed numbers, and composite expressions
+   - Always includes at least one absolute value per problem
    - Beautiful math rendering with KaTeX
 
 ### 🎯 Key Features
@@ -76,7 +100,8 @@ A comprehensive web-based math learning platform designed for primary and lower 
    ```
 
 5. **Access the application:**
-   - Open your browser and navigate to: `http://localhost/hoctoan/`
+   - **Live Demo**: Visit [https://www.chuongduong.net/hoctoan/](https://www.chuongduong.net/hoctoan/)
+   - **Local Installation**: Open your browser and navigate to: `http://localhost/hoctoan/`
 
 ## ⚙️ Configuration
 
