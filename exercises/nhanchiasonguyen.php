@@ -217,6 +217,9 @@
             return;
         }
         
+        // Normalize: replace comma with dot for decimal separator
+        userAnswerStr = userAnswerStr.replace(',', '.');
+        
         var userAnswer = parseFloat(userAnswerStr);
         
         if (isNaN(userAnswer)) {
