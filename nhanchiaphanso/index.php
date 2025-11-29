@@ -1,5 +1,7 @@
 <?php
-$page_title = 'Nhân Chia Phân Số';
+// Lấy mode từ URL parameter
+$mode = isset($_GET['mode']) ? $_GET['mode'] : 'fraction'; // 'fraction' hoặc 'mixed'
+$page_title = $mode === 'mixed' ? 'Nhân Chia Hỗn Số' : 'Nhân Chia Phân Số';
 $config_type = 'nhanchiaphanso';
 $extra_css = ['nhanchiaphanso.css'];
 $use_katex = true;
@@ -19,7 +21,7 @@ include '../includes/header.php';
                     <?php include '../includes/language-switcher.php'; ?>
                 </div>
             </div>
-            <h1><?php echo $lang['practice_multiply_divide_fractions']; ?></h1>
+            <h1><?php echo $mode === 'mixed' ? $lang['practice_multiply_divide_mixed'] : $lang['practice_multiply_divide_fractions']; ?></h1>
             
             <div style="font-size: 100%; color: #666; margin-bottom: 20px;">
                 <strong><?php echo $lang['difficulty']; ?>:</strong> <span id="difficulty-level"></span>
@@ -56,11 +58,13 @@ include '../includes/header.php';
             var problemHistory = [];
             var problemCount = 0;
             var historyManager = null;
+            var FORCE_MIXED_MODE = <?php echo $mode === 'mixed' ? 'true' : 'false'; ?>; // Force mixed numbers if in mixed mode
 
             // Initialize sounds
             $(function () {
                 // Check user logged in
-                historyManager = initHistoryManager('nhanchiaphanso');
+                var exerciseType = FORCE_MIXED_MODE ? 'nhanchiaphanso_mixed' : 'nhanchiaphanso';
+                historyManager = initHistoryManager(exerciseType);
                 if (!historyManager) return;
                 
                 // Display user info
@@ -184,6 +188,13 @@ include '../includes/header.php';
             function generateRandomFraction(minVal, maxVal) {
                 // Kiểm tra có tạo hỗn số không
                 var mixedConfig = CONFIG.mixed_number;
+                
+                // Nếu đang ở chế độ mixed, bắt buộc tạo hỗn số
+                if (FORCE_MIXED_MODE) {
+                    return generateMixedNumber();
+                }
+                
+                // Ngược lại, chỉ tạo theo probability từ câu start_from trở đi
                 if (problemCount >= mixedConfig.start_from && Math.random() < mixedConfig.probability) {
                     return generateMixedNumber();
                 }
@@ -255,6 +266,30 @@ include '../includes/header.php';
                         } else {
                             operators.push(Math.random() < 0.5 ? '×' : '÷');
                         }
+                    }
+                }
+                
+                // Nếu ở chế độ mixed, đảm bảo ít nhất 1-2 hỗn số
+                if (FORCE_MIXED_MODE) {
+                    var mixedCount = 0;
+                    for (var i = 0; i < fractions.length; i++) {
+                        if (fractions[i].isMixed) mixedCount++;
+                    }
+                    
+                    // Nếu chưa có hỗn số nào, force tạo ít nhất 1
+                    if (mixedCount === 0) {
+                        var randomIndex = getRndInteger(0, fractions.length - 1);
+                        fractions[randomIndex] = generateMixedNumber();
+                        mixedCount++;
+                    }
+                    
+                    // Nếu chỉ có 1 hỗn số và có nhiều hơn 1 số hạng, có 50% tạo thêm 1 hỗn số nữa
+                    if (mixedCount === 1 && fractions.length > 1 && Math.random() < 0.5) {
+                        var randomIndex;
+                        do {
+                            randomIndex = getRndInteger(0, fractions.length - 1);
+                        } while (fractions[randomIndex].isMixed);
+                        fractions[randomIndex] = generateMixedNumber();
                     }
                 }
                 
@@ -557,15 +592,19 @@ include '../includes/header.php';
 
             function saveToLocalStorage() {
                 // Chỉ lưu bài toán hiện tại (để F5)
-                saveToStorage('currentProblemFractionMultDiv', currentProblem);
-                saveToStorage('currentWrongAnswersFractionMultDiv', currentWrongAnswers);
+                var storageKey = FORCE_MIXED_MODE ? 'currentProblemFractionMultDivMixed' : 'currentProblemFractionMultDiv';
+                var wrongAnswersKey = FORCE_MIXED_MODE ? 'currentWrongAnswersFractionMultDivMixed' : 'currentWrongAnswersFractionMultDiv';
+                saveToStorage(storageKey, currentProblem);
+                saveToStorage(wrongAnswersKey, currentWrongAnswers);
             }
 
             function loadFromLocalStorage() {
                 // Load bài toán hiện tại
                 // problemHistory sẽ load từ server
-                currentProblem = loadFromStorage('currentProblemFractionMultDiv');
-                currentWrongAnswers = loadFromStorage('currentWrongAnswersFractionMultDiv') || [];
+                var storageKey = FORCE_MIXED_MODE ? 'currentProblemFractionMultDivMixed' : 'currentProblemFractionMultDiv';
+                var wrongAnswersKey = FORCE_MIXED_MODE ? 'currentWrongAnswersFractionMultDivMixed' : 'currentWrongAnswersFractionMultDiv';
+                currentProblem = loadFromStorage(storageKey);
+                currentWrongAnswers = loadFromStorage(wrongAnswersKey) || [];
             }
 
             // Event handlers

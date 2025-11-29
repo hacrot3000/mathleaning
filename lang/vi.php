@@ -53,12 +53,18 @@ return [
     'add_subtract_fractions_desc' => 'Luyện tập cộng trừ phân số (có thể âm).<br>Kết quả rút gọn về dạng tối giản.',
     'multiply_divide_fractions' => 'Nhân Chia Phân Số',
     'multiply_divide_fractions_desc' => 'Luyện tập nhân chia phân số (có thể âm).<br>Kết quả rút gọn về dạng tối giản.',
+    'add_subtract_mixed' => 'Cộng Trừ Hỗn Số',
+    'add_subtract_mixed_desc' => 'Luyện tập cộng trừ hỗn số.<br>Luôn có ít nhất 1-2 hỗn số trong phép toán.',
+    'multiply_divide_mixed' => 'Nhân Chia Hỗn Số',
+    'multiply_divide_mixed_desc' => 'Luyện tập nhân chia hỗn số.<br>Luôn có ít nhất 1-2 hỗn số trong phép toán.',
     
     // Exercise pages
     'practice_add_subtract_integers' => 'Luyện Tập Cộng Trừ Số Nguyên',
     'practice_multiply_divide_integers' => 'Luyện Tập Nhân Chia Số Nguyên',
     'practice_add_subtract_fractions' => 'Luyện Tập Cộng Trừ Phân Số',
     'practice_multiply_divide_fractions' => 'Luyện Tập Nhân Chia Phân Số',
+    'practice_add_subtract_mixed' => 'Luyện Tập Cộng Trừ Hỗn Số',
+    'practice_multiply_divide_mixed' => 'Luyện Tập Nhân Chia Hỗn Số',
     
     // Difficulty levels
     'difficulty_easy' => 'Dễ',

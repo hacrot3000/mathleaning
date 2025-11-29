@@ -106,6 +106,22 @@ $lang_code = getLangCode();
                         <div class="feature-description">
                             <?php echo $lang['multiply_divide_fractions_desc']; ?>
                         </div>
+                    </a>
+                    
+                    <a href="phanso/?mode=mixed" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%); background: -moz-linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%); background: -o-linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%); background: linear-gradient(135deg, #FF6F00 0%, #FF8F00 100%);">
+                        <div class="feature-icon">➕➖</div>
+                        <div class="feature-title"><?php echo $lang['add_subtract_mixed']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['add_subtract_mixed_desc']; ?>
+                        </div>
+                    </a>
+                    
+                    <a href="nhanchiaphanso/?mode=mixed" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #00796B 0%, #00695C 100%); background: -moz-linear-gradient(135deg, #00796B 0%, #00695C 100%); background: -o-linear-gradient(135deg, #00796B 0%, #00695C 100%); background: linear-gradient(135deg, #00796B 0%, #00695C 100%);">
+                        <div class="feature-icon">✖️➗</div>
+                        <div class="feature-title"><?php echo $lang['multiply_divide_mixed']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['multiply_divide_mixed_desc']; ?>
+                        </div>
                     </a>                
                 </div>
             </div>

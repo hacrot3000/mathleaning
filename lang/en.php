@@ -53,12 +53,18 @@ return [
     'add_subtract_fractions_desc' => 'Practice adding and subtracting fractions (can be negative).<br>Results are simplified to lowest terms.',
     'multiply_divide_fractions' => 'Multiply/Divide Fractions',
     'multiply_divide_fractions_desc' => 'Practice multiplying and dividing fractions (can be negative).<br>Results are simplified to lowest terms.',
+    'add_subtract_mixed' => 'Add/Subtract Mixed Numbers',
+    'add_subtract_mixed_desc' => 'Practice adding and subtracting mixed numbers.<br>Always includes 1-2 mixed numbers in each problem.',
+    'multiply_divide_mixed' => 'Multiply/Divide Mixed Numbers',
+    'multiply_divide_mixed_desc' => 'Practice multiplying and dividing mixed numbers.<br>Always includes 1-2 mixed numbers in each problem.',
     
     // Exercise pages
     'practice_add_subtract_integers' => 'Practice Add/Subtract Integers',
     'practice_multiply_divide_integers' => 'Practice Multiply/Divide Integers',
     'practice_add_subtract_fractions' => 'Practice Add/Subtract Fractions',
     'practice_multiply_divide_fractions' => 'Practice Multiply/Divide Fractions',
+    'practice_add_subtract_mixed' => 'Practice Add/Subtract Mixed Numbers',
+    'practice_multiply_divide_mixed' => 'Practice Multiply/Divide Mixed Numbers',
     
     // Difficulty levels
     'difficulty_easy' => 'Easy',
