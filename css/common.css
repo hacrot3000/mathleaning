@@ -1,0 +1,225 @@
+/* Common styles for all pages */
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Back to home button - top left corner */
+.home-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background-color: #607D8B;
+    color: white;
+    text-decoration: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 16px;
+    z-index: 1000;
+    -webkit-box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.home-btn:hover {
+    background-color: #455A64;
+    -webkit-transform: translateY(-2px);
+    -moz-transform: translateY(-2px);
+    -ms-transform: translateY(-2px);
+    -o-transform: translateY(-2px);
+    transform: translateY(-2px);
+    -webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+body.with-padding {
+    padding: 20px;
+    text-align: center;
+}
+
+/* Problem display */
+.problem {
+    font-size: 250%;
+    margin: 30px 0;
+    color: #333;
+}
+
+/* Input field */
+#answer-input {
+    font-size: 200%;
+    padding: 10px 20px;
+    width: 272px;
+    text-align: center;
+    border: 3px solid #4CAF50;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+/* Buttons */
+.submit-btn {
+    font-size: 150%;
+    padding: 12px 30px;
+    margin: 20px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-transition: background-color 0.3s;
+    -moz-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+
+/* Feedback messages */
+.feedback {
+    font-size: 180%;
+    margin: 20px 0;
+    padding: 15px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.correct {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.incorrect {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* History section */
+.history {
+    margin-top: 40px;
+    text-align: left;
+}
+
+.history h3 {
+    color: #333;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 10px;
+}
+
+.history-item {
+    padding: 10px;
+    margin: 8px 0;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    border-left: 4px solid #4CAF50;
+}
+
+.history-problem {
+    font-weight: bold;
+    color: #2196F3;
+    font-size: 110%;
+}
+
+.history-correct {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.history-wrong {
+    color: #f44336;
+    font-style: italic;
+}
+
+.clear-history-btn {
+    font-size: 100%;
+    padding: 8px 20px;
+    margin: 10px 0;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-transition: background-color 0.3s;
+    -moz-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+}
+
+.clear-history-btn:hover {
+    background-color: #da190b;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .home-btn {
+        top: 10px;
+        left: 10px;
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .container {
+        padding: 20px 15px;
+    }
+    
+    .problem {
+        font-size: 180%;
+    }
+    
+    #answer-input {
+        font-size: 150%;
+        width: 90%;
+        max-width: 250px;
+    }
+    
+    .submit-btn {
+        font-size: 120%;
+        padding: 10px 20px;
+        margin: 10px 5px;
+    }
+    
+    .feedback {
+        font-size: 140%;
+    }
+}
+

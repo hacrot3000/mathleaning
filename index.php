@@ -172,6 +172,15 @@
                     </div>
                 </a>
                 
+                <a href="nhanchiasonguyen/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -moz-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -o-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: linear-gradient(135deg, #a044ff 0%, #6a3093 100%);">
+                    <div class="feature-icon">✖️➗</div>
+                    <div class="feature-title">Nhân Chia Số Nguyên</div>
+                    <div class="feature-description">
+                        Luyện tập nhân chia các số nguyên dương và âm.<br>
+                        Kết quả số nguyên hoặc thập phân tối đa 2 chữ số.
+                    </div>
+                </a>
+                
                 <a href="cuuchuong/" class="feature-card green">
                     <div class="feature-icon">✖️</div>
                     <div class="feature-title">Bảng Cửu Chương</div>
