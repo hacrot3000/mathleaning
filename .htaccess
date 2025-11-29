@@ -1,7 +1,43 @@
 RewriteEngine On
 RewriteBase /hoctoan/
 
-# Ẩn phần mở rộng .php cho exercises
+# ============================================================================
+# SECURITY: Block unauthorized access
+# ============================================================================
+
+# Disable directory listing
+Options -Indexes
+
+# Block access to sensitive directories
+RewriteRule ^(includes|db|config|\.git|\.svn|\.env)/ - [F,L]
+
+# Block direct access to config files
+RewriteRule ^(.*\.config\.(sh|php|json|yaml|yml)|.*\.env|.*\.ini)$ - [F,L]
+
+# Block direct access to deploy scripts
+RewriteRule ^deploy\.(sh|config\.sh)$ - [F,L]
+
+# Block direct access to includes/*.php
+RewriteRule ^includes/.*\.php$ - [F,L]
+
+# Block direct access to exercises/*.php files (except exercises/index.php which is accessed via router)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_URI} ^/hoctoan/exercises/.*\.php$
+RewriteCond %{REQUEST_URI} !^/hoctoan/exercises/index\.php$
+RewriteRule ^exercises/.*\.php$ - [F,L]
+
+# Block direct access to other PHP files in root directory (only allow index.php and api.php)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_URI} ^/hoctoan/[^/]+\.php$
+RewriteCond %{REQUEST_URI} !^/hoctoan/index\.php$
+RewriteCond %{REQUEST_URI} !^/hoctoan/api\.php$
+RewriteRule ^.*\.php$ - [F,L]
+
+# ============================================================================
+# URL REWRITING
+# ============================================================================
+
+# Ẩn phần mở rộng .php cho exercises (router)
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^exercises/([^/]+)$ exercises/index.php?type=$1 [QSA,L]
@@ -10,4 +46,3 @@ RewriteRule ^exercises/([^/]+)$ exercises/index.php?type=$1 [QSA,L]
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteCond %{REQUEST_URI} !/$
 RewriteRule ^(.*)$ $1.php [L]
-
