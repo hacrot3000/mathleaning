@@ -254,5 +254,6 @@ $lang_code = getLangCode();
                 loadUserList();
             }
         </script>
-    </body>
-</html>
+        </div> <!-- End container -->
+        
+        <?php include 'includes/footer.php'; ?>

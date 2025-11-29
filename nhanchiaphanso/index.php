@@ -457,7 +457,8 @@ include '../includes/header.php';
 
             setupEnterKeyHandler('#answer-numerator, #answer-denominator', checkAnswer);
         </script>
-    </body>
-</html>
+        </div> <!-- End container -->
+        
+        <?php include '../includes/footer.php'; ?>
 
 

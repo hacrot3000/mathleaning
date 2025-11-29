@@ -315,6 +315,7 @@ include '../includes/header.php';
 
             setupEnterKeyHandler('#answer-input', checkAnswer);
         </script>
-    </body>
-</html>
+        </div> <!-- End container -->
+        
+        <?php include '../includes/footer.php'; ?>
 

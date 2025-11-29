@@ -75,5 +75,9 @@ return [
     
     // History
     'no_items_for_date' => 'No exercises for this date',
+    
+    // Footer
+    'all_rights_reserved' => 'All rights reserved.',
+    'view_source_on_github' => 'View Source on GitHub',
 ];
 

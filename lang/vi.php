@@ -75,5 +75,9 @@ return [
     
     // History
     'no_items_for_date' => 'Không có bài nào trong ngày này',
+    
+    // Footer
+    'all_rights_reserved' => 'Bảo lưu mọi quyền.',
+    'view_source_on_github' => 'Xem mã nguồn trên GitHub',
 ];
 

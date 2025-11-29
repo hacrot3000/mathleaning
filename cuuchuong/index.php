@@ -242,5 +242,5 @@ include '../includes/header.php';
             <?php
         }
         ?>
-    </body>
-</html>
+        
+        <?php include '../includes/footer.php'; ?>
