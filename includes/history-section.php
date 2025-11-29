@@ -38,6 +38,32 @@ if (!isset($lang)) {
     var historyByDate = {}; // History grouped by date
     
     /**
+     * Calculate statistics for a date
+     * @param {Array} items - History items for the date
+     * @returns {Object} Statistics object with correct and wrong counts
+     */
+    function calculateDateStats(items) {
+        var correct = 0;
+        var wrong = 0;
+        
+        items.forEach(function(item) {
+            if (!item || item.skipped) return; // Don't count skipped items
+            
+            correct++; // Each item represents a correct answer eventually
+            
+            // Count wrong answers
+            if (item.wrongAnswers && item.wrongAnswers.length > 0) {
+                wrong += item.wrongAnswers.length;
+            }
+        });
+        
+        return {
+            correct: correct,
+            wrong: wrong
+        };
+    }
+    
+    /**
      * Format date to display string
      * @param {string} dateStr - Date string in YYYY-MM-DD format
      * @returns {string} Formatted date string
@@ -135,7 +161,17 @@ if (!isset($lang)) {
         dates.forEach(function(date) {
             var isActive = activeDate === date;
             var tabClass = isActive ? 'history-tab history-tab-active' : 'history-tab';
-            html += '<button class="' + tabClass + '" data-date="' + date + '">' + formatDateDisplay(date) + '</button>';
+            
+            // Calculate statistics for this date
+            var stats = calculateDateStats(historyByDate[date] || []);
+            var correctText = typeof LANG !== 'undefined' ? LANG.correct_count : 'Đúng';
+            var wrongText = typeof LANG !== 'undefined' ? LANG.wrong_count : 'Sai';
+            var statsHtml = '<div style="font-size: 85%; margin-top: 3px; color: #666;">' + 
+                           correctText + ': ' + stats.correct + ' | ' + 
+                           wrongText + ': ' + stats.wrong + '</div>';
+            
+            html += '<button class="' + tabClass + '" data-date="' + date + '">' + 
+                    formatDateDisplay(date) + statsHtml + '</button>';
         });
         html += '</div>';
         
@@ -177,9 +213,12 @@ if (!isset($lang)) {
         if (items.length === 0) {
             html = '<p style="color: #999;">' + (typeof LANG !== 'undefined' ? LANG.no_items_for_date : 'Không có bài nào trong ngày này') + '</p>';
         } else {
-            // Sort by time descending (newest first)
+            // Sort by time descending (newest first) - if createdAt exists
+            // Otherwise maintain current order (which should already be newest first)
             items.sort(function(a, b) {
-                if (!a.createdAt || !b.createdAt) return 0;
+                if (!a.createdAt && !b.createdAt) return 0; // Maintain order if no timestamps
+                if (!a.createdAt) return 1; // Items without timestamp go to bottom
+                if (!b.createdAt) return -1;
                 return b.createdAt.localeCompare(a.createdAt);
             });
             

@@ -23,6 +23,13 @@ return [
     'today' => 'Today',
     'yesterday' => 'Yesterday',
     'skipped' => 'SKIPPED',
+    'correct_answer' => '✓ Correct!',
+    'incorrect_answer' => '✗ Wrong! Try again.',
+    'confirm_clear_history' => 'Are you sure you want to clear all history?',
+    'please_login' => 'Please login to use this feature!',
+    'no_items_for_date' => 'No items for this date',
+    'correct_count' => 'Correct',
+    'wrong_count' => 'Wrong',
     
     // Home page
     'app_title' => 'Learn Math',

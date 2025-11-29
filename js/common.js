@@ -41,7 +41,7 @@ function showFeedback(isCorrect, message) {
         $feedback.removeClass('correct').addClass('incorrect');
         playSound('light_bulb_breaking');
     }
-    $feedback.html(message || (isCorrect ? '✓ Chính xác!' : '✗ Sai rồi! Thử lại.'));
+    $feedback.html(message || (isCorrect ? t('correct_answer', '✓ Chính xác!') : t('incorrect_answer', '✗ Sai rồi! Thử lại.')));
     $feedback.show();
 }
 
@@ -96,7 +96,7 @@ function removeFromStorage(key) {
 
 // Confirm dialog for clearing history
 function confirmClearHistory() {
-    return confirm('Bạn có chắc muốn xóa toàn bộ lịch sử?');
+    return confirm(t('confirm_clear_history', 'Bạn có chắc muốn xóa toàn bộ lịch sử?'));
 }
 
 // Format number with parentheses if negative

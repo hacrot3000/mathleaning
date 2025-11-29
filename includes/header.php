@@ -71,16 +71,16 @@ $lang_code = getLangCode();
         <script src="../lib/ion.sound-3.0.7/ion.sound.min.js"></script>
         
         <!-- Common JavaScript -->
-        <script src="../js/common.js?v=1"></script>
+        <script src="../js/common.js?v=2"></script>
         
         <!-- User management (if needed) -->
         <?php if ($use_user): ?>
-            <script src="../js/user.js"></script>
+            <script src="../js/user.js?v=1"></script>
         <?php endif; ?>
         
         <!-- History management (if needed) -->
         <?php if ($use_history): ?>
-            <script src="../js/history.js"></script>
+            <script src="../js/history.js?v=1"></script>
         <?php endif; ?>
         
         <!-- Config from PHP -->

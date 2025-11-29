@@ -277,7 +277,7 @@ include '../includes/header.php';
                     skipped: skipped || false
                 };
                 
-                problemHistory.push(historyItem);
+                problemHistory.unshift(historyItem); // Add to beginning for newest-first order
                 
                 // Save to server
                 saveHistoryToServer(

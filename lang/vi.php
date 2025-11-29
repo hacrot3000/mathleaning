@@ -22,7 +22,14 @@ return [
     'try_again' => 'Thử lại',
     'today' => 'Hôm nay',
     'yesterday' => 'Hôm qua',
-    'skipped' => 'BỎ QUA',
+    'skipped' => 'BỐ QUA',
+    'correct_answer' => '✓ Chính xác!',
+    'incorrect_answer' => '✗ Sai rồi! Thử lại.',
+    'confirm_clear_history' => 'Bạn có chắc muốn xóa toàn bộ lịch sử?',
+    'please_login' => 'Vui lòng đăng nhập để sử dụng chức năng này!',
+    'no_items_for_date' => 'Không có bài nào trong ngày này',
+    'correct_count' => 'Đúng',
+    'wrong_count' => 'Sai',
     
     // Home page
     'app_title' => 'Học Toán',

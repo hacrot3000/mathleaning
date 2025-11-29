@@ -7,7 +7,7 @@
 function initHistoryManager(exerciseType, callbacks) {
     var user = getCurrentUser();
     if (!user) {
-        alert('Vui lòng đăng nhập để sử dụng chức năng này!');
+        alert(t('please_login', 'Vui lòng đăng nhập để sử dụng chức năng này!'));
         window.location.href = '../';
         return null;
     }
