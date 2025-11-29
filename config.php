@@ -71,6 +71,18 @@ $config_general = [
     'division_integer_ratio' => 0.7 // Tỉ lệ kết quả chia là số nguyên (70%)
 ];
 
+// Cấu hình ngưỡng "Perfect Answers" (câu trả lời đúng ngay lần đầu) cho mỗi exercise type
+// Khi số câu đúng ngay lần đầu >= ngưỡng này, tab ngày đó sẽ được highlight màu xanh
+$config_perfect_threshold = [
+    'congtrusonguyen' => 10,        // Ngưỡng cho Cộng Trừ Số Nguyên
+    'nhanchiasonguyen' => 10,       // Ngưỡng cho Nhân Chia Số Nguyên
+    'phanso' => 8,                  // Ngưỡng cho Cộng Trừ Phân Số
+    'phanso_mixed' => 8,            // Ngưỡng cho Cộng Trừ Hỗn Số
+    'nhanchiaphanso' => 8,          // Ngưỡng cho Nhân Chia Phân Số
+    'nhanchiaphanso_mixed' => 8,    // Ngưỡng cho Nhân Chia Hỗn Số
+    'luythua' => 5                  // Ngưỡng cho Luỹ Thừa
+];
+
 // Cấu hình cho Cộng Trừ Phân Số
 $config_phanso = [
     // Độ khó Dễ (Câu 1-5)

@@ -18,8 +18,15 @@ if (!isset($lang)) {
     require_once __DIR__ . '/../lang.php';
     $lang = getLang();
 }
+
+// Get perfect answer threshold for current exercise type
+require_once __DIR__ . '/../config.php';
+$perfect_threshold = 0; // Default threshold
+if (isset($exercise_type) && isset($config_perfect_threshold[$exercise_type])) {
+    $perfect_threshold = $config_perfect_threshold[$exercise_type];
+}
 ?>
-<div class="history">
+<div class="history" id="history-container">
     <h3><?php echo $lang['history']; ?></h3>
     
     <!-- Date tabs -->
@@ -36,15 +43,17 @@ if (!isset($lang)) {
 <script type="text/javascript">
     var selectedDate = null; // Currently selected date (YYYY-MM-DD format)
     var historyByDate = {}; // History grouped by date
+    var perfectThreshold = <?php echo $perfect_threshold; ?>; // Perfect answer threshold for current exercise type
     
     /**
      * Calculate statistics for a date
      * @param {Array} items - History items for the date
-     * @returns {Object} Statistics object with correct and wrong counts
+     * @returns {Object} Statistics object with correct, wrong, and perfect counts
      */
     function calculateDateStats(items) {
         var correct = 0;
         var wrong = 0;
+        var perfect = 0; // Perfect answers (correct on first try, no wrong answers)
         
         items.forEach(function(item) {
             if (!item || item.skipped) return; // Don't count skipped items
@@ -54,12 +63,17 @@ if (!isset($lang)) {
             // Count wrong answers
             if (item.wrongAnswers && item.wrongAnswers.length > 0) {
                 wrong += item.wrongAnswers.length;
+            } else {
+                // No wrong answers = perfect answer (correct on first try)
+                perfect++;
             }
         });
         
         return {
             correct: correct,
-            wrong: wrong
+            wrong: wrong,
+            perfect: perfect,
+            reachedThreshold: perfectThreshold > 0 && perfect >= perfectThreshold
         };
     }
     
@@ -140,6 +154,20 @@ if (!isset($lang)) {
     }
     
     /**
+     * Check if a date is today
+     * @param {string} date - Date string in YYYY-MM-DD format
+     * @returns {boolean} True if date is today
+     */
+    function isToday(date) {
+        if (!date) return false;
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        var checkDate = new Date(date + 'T00:00:00');
+        checkDate.setHours(0, 0, 0, 0);
+        return checkDate.getTime() === today.getTime();
+    }
+    
+    /**
      * Render date tabs
      */
     function renderDateTabs() {
@@ -157,18 +185,49 @@ if (!isset($lang)) {
             activeDate = dates[0]; // Default to newest date
         }
         
+        // Check if today reached threshold
+        var todayDate = new Date().toISOString().split('T')[0];
+        var todayStats = historyByDate[todayDate] ? calculateDateStats(historyByDate[todayDate]) : null;
+        var todayReachedThreshold = todayStats && todayStats.reachedThreshold;
+        
+        // Highlight history container if today reached threshold
+        if (todayReachedThreshold) {
+            $('#history-container').addClass('history-container-perfect');
+        } else {
+            $('#history-container').removeClass('history-container-perfect');
+        }
+        
         html = '<div class="history-tabs-container">';
         dates.forEach(function(date) {
             var isActive = activeDate === date;
-            var tabClass = isActive ? 'history-tab history-tab-active' : 'history-tab';
+            var stats = calculateDateStats(historyByDate[date] || []);
+            var reachedThreshold = stats.reachedThreshold;
+            
+            // Build tab classes
+            var tabClass = 'history-tab';
+            if (isActive) {
+                tabClass += ' history-tab-active';
+            }
+            if (reachedThreshold) {
+                tabClass += ' history-tab-perfect';
+            }
             
             // Calculate statistics for this date
-            var stats = calculateDateStats(historyByDate[date] || []);
             var correctText = typeof LANG !== 'undefined' ? LANG.correct_count : 'Đúng';
             var wrongText = typeof LANG !== 'undefined' ? LANG.wrong_count : 'Sai';
+            var perfectText = typeof LANG !== 'undefined' ? (LANG.perfect_count || 'Hoàn hảo') : 'Hoàn hảo';
             var statsHtml = '<div style="font-size: 85%; margin-top: 3px; color: #666;">' + 
                            correctText + ': ' + stats.correct + ' | ' + 
-                           wrongText + ': ' + stats.wrong + '</div>';
+                           wrongText + ': ' + stats.wrong;
+            
+            // Add perfect count if threshold is set
+            if (perfectThreshold > 0) {
+                statsHtml += ' | ' + perfectText + ': ' + stats.perfect;
+                if (reachedThreshold) {
+                    statsHtml += ' ✓';
+                }
+            }
+            statsHtml += '</div>';
             
             html += '<button class="' + tabClass + '" data-date="' + date + '">' + 
                     formatDateDisplay(date) + statsHtml + '</button>';

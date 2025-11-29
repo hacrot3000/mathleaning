@@ -30,6 +30,7 @@ return [
     'no_items_for_date' => 'No items for this date',
     'correct_count' => 'Correct',
     'wrong_count' => 'Wrong',
+    'perfect_count' => 'Perfect',
     
     // Home page
     'app_title' => 'Learn Math',

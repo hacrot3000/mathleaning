@@ -202,6 +202,39 @@ body.with-padding {
     background-color: #45a049;
 }
 
+/* Perfect tab (reached perfect answer threshold) */
+.history-tab-perfect {
+    background-color: #2196F3 !important;
+    color: white !important;
+    border-color: #2196F3 !important;
+    font-weight: bold;
+}
+
+.history-tab-perfect:hover {
+    background-color: #1976D2 !important;
+}
+
+/* Active perfect tab (both active and perfect) */
+.history-tab-active.history-tab-perfect {
+    background-color: #1976D2 !important;
+    border-color: #1976D2 !important;
+}
+
+.history-tab-active.history-tab-perfect:hover {
+    background-color: #1565C0 !important;
+}
+
+/* History container highlight when today reached threshold */
+.history-container-perfect {
+    background-color: #E3F2FD;
+    border: 2px solid #2196F3;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
 .history-item {
     padding: 10px;
     margin: 8px 0;

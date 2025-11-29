@@ -30,6 +30,7 @@ return [
     'no_items_for_date' => 'Không có bài nào trong ngày này',
     'correct_count' => 'Đúng',
     'wrong_count' => 'Sai',
+    'perfect_count' => 'Hoàn hảo',
     
     // Home page
     'app_title' => 'Học Toán',

@@ -307,6 +307,33 @@
             }
         }
         
+        // Ensure at least one operand has a power > 1 (this is a power exercise!)
+        // Power 1 is valid, but not all powers should be 1 or 0
+        var hasPowerGreaterThanOne = powers.some(function(p) { return p > 1; });
+        if (!hasPowerGreaterThanOne) {
+            // Find operands with power 0 or 1
+            var candidates = [];
+            for (var j = 0; j < powers.length; j++) {
+                if (powers[j] <= 1) {
+                    candidates.push(j);
+                }
+            }
+            
+            if (candidates.length > 0) {
+                // Randomly select one operand to add power > 1
+                var randomIndex = candidates[getRndInteger(0, candidates.length - 1)];
+                // Ensure power is at least 2
+                var minPower = Math.max(2, config.power_min);
+                powers[randomIndex] = getRndInteger(minPower, config.power_max);
+            } else {
+                // Fallback: if somehow all are > 1 but we still need to ensure, 
+                // just pick a random one and ensure it's > 1
+                var randomIndex = getRndInteger(0, numOperands - 1);
+                var minPower = Math.max(2, config.power_min);
+                powers[randomIndex] = getRndInteger(minPower, config.power_max);
+            }
+        }
+        
         // Calculate result
         var values = [];
         for (var i = 0; i < operands.length; i++) {
