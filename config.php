@@ -162,13 +162,13 @@ $config_luythua = [
         'threshold' => 10,
         'num_operands_min' => 2,
         'num_operands_max' => 3,        // 1-2 toán tử
-        'number_types' => ['integer', 'decimal'], // Chỉ số nguyên và thực
+        'number_types' => ['integer'], // Chỉ số nguyên
         'allow_composite' => false,     // Không cho phép tổ hợp
         'power_min' => 0,
         'power_max' => 4,
         'power_probability' => 0.6,     // 60% số hạng có luỹ thừa
-        'integer_min' => -20,
-        'integer_max' => 20,
+        'integer_min' => -15,
+        'integer_max' => 15,
         'decimal_places' => 2
     ],
     
