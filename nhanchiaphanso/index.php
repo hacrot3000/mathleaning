@@ -144,7 +144,50 @@ include '../includes/header.php';
                 return result;
             }
 
+            function generateMixedNumber() {
+                // Tạo hỗn số: whole + numerator/denominator
+                var mixedConfig = CONFIG.mixed_number;
+                
+                var whole = getRndInteger(mixedConfig.whole_min, mixedConfig.whole_max);
+                var numerator = getRndInteger(1, mixedConfig.numerator_max);
+                var denominator = getRndInteger(mixedConfig.denominator_min, mixedConfig.denominator_max);
+                
+                // Đảm bảo tử < mẫu (phần phân số < 1)
+                if (numerator >= denominator) {
+                    numerator = getRndInteger(1, denominator - 1);
+                }
+                
+                // Rút gọn phần phân số
+                var g = gcd(numerator, denominator);
+                numerator = numerator / g;
+                denominator = denominator / g;
+                
+                // 30% là hỗn số âm
+                if (Math.random() < 0.3) {
+                    whole = -whole;
+                }
+                
+                // Chuyển hỗn số thành phân số: whole * den + num / den
+                var improperNum = whole * denominator + (whole >= 0 ? numerator : -numerator);
+                
+                return {
+                    num: improperNum,
+                    den: denominator,
+                    normalized: true,
+                    isMixed: true,
+                    mixedWhole: whole,
+                    mixedNumerator: numerator,
+                    mixedDenominator: denominator
+                };
+            }
+            
             function generateRandomFraction(minVal, maxVal) {
+                // Kiểm tra có tạo hỗn số không
+                var mixedConfig = CONFIG.mixed_number;
+                if (problemCount >= mixedConfig.start_from && Math.random() < mixedConfig.probability) {
+                    return generateMixedNumber();
+                }
+                
                 var num, den;
                 do {
                     num = getRndInteger(minVal, maxVal);
@@ -269,6 +312,26 @@ include '../includes/header.php';
                     return frac.num.toString();
                 }
                 
+                // Trường hợp hỗn số - hiển thị dạng a b/c
+                if (frac.isMixed && frac.mixedWhole !== undefined) {
+                    var whole = frac.mixedWhole;
+                    var num = frac.mixedNumerator;
+                    var den = frac.mixedDenominator;
+                    
+                    var mixedLatex;
+                    if (whole < 0) {
+                        // Hỗn số âm: -a b/c
+                        mixedLatex = whole + '\\dfrac{' + num + '}{' + den + '}';
+                        if (addParentheses) {
+                            mixedLatex = '\\left(' + mixedLatex + '\\right)';
+                        }
+                    } else {
+                        // Hỗn số dương: a b/c
+                        mixedLatex = whole + '\\dfrac{' + num + '}{' + den + '}';
+                    }
+                    return mixedLatex;
+                }
+                
                 var fractionLatex;
                 var hasExternalNegativeSign = false; // Dấu âm có nằm ngoài phân số không?
                 
@@ -319,6 +382,19 @@ include '../includes/header.php';
                 // Version văn bản cho lịch sử
                 if (frac.den === 1) {
                     return frac.num.toString();
+                }
+                
+                // Trường hợp hỗn số
+                if (frac.isMixed && frac.mixedWhole !== undefined) {
+                    var whole = frac.mixedWhole;
+                    var num = frac.mixedNumerator;
+                    var den = frac.mixedDenominator;
+                    
+                    if (whole < 0) {
+                        return '(' + whole + ' ' + num + '/' + den + ')';
+                    } else {
+                        return whole + ' ' + num + '/' + den;
+                    }
                 }
                 
                 if (frac.num < 0) {

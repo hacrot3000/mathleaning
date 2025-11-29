@@ -99,6 +99,17 @@ $config_phanso = [
         'num_operands_min' => 2,
         'num_operands_max' => 3,
         'require_negative' => true
+    ],
+    
+    // Cấu hình hỗn số (Mixed Numbers)
+    'mixed_number' => [
+        'start_from' => 12,         // Bắt đầu xuất hiện hỗn số từ câu thứ n
+        'probability' => 0.3,       // Xác suất xuất hiện hỗn số (30%)
+        'whole_min' => 1,           // Phần nguyên tối thiểu
+        'whole_max' => 20,          // Phần nguyên tối đa
+        'numerator_max' => 99,      // Tử số tối đa (2 chữ số)
+        'denominator_min' => 5,     // Mẫu số tối thiểu
+        'denominator_max' => 30     // Mẫu số tối đa
     ]
 ];
 
@@ -130,6 +141,17 @@ $config_nhanchiaphanso = [
         'num_operands_min' => 2,
         'num_operands_max' => 3,
         'require_negative' => true
+    ],
+    
+    // Cấu hình hỗn số (Mixed Numbers)
+    'mixed_number' => [
+        'start_from' => 12,         // Bắt đầu xuất hiện hỗn số từ câu thứ n
+        'probability' => 0.3,       // Xác suất xuất hiện hỗn số (30%)
+        'whole_min' => 1,           // Phần nguyên tối thiểu
+        'whole_max' => 15,          // Phần nguyên tối đa
+        'numerator_max' => 99,      // Tử số tối đa (2 chữ số)
+        'denominator_min' => 5,     // Mẫu số tối thiểu
+        'denominator_max' => 30     // Mẫu số tối đa
     ]
 ];
 
