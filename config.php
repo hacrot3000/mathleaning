@@ -15,7 +15,8 @@ $config_perfect_threshold = [
     'phanso_mixed' => 30,            // Ngưỡng cho Cộng Trừ Hỗn Số
     'nhanchiaphanso' => 30,          // Ngưỡng cho Nhân Chia Phân Số
     'nhanchiaphanso_mixed' => 20,    // Ngưỡng cho Nhân Chia Hỗn Số
-    'luythua' => 50                  // Ngưỡng cho Luỹ Thừa
+    'luythua' => 40,                 // Ngưỡng cho Luỹ Thừa
+    'trituyetdoi' => 40              // Ngưỡng cho Trị Tuyệt Đối
 ];
 
 
@@ -188,7 +189,7 @@ $config_luythua = [
     
     // Độ khó Vừa (Câu 11-25) - Thêm phân số
     'medium' => [
-        'threshold' => 25,
+        'threshold' => 20,
         'num_operands_min' => 2,
         'num_operands_max' => 3,
         'number_types' => ['integer', 'decimal', 'fraction'],
@@ -205,7 +206,7 @@ $config_luythua = [
     
     // Độ khó Khá (Câu 26-40) - Thêm hỗn số
     'hard' => [
-        'threshold' => 40,
+        'threshold' => 30,
         'num_operands_min' => 2,
         'num_operands_max' => 4,
         'number_types' => ['integer', 'decimal', 'fraction', 'mixed'],
@@ -248,9 +249,80 @@ $config_luythua = [
     ]
 ];
 
+// Cấu hình cho Trị Tuyệt Đối
+$config_trituyetdoi = [
+    // Độ khó Dễ (Câu 1-10) - Chỉ số nguyên và số thực
+    'easy' => [
+        'threshold' => 10,
+        'num_operands_min' => 2,
+        'num_operands_max' => 3,        // 1-2 toán tử
+        'number_types' => ['integer'], // Chỉ số nguyên
+        'allow_composite' => false,     // Không cho phép tổ hợp
+        'absolute_probability' => 0.6,  // 60% số hạng có trị tuyệt đối
+        'integer_min' => -15,
+        'integer_max' => 15,
+        'decimal_places' => 2
+    ],
+    
+    // Độ khó Vừa (Câu 11-25) - Thêm phân số
+    'medium' => [
+        'threshold' => 20,
+        'num_operands_min' => 2,
+        'num_operands_max' => 3,
+        'number_types' => ['integer', 'decimal', 'fraction'],
+        'allow_composite' => false,
+        'absolute_probability' => 0.7,
+        'integer_min' => -20,
+        'integer_max' => 20,
+        'fraction_min' => -10,
+        'fraction_max' => 10,
+        'decimal_places' => 2
+    ],
+    
+    // Độ khó Khá (Câu 26-40) - Thêm hỗn số
+    'hard' => [
+        'threshold' => 30,
+        'num_operands_min' => 2,
+        'num_operands_max' => 4,
+        'number_types' => ['integer', 'decimal', 'fraction', 'mixed'],
+        'allow_composite' => false,
+        'absolute_probability' => 0.75,
+        'integer_min' => -20,
+        'integer_max' => 20,
+        'fraction_min' => -15,
+        'fraction_max' => 15,
+        'mixed_whole_min' => 1,
+        'mixed_whole_max' => 5,
+        'mixed_num_max' => 20,
+        'mixed_den_min' => 2,
+        'mixed_den_max' => 10,
+        'decimal_places' => 2
+    ],
+    
+    // Độ khó Rất Khó (Câu 41+) - Cho phép tổ hợp
+    'expert' => [
+        'num_operands_min' => 2,
+        'num_operands_max' => 4,
+        'number_types' => ['integer', 'decimal', 'fraction', 'mixed', 'composite'],
+        'allow_composite' => true,
+        'composite_probability' => 0.4, // 40% số hạng là tổ hợp
+        'absolute_probability' => 0.8,
+        'integer_min' => -20,
+        'integer_max' => 20,
+        'fraction_min' => -15,
+        'fraction_max' => 15,
+        'mixed_whole_min' => 1,
+        'mixed_whole_max' => 5,
+        'mixed_num_max' => 20,
+        'mixed_den_min' => 2,
+        'mixed_den_max' => 10,
+        'decimal_places' => 2
+    ]
+];
+
 // Export config dưới dạng JSON để JavaScript có thể sử dụng
 function getConfigAsJSON($config_name) {
-    global $config_congtru, $config_nhanchia, $config_general, $config_phanso, $config_nhanchiaphanso, $config_luythua;
+    global $config_congtru, $config_nhanchia, $config_general, $config_phanso, $config_nhanchiaphanso, $config_luythua, $config_trituyetdoi;
     
     $config = null;
     switch ($config_name) {
@@ -268,6 +340,9 @@ function getConfigAsJSON($config_name) {
             break;
         case 'luythua':
             $config = $config_luythua;
+            break;
+        case 'trituyetdoi':
+            $config = $config_trituyetdoi;
             break;
         case 'general':
             $config = $config_general;

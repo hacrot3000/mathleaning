@@ -1,0 +1,10 @@
+/* Trị Tuyệt Đối Exercise Styles */
+
+.submit-btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #d882e8 0%, #e04d5f 100%);
+}
+

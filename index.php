@@ -131,6 +131,14 @@ $lang_code = getLangCode();
                             <?php echo $lang['power_practice_desc']; ?>
                         </div>
                     </a>
+                    
+                    <a href="exercises/trituyetdoi" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #f093fb 0%, #f5576c 100%); background: -moz-linear-gradient(135deg, #f093fb 0%, #f5576c 100%); background: -o-linear-gradient(135deg, #f093fb 0%, #f5576c 100%); background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div class="feature-icon">|x|</div>
+                        <div class="feature-title"><?php echo $lang['absolute_value_practice']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['absolute_value_practice_desc']; ?>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>

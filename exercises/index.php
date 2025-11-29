@@ -100,6 +100,17 @@ $exercises = [
         'use_history' => true,
         'config_general' => true,
         'exercise_type' => 'luythua'
+    ],
+    'trituyetdoi' => [
+        'file' => 'trituyetdoi.php',
+        'page_title' => 'Luyện Tập Trị Tuyệt Đối',
+        'config_type' => 'trituyetdoi',
+        'extra_css' => ['trituyetdoi.css'],
+        'use_katex' => true,
+        'use_user' => true,
+        'use_history' => true,
+        'config_general' => true,
+        'exercise_type' => 'trituyetdoi'
     ]
 ];
 
