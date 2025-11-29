@@ -152,6 +152,13 @@ body.with-padding {
     border-left: 4px solid #4CAF50;
 }
 
+.history-item-skipped {
+    background-color: #fff3cd;
+    border-left: 4px solid #ff9800;
+    border: 2px solid #ff9800;
+    font-weight: bold;
+}
+
 .history-problem {
     font-weight: bold;
     color: #2196F3;

@@ -172,6 +172,15 @@
                     </div>
                 </a>
                 
+                <a href="phanso/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -moz-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -o-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);">
+                    <div class="feature-icon">➗</div>
+                    <div class="feature-title">Cộng Trừ Phân Số</div>
+                    <div class="feature-description">
+                        Luyện tập cộng trừ phân số (có thể âm).<br>
+                        Kết quả rút gọn về dạng tối giản.
+                    </div>
+                </a>
+                
                 <a href="nhanchiasonguyen/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -moz-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -o-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: linear-gradient(135deg, #a044ff 0%, #6a3093 100%);">
                     <div class="feature-icon">✖️➗</div>
                     <div class="feature-title">Nhân Chia Số Nguyên</div>

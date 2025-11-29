@@ -181,7 +181,7 @@
 
                 function updateStatus()
                 {
-                    $('#status').html(passed + "/" + alltest.length + "(F:" + failed + ' R:' + currentTest + ')');
+                    $('#status').html(passed + "/" + alltest.length + "(Sai:" + failed + ' Vòng:' + currentTest + ')');
                 }
                 // 3 x 5 =
 

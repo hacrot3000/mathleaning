@@ -39,8 +39,8 @@
             
             <div class="history">
                 <h3>Lịch sử các bài đã làm</h3>
-                <button class="clear-history-btn" id="clear-history-btn">Xóa lịch sử</button>
                 <div id="history-list"></div>
+                <button class="clear-history-btn" id="clear-history-btn">Xóa lịch sử</button>
             </div>
         </div>
 
@@ -224,7 +224,7 @@
                     problemCount++;
                     
                     // Save to history
-                    saveProblemToHistory();
+                    saveProblemToHistory(false); // false = not skipped
                     
                     // Generate new problem after delay
                     setTimeout(function() {
@@ -247,11 +247,11 @@
             function skipProblem() {
                 // Tăng số câu đã làm
                 problemCount++;
-                saveProblemToHistory();
+                saveProblemToHistory(true); // true = skipped
                 generateNewProblem();
             }
 
-            function saveProblemToHistory() {
+            function saveProblemToHistory(skipped) {
                 // Don't save if there's no current problem
                 if (!currentProblem || !currentProblem.numbers || !currentProblem.operators) {
                     return;
@@ -266,7 +266,8 @@
                 problemHistory.push({
                     problem: problemText,
                     correctAnswer: currentProblem.correctAnswer,
-                    wrongAnswers: currentWrongAnswers.slice()
+                    wrongAnswers: currentWrongAnswers.slice(),
+                    skipped: skipped || false
                 });
                 
                 saveToLocalStorage();
@@ -287,7 +288,12 @@
                             continue;
                         }
                         
-                        html += '<div class="history-item">';
+                        // Style khác nhau cho bài skipped
+                        var itemClass = item.skipped ? 'history-item history-item-skipped' : 'history-item';
+                        var skippedLabel = item.skipped ? '<span style="background-color: #ff9800; color: white; padding: 2px 8px; border-radius: 3px; font-size: 80%; margin-right: 5px; font-weight: bold;">BỎ QUA</span>' : '';
+                        
+                        html += '<div class="' + itemClass + '">';
+                        html += skippedLabel;
                         html += '<span class="history-problem">' + item.problem + '</span> = ';
                         html += '<span class="history-correct">' + item.correctAnswer + '</span>';
                         
