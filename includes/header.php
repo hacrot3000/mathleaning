@@ -13,6 +13,8 @@
  *   include '../includes/header.php';
  */
 
+ $jsVersion = 6;
+
 // Default values
 $extra_css = isset($extra_css) ? $extra_css : [];
 $use_katex = isset($use_katex) ? $use_katex : false;
@@ -40,16 +42,16 @@ $lang_code = getLangCode();
         </script>
         
         <!-- Common CSS -->
-        <link rel="stylesheet" href="../css/common.css?v=1">
+        <link rel="stylesheet" href="../css/common.css?v=<?php echo $jsVersion; ?>">
         
         <!-- Extra CSS files -->
         <?php foreach ($extra_css as $css_file): ?>
             <?php if (strpos($css_file, 'http') === 0): ?>
-                <link rel="stylesheet" href="<?php echo htmlspecialchars($css_file); ?>">
+                <link rel="stylesheet" href="<?php echo htmlspecialchars($css_file); ?>?v=<?php echo $jsVersion; ?>">
             <?php elseif (strpos($css_file, '/') === 0): ?>
-                <link rel="stylesheet" href="<?php echo htmlspecialchars($css_file); ?>">
+                <link rel="stylesheet" href="<?php echo htmlspecialchars($css_file); ?>?v=<?php echo $jsVersion; ?>">
             <?php else: ?>
-                <link rel="stylesheet" href="../css/<?php echo htmlspecialchars($css_file); ?>">
+                <link rel="stylesheet" href="../css/<?php echo htmlspecialchars($css_file); ?>?v=<?php echo $jsVersion; ?>">
             <?php endif; ?>
         <?php endforeach; ?>
         
@@ -71,16 +73,19 @@ $lang_code = getLangCode();
         <script src="../lib/ion.sound-3.0.7/ion.sound.min.js"></script>
         
         <!-- Common JavaScript -->
-        <script src="../js/common.js?v=2"></script>
+        <script src="../js/common.js?v=<?php echo $jsVersion; ?>"></script>
+        
+        <!-- Exercise Common Functions -->
+        <script src="../js/exercise-common.js?v=<?php echo $jsVersion; ?>"></script>
         
         <!-- User management (if needed) -->
         <?php if ($use_user): ?>
-            <script src="../js/user.js?v=1"></script>
+            <script src="../js/user.js?v=<?php echo $jsVersion; ?>"></script>
         <?php endif; ?>
         
         <!-- History management (if needed) -->
         <?php if ($use_history): ?>
-            <script src="../js/history.js?v=1"></script>
+            <script src="../js/history.js?v=<?php echo $jsVersion; ?>"></script>
         <?php endif; ?>
         
         <!-- Config from PHP -->

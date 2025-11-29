@@ -38,6 +38,7 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
     var problemCount = 0;
     var historyManager = null;
     var FORCE_MIXED_MODE = <?php echo $FORCE_MIXED_MODE ? 'true' : 'false'; ?>;
+    var storage = createLocalStorageManager(FORCE_MIXED_MODE ? 'nhanchiaphanso_mixed' : 'nhanchiaphanso');
 
     // Initialize
     $(function () {
@@ -60,156 +61,41 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
         } else {
             displayProblem();
         }
+        
+        setupStandardEventHandlers({
+            inputSelector: '#answer-numerator, #answer-denominator',
+            checkAnswerFn: checkAnswer,
+            skipProblemFn: skipProblem
+        });
     });
 
-    function getRndInteger(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function gcd(a, b) {
-        a = Math.abs(a);
-        b = Math.abs(b);
-        while (b !== 0) {
-            var t = b;
-            b = a % b;
-            a = t;
-        }
-        return a;
-    }
-
-    function simplifyFraction(num, den) {
-        if (den === 0) return {num: 0, den: 1, normalized: true};
-        
-        var g = gcd(num, den);
-        num = num / g;
-        den = den / g;
-        
-        if (den < 0) {
-            num = -num;
-            den = -den;
-        }
-        
-        return {num: num, den: den, normalized: true};
-    }
-    
-    function createFractionVariant(num, den) {
-        if (num === 0 || den === 1) {
-            return {num: num, den: den, normalized: true};
-        }
-        
-        if (Math.random() < 0.3 && num < 0) {
-            return {num: -num, den: -den, normalized: false};
-        }
-        
-        return {num: num, den: den, normalized: true};
-    }
-
-    function multiplyFractions(f1, f2) {
-        var num = f1.num * f2.num;
-        var den = f1.den * f2.den;
-        var result = simplifyFraction(num, den);
-        result.normalized = true;
-        return result;
-    }
-
-    function divideFractions(f1, f2) {
-        var num = f1.num * f2.den;
-        var den = f1.den * f2.num;
-        var result = simplifyFraction(num, den);
-        result.normalized = true;
-        return result;
-    }
-
-    function generateMixedNumber() {
-        var mixedConfig = CONFIG.mixed_number;
-        
-        var whole = getRndInteger(mixedConfig.whole_min, mixedConfig.whole_max);
-        var numerator = getRndInteger(1, mixedConfig.numerator_max);
-        var denominator = getRndInteger(mixedConfig.denominator_min, mixedConfig.denominator_max);
-        
-        if (numerator >= denominator) {
-            numerator = getRndInteger(1, denominator - 1);
-        }
-        
-        var g = gcd(numerator, denominator);
-        numerator = numerator / g;
-        denominator = denominator / g;
-        
-        if (Math.random() < 0.3) {
-            whole = -whole;
-        }
-        
-        var improperNum = whole * denominator + (whole >= 0 ? numerator : -numerator);
-        
-        return {
-            num: improperNum,
-            den: denominator,
-            normalized: true,
-            isMixed: true,
-            mixedWhole: whole,
-            mixedNumerator: numerator,
-            mixedDenominator: denominator
-        };
-    }
-    
-    function generateRandomFraction(minVal, maxVal) {
-        var mixedConfig = CONFIG.mixed_number;
-        
-        if (FORCE_MIXED_MODE) {
-            return generateMixedNumber();
-        }
-        
-        if (problemCount >= mixedConfig.start_from && Math.random() < mixedConfig.probability) {
-            return generateMixedNumber();
-        }
-        
-        var num, den;
-        do {
-            num = getRndInteger(minVal, maxVal);
-            den = getRndInteger(minVal, maxVal);
-            
-            if (den === 0) continue;
-            if (num < 0 && den < 0) continue;
-            if (num === 0 && Math.random() < 0.7) continue;
-            
-            break;
-        } while (true);
-        
-        var simplified = simplifyFraction(num, den);
-        return createFractionVariant(simplified.num, simplified.den);
-    }
-
     function generateNewProblem() {
-        var numOperands;
-        var minVal, maxVal;
-        var requireNegative = false;
-        var difficultyLevel = '';
+        var difficulty = getDifficultyConfig(problemCount, CONFIG);
+        var config = difficulty.config;
+        var difficultyLevel = difficulty.difficultyLevel;
         
-        if (problemCount < CONFIG.easy.threshold) {
-            numOperands = CONFIG.easy.num_operands;
-            minVal = CONFIG.easy.min;
-            maxVal = CONFIG.easy.max;
-            requireNegative = CONFIG.easy.require_negative;
-            difficultyLevel = 'easy';
-        } else if (problemCount < CONFIG.medium.threshold) {
-            numOperands = getRndInteger(CONFIG.medium.num_operands_min, CONFIG.medium.num_operands_max);
-            minVal = CONFIG.medium.min;
-            maxVal = CONFIG.medium.max;
-            requireNegative = CONFIG.medium.require_negative;
-            difficultyLevel = 'medium';
-        } else {
-            numOperands = getRndInteger(CONFIG.hard.num_operands_min, CONFIG.hard.num_operands_max);
-            minVal = CONFIG.hard.min;
-            maxVal = CONFIG.hard.max;
-            requireNegative = CONFIG.hard.require_negative;
-            difficultyLevel = 'hard';
-        }
+        var numOperands = config.num_operands || 
+            getRndInteger(config.num_operands_min, config.num_operands_max);
+        var minVal = config.min;
+        var maxVal = config.max;
+        var requireNegative = config.require_negative;
         
         var fractions = [];
         var operators = [];
         
         for (var i = 0; i < numOperands; i++) {
-            fractions.push(generateRandomFraction(minVal, maxVal));
+            // Generate fraction with mixed number logic
+            var frac;
+            if (FORCE_MIXED_MODE) {
+                frac = generateMixedNumber(CONFIG.mixed_number);
+            } else if (problemCount >= CONFIG.mixed_number.start_from && Math.random() < CONFIG.mixed_number.probability) {
+                frac = generateMixedNumber(CONFIG.mixed_number);
+            } else {
+                frac = generateRandomFraction(minVal, maxVal);
+            }
+            
+            fractions.push(frac);
+            
             if (i < numOperands - 1) {
                 if (difficultyLevel === 'easy') {
                     operators.push('×');
@@ -227,7 +113,7 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
             
             if (mixedCount === 0) {
                 var randomIndex = getRndInteger(0, fractions.length - 1);
-                fractions[randomIndex] = generateMixedNumber();
+                fractions[randomIndex] = generateMixedNumber(CONFIG.mixed_number);
                 mixedCount++;
             }
             
@@ -236,19 +122,12 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
                 do {
                     randomIndex = getRndInteger(0, fractions.length - 1);
                 } while (fractions[randomIndex].isMixed);
-                fractions[randomIndex] = generateMixedNumber();
+                fractions[randomIndex] = generateMixedNumber(CONFIG.mixed_number);
             }
         }
         
         if (requireNegative) {
-            var hasNegative = false;
-            for (var i = 0; i < fractions.length; i++) {
-                if (fractions[i].num < 0) {
-                    hasNegative = true;
-                    break;
-                }
-            }
-            
+            var hasNegative = fractions.some(function(f) { return f.num < 0; });
             if (!hasNegative) {
                 var randomIndex = getRndInteger(0, fractions.length - 1);
                 fractions[randomIndex].num = -Math.abs(fractions[randomIndex].num);
@@ -446,14 +325,13 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
             showFeedback(true);
             
             problemCount++;
-            saveProblemToHistory(false);
+            saveProblemToHistoryLocal(false);
             
             setTimeout(function() {
                 generateNewProblem();
             }, 1500);
         } else {
-            var errorMsg = t('incorrect', 'Sai') + '! ' + t('try_again', 'Thử lại') + '. (' + (typeof LANG !== 'undefined' ? LANG.correct : 'Đúng') + ': ' + formatFractionText(correctAnswer) + ')';
-            showFeedback(false, '✗ ' + errorMsg);
+            showFeedback(false);
             
             currentWrongAnswers.push(formatFractionText(userAnswer));
             saveToLocalStorage();
@@ -463,80 +341,43 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
     }
 
     function skipProblem() {
-        problemCount++;
-        saveProblemToHistory(true);
-        generateNewProblem();
+        standardSkipProblem(saveProblemToHistoryLocal, generateNewProblem);
     }
 
-    function saveProblemToHistory(skipped) {
+    function saveProblemToHistoryLocal(skipped) {
         if (!currentProblem || !currentProblem.fractions || !currentProblem.operators) {
             return;
         }
         
         var problemText = formatFractionText(currentProblem.fractions[0]);
-        
         for (var i = 0; i < currentProblem.operators.length; i++) {
             problemText += ' ' + currentProblem.operators[i] + ' ' + formatFractionText(currentProblem.fractions[i + 1]);
         }
         
         var correctAnswerText = formatFractionText(currentProblem.correctAnswer);
         
-        // Format timestamp as YYYY-MM-DD HH:MM:SS (like server)
-        var now = new Date();
-        var createdAt = now.getFullYear() + '-' + 
-                       String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                       String(now.getDate()).padStart(2, '0') + ' ' + 
-                       String(now.getHours()).padStart(2, '0') + ':' + 
-                       String(now.getMinutes()).padStart(2, '0') + ':' + 
-                       String(now.getSeconds()).padStart(2, '0');
-        
-        var historyItem = {
-            problem: problemText,
-            correctAnswer: correctAnswerText,
-            wrongAnswers: currentWrongAnswers.slice(),
-            skipped: skipped || false,
-            createdAt: createdAt
-        };
-        
-        problemHistory.unshift(historyItem);
-        
-        saveHistoryToServer(
-            historyManager,
-            problemText,
-            correctAnswerText,
-            currentWrongAnswers,
-            skipped,
-            function(err) {
-                if (err) console.error('Failed to save history to server');
-            }
-        );
+        saveProblemToHistory({
+            problemState: {
+                currentProblem: currentProblem,
+                currentWrongAnswers: currentWrongAnswers,
+                problemHistory: problemHistory,
+                historyManager: historyManager
+            },
+            problemText: problemText,
+            correctAnswerText: correctAnswerText,
+            skipped: skipped
+        });
         
         saveToLocalStorage();
-        displayHistory();
     }
 
     function saveToLocalStorage() {
-        var storageKey = FORCE_MIXED_MODE ? 'currentProblemFractionMultDivMixed' : 'currentProblemFractionMultDiv';
-        var wrongAnswersKey = FORCE_MIXED_MODE ? 'currentWrongAnswersFractionMultDivMixed' : 'currentWrongAnswersFractionMultDiv';
-        saveToStorage(storageKey, currentProblem);
-        saveToStorage(wrongAnswersKey, currentWrongAnswers);
+        storage.saveState(currentProblem, currentWrongAnswers);
     }
 
     function loadFromLocalStorage() {
-        var storageKey = FORCE_MIXED_MODE ? 'currentProblemFractionMultDivMixed' : 'currentProblemFractionMultDiv';
-        var wrongAnswersKey = FORCE_MIXED_MODE ? 'currentWrongAnswersFractionMultDivMixed' : 'currentWrongAnswersFractionMultDiv';
-        currentProblem = loadFromStorage(storageKey);
-        currentWrongAnswers = loadFromStorage(wrongAnswersKey) || [];
+        var state = storage.loadState();
+        currentProblem = state.currentProblem;
+        currentWrongAnswers = state.currentWrongAnswers;
     }
-
-    // Event handlers
-    $('#submit-btn').click(function() {
-        checkAnswer();
-    });
-
-    $('#skip-btn').click(function() {
-        skipProblem();
-    });
-
-    setupEnterKeyHandler('#answer-numerator, #answer-denominator', checkAnswer);
 </script>

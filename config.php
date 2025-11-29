@@ -155,9 +155,88 @@ $config_nhanchiaphanso = [
     ]
 ];
 
+// Cấu hình cho Luỹ Thừa
+$config_luythua = [
+    // Độ khó Dễ (Câu 1-10) - Chỉ số nguyên và số thực
+    'easy' => [
+        'threshold' => 10,
+        'num_operands_min' => 2,
+        'num_operands_max' => 3,        // 1-2 toán tử
+        'number_types' => ['integer', 'decimal'], // Chỉ số nguyên và thực
+        'allow_composite' => false,     // Không cho phép tổ hợp
+        'power_min' => 0,
+        'power_max' => 4,
+        'power_probability' => 0.6,     // 60% số hạng có luỹ thừa
+        'integer_min' => -20,
+        'integer_max' => 20,
+        'decimal_places' => 2
+    ],
+    
+    // Độ khó Vừa (Câu 11-25) - Thêm phân số
+    'medium' => [
+        'threshold' => 25,
+        'num_operands_min' => 2,
+        'num_operands_max' => 3,
+        'number_types' => ['integer', 'decimal', 'fraction'],
+        'allow_composite' => false,
+        'power_min' => 0,
+        'power_max' => 5,
+        'power_probability' => 0.7,
+        'integer_min' => -20,
+        'integer_max' => 20,
+        'fraction_min' => -10,
+        'fraction_max' => 10,
+        'decimal_places' => 2
+    ],
+    
+    // Độ khó Khá (Câu 26-40) - Thêm hỗn số
+    'hard' => [
+        'threshold' => 40,
+        'num_operands_min' => 2,
+        'num_operands_max' => 4,
+        'number_types' => ['integer', 'decimal', 'fraction', 'mixed'],
+        'allow_composite' => false,
+        'power_min' => 0,
+        'power_max' => 6,
+        'power_probability' => 0.75,
+        'integer_min' => -20,
+        'integer_max' => 20,
+        'fraction_min' => -15,
+        'fraction_max' => 15,
+        'mixed_whole_min' => 1,
+        'mixed_whole_max' => 5,
+        'mixed_num_max' => 20,
+        'mixed_den_min' => 2,
+        'mixed_den_max' => 10,
+        'decimal_places' => 2
+    ],
+    
+    // Độ khó Rất Khó (Câu 41+) - Cho phép tổ hợp
+    'expert' => [
+        'num_operands_min' => 2,
+        'num_operands_max' => 4,
+        'number_types' => ['integer', 'decimal', 'fraction', 'mixed', 'composite'],
+        'allow_composite' => true,
+        'composite_probability' => 0.4, // 40% số hạng là tổ hợp
+        'power_min' => 0,
+        'power_max' => 7,
+        'power_probability' => 0.8,
+        'integer_min' => -20,
+        'integer_max' => 20,
+        'fraction_min' => -15,
+        'fraction_max' => 15,
+        'mixed_whole_min' => 1,
+        'mixed_whole_max' => 5,
+        'mixed_num_max' => 20,
+        'mixed_den_min' => 2,
+        'mixed_den_max' => 10,
+        'decimal_places' => 2
+    ]
+];
+
 // Export config dưới dạng JSON để JavaScript có thể sử dụng
 function getConfigAsJSON($config_name) {
-    global $config_congtru, $config_nhanchia, $config_general, $config_phanso, $config_nhanchiaphanso;
+    global $config_congtru, $config_nhanchia, $config_general, $config_phanso, $config_nhanchiaphanso, $config_luythua;
     
     $config = null;
     switch ($config_name) {
@@ -172,6 +251,9 @@ function getConfigAsJSON($config_name) {
             break;
         case 'nhanchiaphanso':
             $config = $config_nhanchiaphanso;
+            break;
+        case 'luythua':
+            $config = $config_luythua;
             break;
         case 'general':
             $config = $config_general;

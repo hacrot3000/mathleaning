@@ -89,6 +89,17 @@ $exercises = [
         'use_history' => false,
         'config_general' => false,
         'exercise_type' => 'cuuchuong'
+    ],
+    'luythua' => [
+        'file' => 'luythua.php',
+        'page_title' => 'Luyện Tập Luỹ Thừa',
+        'config_type' => 'luythua',
+        'extra_css' => ['luythua.css'],
+        'use_katex' => true,
+        'use_user' => true,
+        'use_history' => true,
+        'config_general' => true,
+        'exercise_type' => 'luythua'
     ]
 ];
 

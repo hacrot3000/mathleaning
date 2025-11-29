@@ -122,7 +122,15 @@ $lang_code = getLangCode();
                         <div class="feature-description">
                             <?php echo $lang['multiply_divide_mixed_desc']; ?>
                         </div>
-                    </a>                
+                    </a>
+                    
+                    <a href="exercises/luythua" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #667eea 0%, #764ba2 100%); background: -moz-linear-gradient(135deg, #667eea 0%, #764ba2 100%); background: -o-linear-gradient(135deg, #667eea 0%, #764ba2 100%); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="feature-icon">x²</div>
+                        <div class="feature-title"><?php echo $lang['power_practice']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['power_practice_desc']; ?>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>

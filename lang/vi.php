@@ -57,6 +57,8 @@ return [
     'add_subtract_mixed_desc' => 'Luyện tập cộng trừ hỗn số.<br>Luôn có ít nhất 1-2 hỗn số trong phép toán.',
     'multiply_divide_mixed' => 'Nhân Chia Hỗn Số',
     'multiply_divide_mixed_desc' => 'Luyện tập nhân chia hỗn số.<br>Luôn có ít nhất 1-2 hỗn số trong phép toán.',
+    'power_practice' => 'Luyện Tập Luỹ Thừa',
+    'power_practice_desc' => 'Luyện tập tính toán với luỹ thừa.<br>Bao gồm số nguyên, thực, phân số, hỗn số và tổ hợp.',
     
     // Exercise pages
     'practice_add_subtract_integers' => 'Luyện Tập Cộng Trừ Số Nguyên',
@@ -65,6 +67,8 @@ return [
     'practice_multiply_divide_fractions' => 'Luyện Tập Nhân Chia Phân Số',
     'practice_add_subtract_mixed' => 'Luyện Tập Cộng Trừ Hỗn Số',
     'practice_multiply_divide_mixed' => 'Luyện Tập Nhân Chia Hỗn Số',
+    'practice_power' => 'Luyện Tập Luỹ Thừa',
+    'difficulty_expert' => 'Rất khó',
     
     // Difficulty levels
     'difficulty_easy' => 'Dễ',

@@ -57,6 +57,8 @@ return [
     'add_subtract_mixed_desc' => 'Practice adding and subtracting mixed numbers.<br>Always includes 1-2 mixed numbers in each problem.',
     'multiply_divide_mixed' => 'Multiply/Divide Mixed Numbers',
     'multiply_divide_mixed_desc' => 'Practice multiplying and dividing mixed numbers.<br>Always includes 1-2 mixed numbers in each problem.',
+    'power_practice' => 'Power/Exponent Practice',
+    'power_practice_desc' => 'Practice calculations with exponents.<br>Includes integers, decimals, fractions, mixed numbers and compositions.',
     
     // Exercise pages
     'practice_add_subtract_integers' => 'Practice Add/Subtract Integers',
@@ -65,6 +67,8 @@ return [
     'practice_multiply_divide_fractions' => 'Practice Multiply/Divide Fractions',
     'practice_add_subtract_mixed' => 'Practice Add/Subtract Mixed Numbers',
     'practice_multiply_divide_mixed' => 'Practice Multiply/Divide Mixed Numbers',
+    'practice_power' => 'Practice Powers/Exponents',
+    'difficulty_expert' => 'Expert',
     
     // Difficulty levels
     'difficulty_easy' => 'Easy',

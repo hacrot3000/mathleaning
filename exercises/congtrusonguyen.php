@@ -23,6 +23,7 @@
     var problemHistory = [];
     var problemCount = 0;
     var historyManager = null;
+    var storage = createLocalStorageManager('congtru');
 
     // Initialize
     $(function () {
@@ -45,40 +46,24 @@
         } else {
             displayProblem();
         }
+        
+        setupStandardEventHandlers({
+            inputSelector: '#answer-input',
+            checkAnswerFn: checkAnswer,
+            skipProblemFn: skipProblem
+        });
     });
-
-    function formatNumber(num) {
-        if (num < 0) {
-            return '(' + num + ')';
-        }
-        return num;
-    }
     
     function generateNewProblem() {
-        var numOperands;
-        var minNum, maxNum;
-        var requireNegative = false;
-        var difficultyLevel = '';
+        var difficulty = getDifficultyConfig(problemCount, CONFIG);
+        var config = difficulty.config;
+        var difficultyLevel = difficulty.difficultyLevel;
         
-        if (problemCount < CONFIG.easy.threshold) {
-            numOperands = CONFIG.easy.num_operands;
-            minNum = CONFIG.easy.min;
-            maxNum = CONFIG.easy.max;
-            requireNegative = CONFIG.easy.require_negative;
-            difficultyLevel = 'easy';
-        } else if (problemCount < CONFIG.medium.threshold) {
-            numOperands = getRndInteger(CONFIG.medium.num_operands_min, CONFIG.medium.num_operands_max);
-            minNum = CONFIG.medium.min;
-            maxNum = CONFIG.medium.max;
-            requireNegative = CONFIG.medium.require_negative;
-            difficultyLevel = 'medium';
-        } else {
-            numOperands = getRndInteger(CONFIG.hard.num_operands_min, CONFIG.hard.num_operands_max);
-            minNum = CONFIG.hard.min;
-            maxNum = CONFIG.hard.max;
-            requireNegative = CONFIG.hard.require_negative;
-            difficultyLevel = 'hard';
-        }
+        var numOperands = config.num_operands || 
+            getRndInteger(config.num_operands_min, config.num_operands_max);
+        var minNum = config.min;
+        var maxNum = config.max;
+        var requireNegative = config.require_negative;
         
         var numbers = [];
         var operators = [];
@@ -91,14 +76,7 @@
         }
         
         if (requireNegative) {
-            var hasNegative = false;
-            for (var i = 0; i < numbers.length; i++) {
-                if (numbers[i] < 0) {
-                    hasNegative = true;
-                    break;
-                }
-            }
-            
+            var hasNegative = numbers.some(function(n) { return n < 0; });
             if (!hasNegative) {
                 var randomIndex = getRndInteger(0, numbers.length - 1);
                 numbers[randomIndex] = -Math.abs(numbers[randomIndex]);
@@ -144,25 +122,7 @@
         focusAnswerInput();
         hideFeedback();
         
-        var difficultyText = '';
-        var easyText = t('difficulty_easy', 'Dễ');
-        var mediumText = t('difficulty_medium', 'Trung bình');
-        var hardText = t('difficulty_hard', 'Khó');
-        
-        var hasNegativeText = t('has_negative', 'có số âm');
-        var numberText = t('number', 'số');
-        var toText = t('to', 'đến');
-        var operatorText = t('operator', 'toán tử');
-        
-        if (problemCount < CONFIG.easy.threshold) {
-            difficultyText = easyText + ' (' + numberText + ' ' + CONFIG.easy.min + ' ' + toText + ' ' + CONFIG.easy.max + ', ' + (CONFIG.easy.num_operands - 1) + ' ' + operatorText + ')';
-        } else if (problemCount < CONFIG.medium.threshold) {
-            difficultyText = mediumText + ' (' + hasNegativeText + ', ' + CONFIG.medium.min + ' ' + toText + ' ' + CONFIG.medium.max + ', ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' ' + operatorText + ')';
-        } else {
-            difficultyText = hardText + ' (' + hasNegativeText + ', ' + CONFIG.hard.min + ' ' + toText + ' ' + CONFIG.hard.max + ', ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' ' + operatorText + ')';
-        }
-        
-        $('#difficulty-level').html(difficultyText);
+        $('#difficulty-level').html(getDifficultyText(currentProblem.difficulty));
         $('#question-number').html((problemCount + 1));
     }
 
@@ -178,7 +138,7 @@
             showFeedback(true);
             
             problemCount++;
-            saveProblemToHistory(false);
+            saveProblemToHistoryLocal(false);
             
             setTimeout(function() {
                 generateNewProblem();
@@ -194,73 +154,39 @@
     }
 
     function skipProblem() {
-        problemCount++;
-        saveProblemToHistory(true);
-        generateNewProblem();
+        standardSkipProblem(saveProblemToHistoryLocal, generateNewProblem);
     }
 
-    function saveProblemToHistory(skipped) {
+    function saveProblemToHistoryLocal(skipped) {
         if (!currentProblem || !currentProblem.numbers || !currentProblem.operators) {
             return;
         }
         
         var problemText = formatNumber(currentProblem.numbers[0]);
-        
         for (var i = 0; i < currentProblem.operators.length; i++) {
             problemText += ' ' + currentProblem.operators[i] + ' ' + formatNumber(currentProblem.numbers[i + 1]);
         }
         
-        // Format timestamp as YYYY-MM-DD HH:MM:SS (like server)
-        var now = new Date();
-        var createdAt = now.getFullYear() + '-' + 
-                       String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                       String(now.getDate()).padStart(2, '0') + ' ' + 
-                       String(now.getHours()).padStart(2, '0') + ':' + 
-                       String(now.getMinutes()).padStart(2, '0') + ':' + 
-                       String(now.getSeconds()).padStart(2, '0');
-        
-        var historyItem = {
-            problem: problemText,
-            correctAnswer: currentProblem.correctAnswer,
-            wrongAnswers: currentWrongAnswers.slice(),
-            skipped: skipped || false,
-            createdAt: createdAt
-        };
-        
-        problemHistory.unshift(historyItem);
-        
-        saveHistoryToServer(
-            historyManager,
-            problemText,
-            currentProblem.correctAnswer.toString(),
-            currentWrongAnswers,
-            skipped,
-            function(err) {
-                if (err) console.error('Failed to save history to server');
-            }
-        );
-        
-        displayHistory();
+        saveProblemToHistory({
+            problemState: {
+                currentProblem: currentProblem,
+                currentWrongAnswers: currentWrongAnswers,
+                problemHistory: problemHistory,
+                historyManager: historyManager
+            },
+            problemText: problemText,
+            correctAnswerText: currentProblem.correctAnswer.toString(),
+            skipped: skipped
+        });
     }
 
     function saveToLocalStorage() {
-        saveToStorage('currentProblem_congtru', currentProblem);
-        saveToStorage('currentWrongAnswers_congtru', currentWrongAnswers);
+        storage.saveState(currentProblem, currentWrongAnswers);
     }
 
     function loadFromLocalStorage() {
-        currentProblem = loadFromStorage('currentProblem_congtru');
-        currentWrongAnswers = loadFromStorage('currentWrongAnswers_congtru') || [];
+        var state = storage.loadState();
+        currentProblem = state.currentProblem;
+        currentWrongAnswers = state.currentWrongAnswers;
     }
-
-    // Event handlers
-    $('#submit-btn').click(function() {
-        checkAnswer();
-    });
-
-    $('#skip-btn').click(function() {
-        skipProblem();
-    });
-
-    setupEnterKeyHandler('#answer-input', checkAnswer);
 </script>

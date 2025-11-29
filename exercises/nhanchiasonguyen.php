@@ -28,6 +28,7 @@
     var problemHistory = [];
     var problemCount = 0;
     var historyManager = null;
+    var storage = createLocalStorageManager('nhanchia');
 
     // Initialize
     $(function () {
@@ -50,43 +51,24 @@
         } else {
             displayProblem();
         }
+        
+        setupStandardEventHandlers({
+            inputSelector: '#answer-input',
+            checkAnswerFn: checkAnswer,
+            skipProblemFn: skipProblem
+        });
     });
-
-    function formatNumber(num) {
-        if (num < 0) {
-            return '(' + num + ')';
-        }
-        return num;
-    }
     
     function generateNewProblem() {
-        var minNum, maxNum;
-        var requireNegative = false;
-        var operator;
-        var operators;
-        var difficultyLevel = '';
+        var difficulty = getDifficultyConfig(problemCount, CONFIG);
+        var config = difficulty.config;
+        var difficultyLevel = difficulty.difficultyLevel;
         
-        if (problemCount < CONFIG.easy.threshold) {
-            minNum = CONFIG.easy.min;
-            maxNum = CONFIG.easy.max;
-            requireNegative = CONFIG.easy.require_negative;
-            operators = CONFIG.easy.operators;
-            difficultyLevel = 'easy';
-        } else if (problemCount < CONFIG.medium.threshold) {
-            minNum = CONFIG.medium.min;
-            maxNum = CONFIG.medium.max;
-            requireNegative = CONFIG.medium.require_negative;
-            operators = CONFIG.medium.operators;
-            difficultyLevel = 'medium';
-        } else {
-            minNum = CONFIG.hard.min;
-            maxNum = CONFIG.hard.max;
-            requireNegative = CONFIG.hard.require_negative;
-            operators = CONFIG.hard.operators;
-            difficultyLevel = 'hard';
-        }
-        
-        operator = operators[Math.floor(Math.random() * operators.length)];
+        var minNum = config.min;
+        var maxNum = config.max;
+        var requireNegative = config.require_negative;
+        var operators = config.operators;
+        var operator = operators[Math.floor(Math.random() * operators.length)];
         
         var num1, num2, result;
         
@@ -179,33 +161,7 @@
         focusAnswerInput();
         hideFeedback();
         
-        var difficultyText = '';
-        var easyText = t('difficulty_easy', 'Dễ');
-        var mediumText = t('difficulty_medium', 'Trung bình');
-        var hardText = t('difficulty_hard', 'Khó');
-        var multiplyText = t('multiply', 'nhân');
-        var divideText = t('divide', 'chia');
-        var multiplyDivideText = multiplyText + '/' + divideText;
-        var onlyMultiplyText = t('only_multiply', 'chỉ nhân');
-        var onlyDivideText = t('only_divide', 'chỉ chia');
-        var hasNegativeText = t('has_negative', 'có số âm');
-        var numberText = t('number', 'số');
-        var operatorText = t('operator', 'toán tử');
-        var toText = t('to', 'đến');
-        
-        var operatorNames = '';
-        if (problemCount < CONFIG.easy.threshold) {
-            operatorNames = CONFIG.easy.operators.length > 1 ? multiplyDivideText : (CONFIG.easy.operators[0] === '×' ? onlyMultiplyText : onlyDivideText);
-            difficultyText = easyText + ' (' + operatorNames + ', ' + numberText + ' ' + CONFIG.easy.min + '-' + CONFIG.easy.max + ')';
-        } else if (problemCount < CONFIG.medium.threshold) {
-            operatorNames = CONFIG.medium.operators.length > 1 ? multiplyDivideText : (CONFIG.medium.operators[0] === '×' ? onlyMultiplyText : onlyDivideText);
-            difficultyText = mediumText + ' (' + operatorNames + ', ' + hasNegativeText + ', ' + CONFIG.medium.min + ' ' + toText + ' ' + CONFIG.medium.max + ')';
-        } else {
-            operatorNames = CONFIG.hard.operators.length > 1 ? multiplyDivideText : (CONFIG.hard.operators[0] === '×' ? onlyMultiplyText : onlyDivideText);
-            difficultyText = hardText + ' (' + operatorNames + ', ' + hasNegativeText + ', ' + CONFIG.hard.min + ' ' + toText + ' ' + CONFIG.hard.max + ')';
-        }
-        
-        $('#difficulty-level').html(difficultyText);
+        $('#difficulty-level').html(getDifficultyText(currentProblem.difficulty));
         $('#question-number').html((problemCount + 1));
     }
 
@@ -234,7 +190,7 @@
             showFeedback(true);
             
             problemCount++;
-            saveProblemToHistory(false);
+            saveProblemToHistoryLocal(false);
             
             setTimeout(function() {
                 generateNewProblem();
@@ -250,12 +206,10 @@
     }
 
     function skipProblem() {
-        problemCount++;
-        saveProblemToHistory(true);
-        generateNewProblem();
+        standardSkipProblem(saveProblemToHistoryLocal, generateNewProblem);
     }
 
-    function saveProblemToHistory(skipped) {
+    function saveProblemToHistoryLocal(skipped) {
         if (!currentProblem) {
             return;
         }
@@ -264,57 +218,26 @@
                           currentProblem.operator + ' ' + 
                           formatNumber(currentProblem.num2);
         
-        // Format timestamp as YYYY-MM-DD HH:MM:SS (like server)
-        var now = new Date();
-        var createdAt = now.getFullYear() + '-' + 
-                       String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-                       String(now.getDate()).padStart(2, '0') + ' ' + 
-                       String(now.getHours()).padStart(2, '0') + ':' + 
-                       String(now.getMinutes()).padStart(2, '0') + ':' + 
-                       String(now.getSeconds()).padStart(2, '0');
-        
-        var historyItem = {
-            problem: problemText,
-            correctAnswer: currentProblem.correctAnswer,
-            wrongAnswers: currentWrongAnswers.slice(),
-            skipped: skipped || false,
-            createdAt: createdAt
-        };
-        
-        problemHistory.unshift(historyItem);
-        
-        saveHistoryToServer(
-            historyManager,
-            problemText,
-            currentProblem.correctAnswer.toString(),
-            currentWrongAnswers,
-            skipped,
-            function(err) {
-                if (err) console.error('Failed to save history');
-            }
-        );
-        
-        displayHistory();
+        saveProblemToHistory({
+            problemState: {
+                currentProblem: currentProblem,
+                currentWrongAnswers: currentWrongAnswers,
+                problemHistory: problemHistory,
+                historyManager: historyManager
+            },
+            problemText: problemText,
+            correctAnswerText: currentProblem.correctAnswer.toString(),
+            skipped: skipped
+        });
     }
 
     function saveToLocalStorage() {
-        saveToStorage('currentProblemMultDiv', currentProblem);
-        saveToStorage('currentWrongAnswersMultDiv', currentWrongAnswers);
+        storage.saveState(currentProblem, currentWrongAnswers);
     }
 
     function loadFromLocalStorage() {
-        currentProblem = loadFromStorage('currentProblemMultDiv');
-        currentWrongAnswers = loadFromStorage('currentWrongAnswersMultDiv') || [];
+        var state = storage.loadState();
+        currentProblem = state.currentProblem;
+        currentWrongAnswers = state.currentWrongAnswers;
     }
-
-    // Event handlers
-    $('#submit-btn').click(function() {
-        checkAnswer();
-    });
-
-    $('#skip-btn').click(function() {
-        skipProblem();
-    });
-
-    setupEnterKeyHandler('#answer-input', checkAnswer);
 </script>
