@@ -1,57 +1,21 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-        <title>Nhân Chia Phân Số</title>
-        <link rel="stylesheet" href="../css/common.css">
-        <link rel="stylesheet" href="../lib/katex-0.16.9/katex/katex.min.css">
-        <style type="text/css">
-            /* Override colors for fraction multiplication/division */
-            .submit-btn {
-                background-color: #9C27B0;
-            }
-            .submit-btn:hover {
-                background-color: #7B1FA2;
-            }
-            .history h3 {
-                border-bottom-color: #9C27B0;
-            }
-            .history-item {
-                border-left-color: #9C27B0;
-            }
-            .history-problem {
-                color: #9C27B0;
-            }
-            .problem {
-                font-size: 200%;
-                min-height: 80px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .fraction-input-group input {
-                border-color: #9C27B0;
-            }
-            .fraction-line {
-                background-color: #9C27B0;
-            }
-        </style>
-        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-        <script src="../lib/katex-0.16.9/katex/katex.min.js"></script>
-        <script src="../lib/katex-0.16.9/katex/contrib/auto-render.min.js"></script>
-        <script src="../lib/ion.sound-3.0.7/ion.sound.min.js"></script>
-        <script src="../js/common.js"></script>
-        <?php require_once '../config.php'; ?>
-        <script type="text/javascript">
-            // Load config from PHP
-            var CONFIG = <?php echo getConfigAsJSON('nhanchiaphanso'); ?>;
-        </script>
-    </head>
-    <body class="with-padding">
-        <a href="../" class="home-btn">🏠 Trang chủ</a>
-        
+<?php
+$page_title = 'Nhân Chia Phân Số';
+$config_type = 'nhanchiaphanso';
+$extra_css = ['nhanchiaphanso.css'];
+$use_katex = true;
+$use_user = false;
+$use_history = false;
+$config_general = false;
+include '../includes/header.php';
+?>
         <div class="container">
+            <!-- Header with home button and user info -->
+            <div class="container-header">
+                <div class="container-header-left">
+                    <a href="../" class="home-btn">🏠 Trang chủ</a>
+                </div>
+                <div class="container-header-right" id="user-info-display"></div>
+            </div>
             <h1>Luyện Tập Nhân Chia Phân Số</h1>
             
             <div style="font-size: 100%; color: #666; margin-bottom: 20px;">
@@ -80,11 +44,7 @@
             
             <div id="feedback" class="feedback" style="display: none;"></div>
             
-            <div class="history">
-                <h3>Lịch sử các bài đã làm</h3>
-                <div id="history-list"></div>
-                <button class="clear-history-btn" id="clear-history-btn">Xóa lịch sử</button>
-            </div>
+            <?php include '../includes/history-section.php'; ?>
         </div>
 
         <script type="text/javascript">
@@ -473,41 +433,6 @@
                 displayHistory();
             }
 
-            function displayHistory() {
-                var html = '';
-                
-                if (problemHistory.length === 0) {
-                    html = '<p style="color: #999;">Chưa có lịch sử</p>';
-                } else {
-                    for (var i = problemHistory.length - 1; i >= 0; i--) {
-                        var item = problemHistory[i];
-                        
-                        if (!item || typeof item.problem === 'undefined') {
-                            continue;
-                        }
-                        
-                        var itemClass = item.skipped ? 'history-item history-item-skipped' : 'history-item';
-                        var skippedLabel = item.skipped ? '<span style="background-color: #ff9800; color: white; padding: 2px 8px; border-radius: 3px; font-size: 80%; margin-right: 5px; font-weight: bold;">BỎ QUA</span>' : '';
-                        
-                        html += '<div class="' + itemClass + '">';
-                        html += skippedLabel;
-                        html += '<span class="history-problem">' + item.problem + '</span> = ';
-                        html += '<span class="history-correct">' + item.correctAnswer + '</span>';
-                        
-                        if (item.wrongAnswers && item.wrongAnswers.length > 0) {
-                            html += '; <span class="history-wrong">(' + item.wrongAnswers.join(', ') + ')</span>';
-                        }
-                        
-                        html += '</div>';
-                    }
-                    
-                    if (html === '') {
-                        html = '<p style="color: #999;">Chưa có lịch sử</p>';
-                    }
-                }
-                
-                $('#history-list').html(html);
-            }
 
             function saveToLocalStorage() {
                 saveToStorage('currentProblemFractionMultDiv', currentProblem);
@@ -521,14 +446,6 @@
                 problemHistory = loadFromStorage('problemHistoryFractionMultDiv') || [];
             }
 
-            function clearHistory() {
-                if (confirmClearHistory()) {
-                    problemHistory = [];
-                    removeFromStorage('problemHistoryFractionMultDiv');
-                    displayHistory();
-                }
-            }
-
             // Event handlers
             $('#submit-btn').click(function() {
                 checkAnswer();
@@ -539,10 +456,6 @@
             });
 
             setupEnterKeyHandler('#answer-numerator, #answer-denominator', checkAnswer);
-
-            $('#clear-history-btn').click(function() {
-                clearHistory();
-            });
         </script>
     </body>
 </html>

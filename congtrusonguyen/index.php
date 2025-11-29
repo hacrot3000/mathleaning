@@ -1,48 +1,46 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-        <title>Cộng Trừ Số Nguyên</title>
-        <link rel="stylesheet" href="../css/common.css">
-        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-        <script src="../lib/ion.sound-3.0.7/ion.sound.min.js"></script>
-        <script src="../js/common.js"></script>
-        <?php require_once '../config.php'; ?>
-        <script type="text/javascript">
-            // Load config from PHP
-            var CONFIG = <?php echo getConfigAsJSON('congtru'); ?>;
-        </script>
-    </head>
-    <body class="with-padding">
-        <a href="../" class="home-btn">🏠 Trang chủ</a>
-        
+<?php
+$page_title = 'Cộng Trừ Số Nguyên';
+$config_type = 'congtru';
+$extra_css = [];
+$use_katex = false;
+$use_user = true;
+$use_history = true;
+$config_general = false;
+include '../includes/header.php';
+?>
         <div class="container">
+            <!-- Header with home button and user info -->
+            <div class="container-header">
+                <div class="container-header-left">
+                    <a href="../" class="home-btn">🏠 <?php echo $lang['home']; ?></a>
+                </div>
+                <div class="container-header-right">
+                    <div id="user-info-display"></div>
+                    <?php include '../includes/language-switcher.php'; ?>
+                </div>
+            </div>
+            
             <!-- <h1>Luyện Tập Cộng Trừ Số Nguyên</h1> -->
             
             <div style="font-size: 100%; color: #666; margin-bottom: 20px;">
-                <strong>Độ khó:</strong> <span id="difficulty-level"></span>
-                <strong>Câu hỏi:</strong> <span id="question-number"></span>
+                <strong><?php echo $lang['difficulty']; ?>:</strong> <span id="difficulty-level"></span>
+                <strong><?php echo $lang['question']; ?>:</strong> <span id="question-number"></span>
             </div>
             
             <div class="problem" id="problem-display"></div>
             
             <div>
-                <input type="number" id="answer-input" placeholder="Kết quả" autocomplete="off">
+                <input type="number" id="answer-input" placeholder="<?php echo $lang['result']; ?>" autocomplete="off">
             </div>
             
             <div>
-                <button class="submit-btn" id="submit-btn">Kiểm tra</button>
-                <button class="submit-btn" id="skip-btn" style="background-color: #ff9800;">Bỏ qua</button>
+                <button class="submit-btn" id="submit-btn"><?php echo $lang['submit']; ?></button>
+                <button class="submit-btn" id="skip-btn" style="background-color: #ff9800;"><?php echo $lang['skip']; ?></button>
             </div>
             
             <div id="feedback" class="feedback" style="display: none;"></div>
             
-            <div class="history">
-                <h3>Lịch sử các bài đã làm</h3>
-                <div id="history-list"></div>
-                <button class="clear-history-btn" id="clear-history-btn">Xóa lịch sử</button>
-            </div>
+            <?php include '../includes/history-section.php'; ?>
         </div>
 
         <script type="text/javascript">
@@ -50,12 +48,26 @@
             var currentWrongAnswers = [];
             var problemHistory = [];
             var problemCount = 0; // Đếm số câu đã làm (reset mỗi lần load trang)
+            var historyManager = null; // Manager for server history
 
             // Initialize sounds
             $(function () {
+                // Check user logged in and init history manager
+                historyManager = initHistoryManager('congtrusonguyen');
+                if (!historyManager) return; // Will redirect to home
+                
+                // Display user info
+                $('#user-info-display').html(displayUserInfo());
+                
                 initializeSounds("../lib/ion.sound-3.0.7/sounds/");
 
-                // Load lịch sử và bài toán hiện tại từ localStorage
+                // Load lịch sử từ server
+                loadHistoryFromServer(historyManager, function(err, serverHistory) {
+                    problemHistory = serverHistory || [];
+                    displayHistory();
+                });
+                
+                // Load bài toán hiện tại từ localStorage (chỉ để F5)
                 loadFromLocalStorage();
                 
                 // Reset độ khó về 0 mỗi lần load trang
@@ -68,8 +80,6 @@
                 } else {
                     displayProblem();
                 }
-                
-                displayHistory();
             });
 
             function formatNumber(num) {
@@ -188,12 +198,16 @@
                 
                 // Hiển thị độ khó và số câu hỏi
                 var difficultyText = '';
+                var easyText = t('difficulty_easy', 'Dễ');
+                var mediumText = t('difficulty_medium', 'Trung bình');
+                var hardText = t('difficulty_hard', 'Khó');
+                
                 if (problemCount < CONFIG.easy.threshold) {
-                    difficultyText = 'Dễ (số ' + CONFIG.easy.min + ' đến ' + CONFIG.easy.max + ', ' + (CONFIG.easy.num_operands - 1) + ' toán tử)';
+                    difficultyText = easyText + ' (số ' + CONFIG.easy.min + ' đến ' + CONFIG.easy.max + ', ' + (CONFIG.easy.num_operands - 1) + ' toán tử)';
                 } else if (problemCount < CONFIG.medium.threshold) {
-                    difficultyText = 'Trung bình (có số âm, ' + CONFIG.medium.min + ' đến ' + CONFIG.medium.max + ', ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' toán tử)';
+                    difficultyText = mediumText + ' (có số âm, ' + CONFIG.medium.min + ' đến ' + CONFIG.medium.max + ', ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' toán tử)';
                 } else {
-                    difficultyText = 'Khó (có số âm, ' + CONFIG.hard.min + ' đến ' + CONFIG.hard.max + ', ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' toán tử)';
+                    difficultyText = hardText + ' (có số âm, ' + CONFIG.hard.min + ' đến ' + CONFIG.hard.max + ', ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' toán tử)';
                 }
                 
                 $('#difficulty-level').html(difficultyText);
@@ -204,7 +218,7 @@
                 var userAnswer = parseInt($('#answer-input').val());
                 
                 if (isNaN(userAnswer)) {
-                    alert('Vui lòng nhập một số hợp lệ!');
+                    alert(t('enter_valid_number', 'Vui lòng nhập một số hợp lệ!'));
                     return;
                 }
                 
@@ -251,76 +265,43 @@
                     problemText += ' ' + currentProblem.operators[i] + ' ' + formatNumber(currentProblem.numbers[i + 1]);
                 }
                 
-                problemHistory.push({
+                var historyItem = {
                     problem: problemText,
                     correctAnswer: currentProblem.correctAnswer,
                     wrongAnswers: currentWrongAnswers.slice(),
                     skipped: skipped || false
-                });
+                };
                 
-                saveToLocalStorage();
+                problemHistory.push(historyItem);
+                
+                // Save to server
+                saveHistoryToServer(
+                    historyManager,
+                    problemText,
+                    currentProblem.correctAnswer.toString(),
+                    currentWrongAnswers,
+                    skipped,
+                    function(err) {
+                        if (err) console.error('Failed to save history to server');
+                    }
+                );
+                
                 displayHistory();
             }
 
-            function displayHistory() {
-                var html = '';
-                
-                if (problemHistory.length === 0) {
-                    html = '<p style="color: #999;">Chưa có lịch sử</p>';
-                } else {
-                    for (var i = problemHistory.length - 1; i >= 0; i--) {
-                        var item = problemHistory[i];
-                        
-                        // Skip invalid items
-                        if (!item || typeof item.problem === 'undefined') {
-                            continue;
-                        }
-                        
-                        // Style khác nhau cho bài skipped
-                        var itemClass = item.skipped ? 'history-item history-item-skipped' : 'history-item';
-                        var skippedLabel = item.skipped ? '<span style="background-color: #ff9800; color: white; padding: 2px 8px; border-radius: 3px; font-size: 80%; margin-right: 5px; font-weight: bold;">BỎ QUA</span>' : '';
-                        
-                        html += '<div class="' + itemClass + '">';
-                        html += skippedLabel;
-                        html += '<span class="history-problem">' + item.problem + '</span> = ';
-                        html += '<span class="history-correct">' + item.correctAnswer + '</span>';
-                        
-                        if (item.wrongAnswers && item.wrongAnswers.length > 0) {
-                            html += '; <span class="history-wrong">(' + item.wrongAnswers.join(', ') + ')</span>';
-                        }
-                        
-                        html += '</div>';
-                    }
-                    
-                    // If no valid items were rendered, show empty message
-                    if (html === '') {
-                        html = '<p style="color: #999;">Chưa có lịch sử</p>';
-                    }
-                }
-                
-                $('#history-list').html(html);
-            }
 
             function saveToLocalStorage() {
-                // Lưu cả bài toán hiện tại, câu trả lời sai, và lịch sử
-                saveToStorage('currentProblem', currentProblem);
-                saveToStorage('currentWrongAnswers', currentWrongAnswers);
-                saveToStorage('problemHistory', problemHistory);
+                // Chỉ lưu bài toán hiện tại và câu trả lời sai (để F5)
+                // KHÔNG lưu problemHistory nữa (đã chuyển sang server)
+                saveToStorage('currentProblem_congtru', currentProblem);
+                saveToStorage('currentWrongAnswers_congtru', currentWrongAnswers);
             }
 
             function loadFromLocalStorage() {
-                // Load cả bài toán hiện tại, câu trả lời sai, và lịch sử
-                currentProblem = loadFromStorage('currentProblem');
-                currentWrongAnswers = loadFromStorage('currentWrongAnswers') || [];
-                problemHistory = loadFromStorage('problemHistory') || [];
-            }
-
-            function clearHistory() {
-                if (confirmClearHistory()) {
-                    problemHistory = [];
-                    removeFromStorage('problemHistory');
-                    displayHistory();
-                }
+                // Load bài toán hiện tại và câu trả lời sai
+                // problemHistory sẽ load từ server
+                currentProblem = loadFromStorage('currentProblem_congtru');
+                currentWrongAnswers = loadFromStorage('currentWrongAnswers_congtru') || [];
             }
 
             // Event handlers
@@ -333,10 +314,6 @@
             });
 
             setupEnterKeyHandler('#answer-input', checkAnswer);
-
-            $('#clear-history-btn').click(function() {
-                clearHistory();
-            });
         </script>
     </body>
 </html>

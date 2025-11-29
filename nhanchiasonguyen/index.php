@@ -1,45 +1,22 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-        <title>Nhân Chia Số Nguyên</title>
-        <link rel="stylesheet" href="../css/common.css">
-        <style type="text/css">
-            /* Override colors for multiplication/division */
-            #answer-input {
-                border-color: #9C27B0;
-            }
-            .submit-btn {
-                background-color: #9C27B0;
-            }
-            .submit-btn:hover {
-                background-color: #7B1FA2;
-            }
-            .history h3 {
-                border-bottom-color: #9C27B0;
-            }
-            .history-item {
-                border-left-color: #9C27B0;
-            }
-            .history-problem {
-                color: #9C27B0;
-            }
-        </style>
-        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-        <script src="../lib/ion.sound-3.0.7/ion.sound.min.js"></script>
-        <script src="../js/common.js"></script>
-        <?php require_once '../config.php'; ?>
-        <script type="text/javascript">
-            // Load config from PHP
-            var CONFIG = <?php echo getConfigAsJSON('nhanchia'); ?>;
-            var CONFIG_GENERAL = <?php echo getConfigAsJSON('general'); ?>;
-        </script>
-    </head>
-    <body class="with-padding">
-        <a href="../" class="home-btn">🏠 Trang chủ</a>
-        
+<?php
+$page_title = 'Nhân Chia Số Nguyên';
+$config_type = 'nhanchia';
+$extra_css = ['nhanchiasonguyen.css'];
+$use_katex = false;
+$use_user = true;
+$use_history = true;
+$config_general = true;
+include '../includes/header.php';
+?>
         <div class="container">
+            <!-- Header with home button and user info -->
+            <div class="container-header">
+                <div class="container-header-left">
+                    <a href="../" class="home-btn">🏠 Trang chủ</a>
+                </div>
+                <div class="container-header-right" id="user-info-display"></div>
+            </div>
+            
             <h1>Luyện Tập Nhân Chia Số Nguyên</h1>
             
             <div style="font-size: 100%; color: #666; margin-bottom: 20px;">
@@ -63,11 +40,7 @@
             
             <div id="feedback" class="feedback" style="display: none;"></div>
             
-            <div class="history">
-                <h3>Lịch sử các bài đã làm</h3>
-                <div id="history-list"></div>
-                <button class="clear-history-btn" id="clear-history-btn">Xóa lịch sử</button>
-            </div>
+            <?php include '../includes/history-section.php'; ?>
         </div>
 
         <script type="text/javascript">
@@ -75,12 +48,26 @@
             var currentWrongAnswers = [];
             var problemHistory = [];
             var problemCount = 0; // Đếm số câu đã làm (reset mỗi lần load trang)
+            var historyManager = null;
 
             // Initialize sounds
             $(function () {
+                // Check user logged in
+                historyManager = initHistoryManager('nhanchiasonguyen');
+                if (!historyManager) return;
+                
+                // Display user info
+                $('#user-info-display').html(displayUserInfo());
+                
                 initializeSounds("../lib/ion.sound-3.0.7/sounds/");
 
-                // Load lịch sử và bài toán hiện tại từ localStorage
+                // Load lịch sử từ server
+                loadHistoryFromServer(historyManager, function(err, serverHistory) {
+                    problemHistory = serverHistory || [];
+                    displayHistory();
+                });
+                
+                // Load bài toán hiện tại từ localStorage
                 loadFromLocalStorage();
                 
                 // Reset độ khó về 0 mỗi lần load trang
@@ -93,8 +80,6 @@
                 } else {
                     displayProblem();
                 }
-                
-                displayHistory();
             });
 
             function formatNumber(num) {
@@ -324,76 +309,41 @@
                                   currentProblem.operator + ' ' + 
                                   formatNumber(currentProblem.num2);
                 
-                problemHistory.push({
+                var historyItem = {
                     problem: problemText,
                     correctAnswer: currentProblem.correctAnswer,
                     wrongAnswers: currentWrongAnswers.slice(),
                     skipped: skipped || false
-                });
+                };
                 
-                saveToLocalStorage();
+                problemHistory.push(historyItem);
+                
+                // Save to server
+                saveHistoryToServer(
+                    historyManager,
+                    problemText,
+                    currentProblem.correctAnswer.toString(),
+                    currentWrongAnswers,
+                    skipped,
+                    function(err) {
+                        if (err) console.error('Failed to save history');
+                    }
+                );
+                
                 displayHistory();
             }
 
-            function displayHistory() {
-                var html = '';
-                
-                if (problemHistory.length === 0) {
-                    html = '<p style="color: #999;">Chưa có lịch sử</p>';
-                } else {
-                    for (var i = problemHistory.length - 1; i >= 0; i--) {
-                        var item = problemHistory[i];
-                        
-                        // Skip invalid items
-                        if (!item || typeof item.problem === 'undefined') {
-                            continue;
-                        }
-                        
-                        // Style khác nhau cho bài skipped
-                        var itemClass = item.skipped ? 'history-item history-item-skipped' : 'history-item';
-                        var skippedLabel = item.skipped ? '<span style="background-color: #ff9800; color: white; padding: 2px 8px; border-radius: 3px; font-size: 80%; margin-right: 5px; font-weight: bold;">BỎ QUA</span>' : '';
-                        
-                        html += '<div class="' + itemClass + '">';
-                        html += skippedLabel;
-                        html += '<span class="history-problem">' + item.problem + '</span> = ';
-                        html += '<span class="history-correct">' + item.correctAnswer + '</span>';
-                        
-                        if (item.wrongAnswers && item.wrongAnswers.length > 0) {
-                            html += '; <span class="history-wrong">(' + item.wrongAnswers.join(', ') + ')</span>';
-                        }
-                        
-                        html += '</div>';
-                    }
-                    
-                    // If no valid items were rendered, show empty message
-                    if (html === '') {
-                        html = '<p style="color: #999;">Chưa có lịch sử</p>';
-                    }
-                }
-                
-                $('#history-list').html(html);
-            }
 
             function saveToLocalStorage() {
-                // Lưu cả bài toán hiện tại, câu trả lời sai, và lịch sử
+                // Chỉ lưu bài toán hiện tại (để F5)
                 saveToStorage('currentProblemMultDiv', currentProblem);
                 saveToStorage('currentWrongAnswersMultDiv', currentWrongAnswers);
-                saveToStorage('problemHistoryMultDiv', problemHistory);
             }
 
             function loadFromLocalStorage() {
-                // Load cả bài toán hiện tại, câu trả lời sai, và lịch sử
+                // Load bài toán hiện tại
                 currentProblem = loadFromStorage('currentProblemMultDiv');
                 currentWrongAnswers = loadFromStorage('currentWrongAnswersMultDiv') || [];
-                problemHistory = loadFromStorage('problemHistoryMultDiv') || [];
-            }
-
-            function clearHistory() {
-                if (confirmClearHistory()) {
-                    problemHistory = [];
-                    removeFromStorage('problemHistoryMultDiv');
-                    displayHistory();
-                }
             }
 
             // Event handlers
@@ -406,10 +356,6 @@
             });
 
             setupEnterKeyHandler('#answer-input', checkAnswer);
-
-            $('#clear-history-btn').click(function() {
-                clearHistory();
-            });
         </script>
     </body>
 </html>

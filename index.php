@@ -1,219 +1,258 @@
+<?php
+require_once 'lang.php';
+$lang = getLang();
+$lang_code = getLangCode();
+?>
 <!doctype html>
-<html lang="en">
+<html lang="<?php echo $lang_code; ?>">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-        <title>Học Toán - Trang Chủ</title>
-        <style type="text/css">
-            * {
-                margin: 0;
-                padding: 0;
-                -webkit-box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                box-sizing: border-box;
-            }
-            
-            body {
-                font-family: 'Arial', sans-serif;
-                background: #667eea;
-                /* Fallback for old browsers */
-                background: -webkit-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                background: -moz-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                background: -o-linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                min-height: 100vh;
-                padding: 20px;
-            }
-            
-            .container {
-                max-width: 800px;
-                width: 100%;
-                background: white;
-                -webkit-border-radius: 20px;
-                -moz-border-radius: 20px;
-                border-radius: 20px;
-                -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                -moz-box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                padding: 50px;
-                text-align: center;
-                margin: 50px auto;
-            }
-            
-            h1 {
-                font-size: 3em;
-                color: #333;
-                margin-bottom: 20px;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            }
-            
-            .subtitle {
-                font-size: 1.2em;
-                color: #666;
-                margin-bottom: 50px;
-            }
-            
-            .features {
-                margin-top: 40px;
-                text-align: center;
-                font-size: 0; /* Remove whitespace between inline-block elements */
-            }
-            
-            .feature-card {
-                display: inline-block;
-                vertical-align: top;
-                width: 45%;
-                max-width: 300px;
-                margin: 15px 2.5%;
-                background: #f093fb;
-                /* Fallback for old browsers */
-                background: -webkit-linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                background: -moz-linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                background: -o-linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                -webkit-border-radius: 15px;
-                -moz-border-radius: 15px;
-                border-radius: 15px;
-                padding: 40px 30px;
-                text-decoration: none;
-                color: white;
-                font-size: 16px; /* Reset font-size */
-                -webkit-transition: all 0.3s ease;
-                -moz-transition: all 0.3s ease;
-                -o-transition: all 0.3s ease;
-                transition: all 0.3s ease;
-                -webkit-box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                -moz-box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            }
-            
-            .feature-card:hover {
-                -webkit-transform: translateY(-10px);
-                -moz-transform: translateY(-10px);
-                -ms-transform: translateY(-10px);
-                -o-transform: translateY(-10px);
-                transform: translateY(-10px);
-                -webkit-box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-                -moz-box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-                box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-            }
-            
-            .feature-card.blue {
-                background: #4facfe;
-                /* Fallback for old browsers */
-                background: -webkit-linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                background: -moz-linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                background: -o-linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            }
-            
-            .feature-card.green {
-                background: #43e97b;
-                /* Fallback for old browsers */
-                background: -webkit-linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-                background: -moz-linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-                background: -o-linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-                background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            }
-            
-            .feature-icon {
-                font-size: 4em;
-                margin-bottom: 20px;
-            }
-            
-            .feature-title {
-                font-size: 1.8em;
-                font-weight: bold;
-                margin-bottom: 15px;
-            }
-            
-            .feature-description {
-                font-size: 1em;
-                opacity: 0.9;
-                line-height: 1.5;
-            }
-            
-            .footer {
-                margin-top: 50px;
-                color: #999;
-                font-size: 0.9em;
-            }
-            
-            @media (max-width: 600px) {
-                .container {
-                    padding: 30px 20px;
-                }
-                
-                h1 {
-                    font-size: 2em;
-                }
-                
-                .feature-card {
-                    display: block;
-                    width: 90%;
-                    max-width: none;
-                    margin: 15px auto;
-                }
-            }
-        </style>
+        <title><?php echo $lang['app_title']; ?> - <?php echo $lang['home']; ?></title>
+        <link rel="stylesheet" href="css/common.css">
+        <link rel="stylesheet" href="css/home.css">
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        <script src="js/user.js"></script>
+        <script src="js/common.js"></script>
+        <script type="text/javascript">
+            var LANG = <?php echo json_encode($lang, JSON_UNESCAPED_UNICODE); ?>;
+            var LANG_CODE = '<?php echo $lang_code; ?>';
+        </script>
     </head>
-    <body>
+    <body class="home-page">
         <div class="container">
-            <h1>🎓 Học Toán</h1>
-            <p class="subtitle">Chọn bài luyện tập để bắt đầu</p>
-            
-            <div class="features">                
-                <a href="cuuchuong/" class="feature-card green">
-                    <div class="feature-icon">✖️</div>
-                    <div class="feature-title">Bảng Cửu Chương</div>
-                    <div class="feature-description">
-                        Luyện tập bảng cửu chương từ 2 đến 9.<br>
-                        Chọn bảng cửu chương muốn học.
-                    </div>
-                </a>
-                
-                <a href="congtrusonguyen/" class="feature-card blue">
-                    <div class="feature-icon">➕➖</div>
-                    <div class="feature-title">Cộng Trừ Số Nguyên</div>
-                    <div class="feature-description">
-                        Luyện tập cộng trừ các số nguyên dương và âm.<br>
-                        Độ khó tăng dần từ dễ đến khó.
-                    </div>
-                </a>
-                
-                <a href="nhanchiasonguyen/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: -moz-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: -o-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);">
-                    <div class="feature-icon">✖️➗</div>
-                    <div class="feature-title">Nhân Chia Số Nguyên</div>
-                    <div class="feature-description">
-                        Luyện tập nhân chia các số nguyên dương và âm.<br>
-                        Kết quả số nguyên hoặc thập phân tối đa 2 chữ số.
-                    </div>
-                </a>
-                
-                <a href="phanso/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -moz-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -o-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);">
-                    <div class="feature-icon">➕➖</div>
-                    <div class="feature-title">Cộng Trừ Phân Số</div>
-                    <div class="feature-description">
-                        Luyện tập cộng trừ phân số (có thể âm).<br>
-                        Kết quả rút gọn về dạng tối giản.
-                    </div>
-                </a>
-                
-                <a href="nhanchiaphanso/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -moz-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -o-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: linear-gradient(135deg, #a044ff 0%, #6a3093 100%);">
-                    <div class="feature-icon">✖️➗</div>
-                    <div class="feature-title">Nhân Chia Phân Số</div>
-                    <div class="feature-description">
-                        Luyện tập nhân chia phân số (có thể âm).<br>
-                        Kết quả rút gọn về dạng tối giản.
-                    </div>
-                </a>                
-
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h1>🎓 <?php echo $lang['app_title']; ?></h1>
+                <?php include 'includes/language-switcher.php'; ?>
             </div>
             
-            <div class="footer">
-                <p>Học tập vui vẻ! 📚</p>
+            <!-- User Section -->
+            <div class="user-section" id="user-section">
+                <!-- User Info (when logged in) -->
+                <div id="user-info" class="hidden">
+                    <div class="user-info">
+                        <span class="user-avatar" id="current-user-avatar"></span>
+                        <span class="user-name" id="current-user-name"></span>
+                    </div>
+                    <button class="btn btn-secondary" id="logout-btn" style="margin-top: 15px;"><?php echo $lang['logout']; ?></button>
+                </div>
+                
+                <!-- Login/Register (when not logged in) -->
+                <div id="auth-section">
+                    <div id="login-view">
+                        <h3><?php echo $lang['select_user']; ?></h3>
+                        <div class="user-list" id="user-list"></div>
+                        <button class="btn btn-primary" id="show-register-btn" style="margin-top: 20px;">+ <?php echo $lang['create_user']; ?></button>
+                    </div>
+                    
+                    <div id="register-view" class="hidden">
+                        <h3><?php echo $lang['create_user']; ?></h3>
+                        <form class="auth-form" id="register-form">
+                            <div class="form-group">
+                                <label for="user-name"><?php echo $lang['user_name']; ?>:</label>
+                                <input type="text" id="user-name" required maxlength="50" placeholder="<?php echo $lang['user_name']; ?>...">
+                            </div>
+                            <div class="form-group">
+                                <label><?php echo $lang['select_avatar']; ?>:</label>
+                                <div class="avatar-grid" id="avatar-grid"></div>
+                            </div>
+                            <button type="submit" class="btn btn-primary"><?php echo $lang['create_account']; ?></button>
+                            <button type="button" class="btn btn-secondary" id="back-to-login-btn" style="margin-left: 10px;"><?php echo $lang['back']; ?></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features Section -->
+            <div id="features-section" class="hidden">
+                <p class="subtitle"><?php echo $lang['select_exercise']; ?></p>
+                
+                <div class="features">                
+                    <a href="cuuchuong/" class="feature-card green">
+                        <div class="feature-icon">✖️</div>
+                        <div class="feature-title"><?php echo $lang['multiplication_table']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['multiplication_table_desc']; ?>
+                        </div>
+                    </a>
+                    
+                    <a href="congtrusonguyen/" class="feature-card blue">
+                        <div class="feature-icon">➕➖</div>
+                        <div class="feature-title"><?php echo $lang['add_subtract_integers']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['add_subtract_integers_desc']; ?>
+                        </div>
+                    </a>
+                    
+                    <a href="nhanchiasonguyen/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: -moz-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: -o-linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);">
+                        <div class="feature-icon">✖️➗</div>
+                        <div class="feature-title"><?php echo $lang['multiply_divide_integers']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['multiply_divide_integers_desc']; ?>
+                        </div>
+                    </a>
+                    
+                    <a href="phanso/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -moz-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: -o-linear-gradient(135deg, #E91E63 0%, #C2185B 100%); background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);">
+                        <div class="feature-icon">➕➖</div>
+                        <div class="feature-title"><?php echo $lang['add_subtract_fractions']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['add_subtract_fractions_desc']; ?>
+                        </div>
+                    </a>
+                    
+                    <a href="nhanchiaphanso/" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -moz-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: -o-linear-gradient(135deg, #a044ff 0%, #6a3093 100%); background: linear-gradient(135deg, #a044ff 0%, #6a3093 100%);">
+                        <div class="feature-icon">✖️➗</div>
+                        <div class="feature-title"><?php echo $lang['multiply_divide_fractions']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['multiply_divide_fractions_desc']; ?>
+                        </div>
+                    </a>                
+                </div>
             </div>
         </div>
+
+        <script type="text/javascript">
+            var selectedAvatar = null;
+            
+            $(function() {
+                checkLoginStatus();
+                loadUserList();
+                renderAvatarGrid();
+                
+                // Event handlers
+                $('#show-register-btn').click(function() {
+                    $('#login-view').addClass('hidden');
+                    $('#register-view').removeClass('hidden');
+                });
+                
+                $('#back-to-login-btn').click(function() {
+                    $('#register-view').addClass('hidden');
+                    $('#login-view').removeClass('hidden');
+                });
+                
+                $('#register-form').submit(function(e) {
+                    e.preventDefault();
+                    register();
+                });
+                
+                $('#logout-btn').click(function() {
+                    logout();
+                });
+            });
+            
+            function checkLoginStatus() {
+                var user = getCurrentUser();
+                if (user) {
+                    showLoggedIn(user);
+                } else {
+                    showLoggedOut();
+                }
+            }
+            
+            function showLoggedIn(user) {
+                $('#current-user-avatar').text(user.avatar);
+                $('#current-user-name').text(user.name);
+                $('#user-info').removeClass('hidden');
+                $('#auth-section').addClass('hidden');
+                $('#features-section').removeClass('hidden');
+            }
+            
+            function showLoggedOut() {
+                $('#user-info').addClass('hidden');
+                $('#auth-section').removeClass('hidden');
+                $('#features-section').addClass('hidden');
+            }
+            
+            function loadUserList() {
+                apiGetUsers(function(err, users) {
+                    if (err) {
+                        console.error('Error loading users:', err);
+                        return;
+                    }
+                    
+                    var html = '';
+                    if (users.length === 0) {
+                        html = '<p style="color: #999;">' + (typeof LANG !== 'undefined' ? LANG.no_users : 'Chưa có người dùng nào. Hãy tạo tài khoản mới!') + '</p>';
+                    } else {
+                        users.forEach(function(user) {
+                            html += '<div class="user-card" data-user-id="' + user.id + '">';
+                            html += '<div class="user-card-avatar">' + user.avatar + '</div>';
+                            html += '<div class="user-card-name">' + user.name + '</div>';
+                            html += '</div>';
+                        });
+                    }
+                    
+                    $('#user-list').html(html);
+                    
+                    // Add click handlers
+                    $('.user-card').click(function() {
+                        var userId = $(this).data('user-id');
+                        loginAsUser(userId);
+                    });
+                });
+            }
+            
+            function renderAvatarGrid() {
+                var html = '';
+                AVATARS.forEach(function(avatar) {
+                    html += '<div class="avatar-option" data-avatar="' + avatar + '">' + avatar + '</div>';
+                });
+                $('#avatar-grid').html(html);
+                
+                $('.avatar-option').click(function() {
+                    $('.avatar-option').removeClass('selected');
+                    $(this).addClass('selected');
+                    selectedAvatar = $(this).data('avatar');
+                });
+            }
+            
+            function register() {
+                var name = $('#user-name').val().trim();
+                if (!name) {
+                    alert(typeof LANG !== 'undefined' ? LANG.enter_name : 'Vui lòng nhập tên!');
+                    return;
+                }
+                
+                if (!selectedAvatar) {
+                    alert(typeof LANG !== 'undefined' ? LANG.select_avatar : 'Vui lòng chọn avatar!');
+                    return;
+                }
+                
+                apiCreateUser(name, selectedAvatar, function(err, user) {
+                    if (err) {
+                        alert('Lỗi: ' + err);
+                        return;
+                    }
+                    
+                    showLoggedIn(user);
+                });
+            }
+            
+            function loginAsUser(userId) {
+                // Simple login - just set cookie
+                apiGetUsers(function(err, users) {
+                    if (err) return;
+                    
+                    var user = users.find(function(u) { return u.id == userId; });
+                    if (user) {
+                        setCurrentUser(user);
+                        showLoggedIn(user);
+                    }
+                });
+            }
+            
+            function logout() {
+                clearCurrentUser();
+                // Reset selected avatar
+                selectedAvatar = null;
+                // Clear form if visible
+                $('#user-name').val('');
+                $('.avatar-option').removeClass('selected');
+                // Update UI
+                showLoggedOut();
+                // Reload user list
+                loadUserList();
+            }
+        </script>
     </body>
 </html>
-

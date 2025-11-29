@@ -116,3 +116,11 @@ function setupEnterKeyHandler(inputSelector, callback) {
     });
 }
 
+// Translate function - get text from LANG object
+function t(key, defaultValue) {
+    if (typeof LANG !== 'undefined' && LANG[key]) {
+        return LANG[key];
+    }
+    return defaultValue || key;
+}
+

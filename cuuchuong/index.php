@@ -1,23 +1,25 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-        <title>Bảng Cửu Chương</title>
-        <link rel="stylesheet" href="../css/common.css">
-        <link rel="stylesheet" href="../css/cuuchuong.css">
-        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-        <script src="../lib/ion.sound-3.0.7/ion.sound.min.js" ></script>
-
-    </head>
-    <body class="with-padding">
-        <a href="../" class="home-btn">🏠 Trang chủ</a>
-        
+<?php
+$page_title = 'Bảng Cửu Chương';
+$config_type = ''; // No config needed
+$extra_css = ['cuuchuong.css'];
+$use_katex = false;
+$use_user = false;
+$use_history = false;
+$config_general = false;
+include '../includes/header.php';
+?>
         <?php
         if (empty($_GET['cuuchuong']))
         {
             ?>
             <div class="container">
+                <!-- Header with home button -->
+                <div class="container-header">
+                    <div class="container-header-left">
+                        <a href="../" class="home-btn">🏠 Trang chủ</a>
+                    </div>
+                    <div class="container-header-right"></div>
+                </div>
                 <h1>🎯 Bảng Cửu Chương</h1>
                 <p style="color: #666; margin-bottom: 30px;">Chọn giới hạn bảng cửu chương:</p>
                 <form method="GET" action="" class="selection-form">
@@ -76,6 +78,13 @@
             ?>
 
             <div class="container game-container">
+                <!-- Header with home button -->
+                <div class="container-header">
+                    <div class="container-header-left">
+                        <a href="../" class="home-btn">🏠 Trang chủ</a>
+                    </div>
+                    <div class="container-header-right"></div>
+                </div>
                 <h1>🎯 Bảng Cửu Chương</h1>
                 
                 <div class="problem-display">

@@ -1,0 +1,27 @@
+/* Styles for Nhân Chia Số Nguyên page */
+
+/* Override colors for multiplication/division */
+#answer-input {
+    border-color: #9C27B0;
+}
+
+.submit-btn {
+    background-color: #9C27B0;
+}
+
+.submit-btn:hover {
+    background-color: #7B1FA2;
+}
+
+.history h3 {
+    border-bottom-color: #9C27B0;
+}
+
+.history-item {
+    border-left-color: #9C27B0;
+}
+
+.history-problem {
+    color: #9C27B0;
+}
+

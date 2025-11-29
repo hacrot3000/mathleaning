@@ -1,0 +1,39 @@
+/* Styles for Cộng Trừ Phân Số page */
+
+/* Override colors for fraction operations */
+.submit-btn {
+    background-color: #E91E63;
+}
+
+.submit-btn:hover {
+    background-color: #C2185B;
+}
+
+.history h3 {
+    border-bottom-color: #E91E63;
+}
+
+.history-item {
+    border-left-color: #E91E63;
+}
+
+.history-problem {
+    color: #E91E63;
+}
+
+.problem {
+    font-size: 200%;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fraction-input-group input {
+    border-color: #E91E63;
+}
+
+.fraction-line {
+    background-color: #E91E63;
+}
+

@@ -14,20 +14,17 @@ body {
     position: relative;
 }
 
-/* Back to home button - top left corner */
+/* Back to home button - inside container, top left */
 .home-btn {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    padding: 10px 20px;
+    display: inline-block;
+    padding: 8px 16px;
     background-color: #607D8B;
     color: white;
     text-decoration: none;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    font-size: 16px;
-    z-index: 1000;
+    font-size: 14px;
     -webkit-box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     -moz-box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -47,6 +44,25 @@ body {
     -webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     -moz-box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Header row in container */
+.container-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.container-header-left {
+    flex: 0 0 auto;
+}
+
+.container-header-right {
+    flex: 0 0 auto;
+    text-align: right;
 }
 
 /* Container */
@@ -142,6 +158,50 @@ body.with-padding {
     padding-bottom: 10px;
 }
 
+/* History tabs */
+.history-tabs {
+    margin: 20px 0;
+}
+
+.history-tabs-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.history-tab {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    color: #666;
+    border: 2px solid #ddd;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.history-tab:hover {
+    background-color: #e0e0e0;
+    border-color: #4CAF50;
+}
+
+.history-tab-active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+    font-weight: bold;
+}
+
+.history-tab-active:hover {
+    background-color: #45a049;
+}
+
 .history-item {
     padding: 10px;
     margin: 8px 0;
@@ -199,10 +259,19 @@ body.with-padding {
 /* Mobile responsive */
 @media (max-width: 768px) {
     .home-btn {
-        top: 10px;
-        left: 10px;
-        padding: 8px 15px;
-        font-size: 14px;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .container-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .container-header-right {
+        text-align: left;
+        width: 100%;
+        margin-top: 10px;
     }
     
     .container {
@@ -227,6 +296,17 @@ body.with-padding {
     
     .feedback {
         font-size: 140%;
+    }
+    
+    .history-tabs-container {
+        gap: 5px;
+    }
+    
+    .history-tab {
+        padding: 6px 12px;
+        font-size: 12px;
+        flex: 1 1 auto;
+        min-width: calc(50% - 3px);
     }
 }
 
