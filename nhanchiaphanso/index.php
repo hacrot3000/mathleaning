@@ -3,8 +3,8 @@ $page_title = 'Nhân Chia Phân Số';
 $config_type = 'nhanchiaphanso';
 $extra_css = ['nhanchiaphanso.css'];
 $use_katex = true;
-$use_user = false;
-$use_history = false;
+$use_user = true;
+$use_history = true;
 $config_general = false;
 include '../includes/header.php';
 ?>
@@ -12,34 +12,37 @@ include '../includes/header.php';
             <!-- Header with home button and user info -->
             <div class="container-header">
                 <div class="container-header-left">
-                    <a href="../" class="home-btn">🏠 Trang chủ</a>
+                    <a href="../" class="home-btn">🏠 <?php echo $lang['home']; ?></a>
                 </div>
-                <div class="container-header-right" id="user-info-display"></div>
+                <div class="container-header-right">
+                    <div id="user-info-display"></div>
+                    <?php include '../includes/language-switcher.php'; ?>
+                </div>
             </div>
-            <h1>Luyện Tập Nhân Chia Phân Số</h1>
+            <h1><?php echo $lang['practice_multiply_divide_fractions']; ?></h1>
             
             <div style="font-size: 100%; color: #666; margin-bottom: 20px;">
-                <strong>Độ khó:</strong> <span id="difficulty-level"></span>
-                <strong>Câu hỏi:</strong> <span id="question-number"></span>
+                <strong><?php echo $lang['difficulty']; ?>:</strong> <span id="difficulty-level"></span>
+                <strong><?php echo $lang['question']; ?>:</strong> <span id="question-number"></span>
             </div>
             
             <div class="problem" id="problem-display"></div>
             
             <div style="margin: 30px 0;">
-                <span class="fraction-label">Kết quả:</span>
+                <span class="fraction-label"><?php echo $lang['result']; ?>:</span>
                 <div class="fraction-input-group">
-                    <input type="number" id="answer-numerator" placeholder="Tử số" autocomplete="off">
+                    <input type="number" id="answer-numerator" placeholder="<?php echo isset($lang['numerator']) ? $lang['numerator'] : 'Tử số'; ?>" autocomplete="off">
                     <div class="fraction-line"></div>
-                    <input type="number" id="answer-denominator" placeholder="Mẫu số" autocomplete="off">
+                    <input type="number" id="answer-denominator" placeholder="<?php echo isset($lang['denominator']) ? $lang['denominator'] : 'Mẫu số'; ?>" autocomplete="off">
                 </div>
                 <p style="font-size: 70%; color: #999; margin-top: 10px;">
-                    <em>* Nhập phân số tối giản (rút gọn đến dạng đơn giản nhất)</em>
+                    <em><?php echo $lang['simplified_fraction_note']; ?></em>
                 </p>
             </div>
             
             <div>
-                <button class="submit-btn" id="submit-btn">Kiểm tra</button>
-                <button class="submit-btn" id="skip-btn" style="background-color: #ff9800;">Bỏ qua</button>
+                <button class="submit-btn" id="submit-btn"><?php echo $lang['submit']; ?></button>
+                <button class="submit-btn" id="skip-btn" style="background-color: #ff9800;"><?php echo $lang['skip']; ?></button>
             </div>
             
             <div id="feedback" class="feedback" style="display: none;"></div>
@@ -52,11 +55,25 @@ include '../includes/header.php';
             var currentWrongAnswers = [];
             var problemHistory = [];
             var problemCount = 0;
+            var historyManager = null;
 
             // Initialize sounds
             $(function () {
+                // Check user logged in
+                historyManager = initHistoryManager('nhanchiaphanso');
+                if (!historyManager) return;
+                
+                // Display user info
+                $('#user-info-display').html(displayUserInfo());
+                
                 initializeSounds("../lib/ion.sound-3.0.7/sounds/");
 
+                // Load lịch sử từ server
+                loadHistoryFromServer(historyManager, function(err, serverHistory) {
+                    problemHistory = serverHistory || [];
+                    displayHistory();
+                });
+                
                 loadFromLocalStorage();
                 problemCount = 0;
                 
@@ -65,8 +82,6 @@ include '../includes/header.php';
                 } else {
                     displayProblem();
                 }
-                
-                displayHistory();
             });
 
             function gcd(a, b) {
@@ -352,16 +367,29 @@ include '../includes/header.php';
                 
                 // Hiển thị độ khó
                 var difficultyText = '';
+                var easyText = t('difficulty_easy', 'Dễ');
+                var mediumText = t('difficulty_medium', 'Trung bình');
+                var hardText = t('difficulty_hard', 'Khó');
+                var multiplyText = t('multiply', 'nhân');
+                var divideText = t('divide', 'chia');
+                var multiplyDivideText = multiplyText + '/' + divideText;
+                var onlyMultiplyText = t('only_multiply', 'chỉ nhân');
+                var onlyDivideText = t('only_divide', 'chỉ chia');
+                var numeratorDenominatorText = t('numerator_denominator', 'tử/mẫu');
+                var hasNegativeFractionText = t('has_negative_fraction', 'có phân số âm');
+                var toText = t('to', 'đến');
+                var operatorText = t('operator', 'toán tử');
+                
                 var operatorName = '';
                 if (problemCount < CONFIG.easy.threshold) {
-                    operatorName = 'chỉ nhân';
-                    difficultyText = 'Dễ (' + operatorName + ', tử/mẫu ' + CONFIG.easy.min + ' đến ' + CONFIG.easy.max + ', ' + (CONFIG.easy.num_operands - 1) + ' toán tử)';
+                    operatorName = onlyMultiplyText;
+                    difficultyText = easyText + ' (' + operatorName + ', ' + numeratorDenominatorText + ' ' + CONFIG.easy.min + ' ' + toText + ' ' + CONFIG.easy.max + ', ' + (CONFIG.easy.num_operands - 1) + ' ' + operatorText + ')';
                 } else if (problemCount < CONFIG.medium.threshold) {
-                    operatorName = 'nhân/chia';
-                    difficultyText = 'Trung bình (' + operatorName + ', có phân số âm, ' + CONFIG.medium.min + ' đến ' + CONFIG.medium.max + ', ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' toán tử)';
+                    operatorName = multiplyDivideText;
+                    difficultyText = mediumText + ' (' + operatorName + ', ' + hasNegativeFractionText + ', ' + CONFIG.medium.min + ' ' + toText + ' ' + CONFIG.medium.max + ', ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' ' + operatorText + ')';
                 } else {
-                    operatorName = 'nhân/chia';
-                    difficultyText = 'Khó (' + operatorName + ', có phân số âm, ' + CONFIG.hard.min + ' đến ' + CONFIG.hard.max + ', ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' toán tử)';
+                    operatorName = multiplyDivideText;
+                    difficultyText = hardText + ' (' + operatorName + ', ' + hasNegativeFractionText + ', ' + CONFIG.hard.min + ' ' + toText + ' ' + CONFIG.hard.max + ', ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' ' + operatorText + ')';
                 }
                 
                 $('#difficulty-level').html(difficultyText);
@@ -373,12 +401,12 @@ include '../includes/header.php';
                 var userDen = parseInt($('#answer-denominator').val());
                 
                 if (isNaN(userNum) || isNaN(userDen)) {
-                    alert('Vui lòng nhập tử số và mẫu số hợp lệ!');
+                    alert(t('enter_numerator_denominator', 'Vui lòng nhập tử số và mẫu số hợp lệ!'));
                     return;
                 }
                 
                 if (userDen === 0) {
-                    alert('Mẫu số không được bằng 0!');
+                    alert(t('denominator_not_zero', 'Mẫu số không được bằng 0!'));
                     return;
                 }
                 
@@ -396,7 +424,8 @@ include '../includes/header.php';
                         generateNewProblem();
                     }, 1500);
                 } else {
-                    showFeedback(false, '✗ Sai rồi! Thử lại. (Đáp án đúng: ' + formatFractionText(correctAnswer) + ')');
+                    var errorMsg = t('incorrect', 'Sai') + '! ' + t('try_again', 'Thử lại') + '. (' + (typeof LANG !== 'undefined' ? LANG.correct : 'Đúng') + ': ' + formatFractionText(correctAnswer) + ')';
+                    showFeedback(false, '✗ ' + errorMsg);
                     
                     currentWrongAnswers.push(formatFractionText(userAnswer));
                     saveToLocalStorage();
@@ -422,12 +451,28 @@ include '../includes/header.php';
                     problemText += ' ' + currentProblem.operators[i] + ' ' + formatFractionText(currentProblem.fractions[i + 1]);
                 }
                 
-                problemHistory.push({
+                var correctAnswerText = formatFractionText(currentProblem.correctAnswer);
+                
+                var historyItem = {
                     problem: problemText,
-                    correctAnswer: formatFractionText(currentProblem.correctAnswer),
+                    correctAnswer: correctAnswerText,
                     wrongAnswers: currentWrongAnswers.slice(),
                     skipped: skipped || false
-                });
+                };
+                
+                problemHistory.push(historyItem);
+                
+                // Save to server
+                saveHistoryToServer(
+                    historyManager,
+                    problemText,
+                    correctAnswerText,
+                    currentWrongAnswers,
+                    skipped,
+                    function(err) {
+                        if (err) console.error('Failed to save history to server');
+                    }
+                );
                 
                 saveToLocalStorage();
                 displayHistory();
@@ -435,15 +480,16 @@ include '../includes/header.php';
 
 
             function saveToLocalStorage() {
+                // Chỉ lưu bài toán hiện tại (để F5)
                 saveToStorage('currentProblemFractionMultDiv', currentProblem);
                 saveToStorage('currentWrongAnswersFractionMultDiv', currentWrongAnswers);
-                saveToStorage('problemHistoryFractionMultDiv', problemHistory);
             }
 
             function loadFromLocalStorage() {
+                // Load bài toán hiện tại
+                // problemHistory sẽ load từ server
                 currentProblem = loadFromStorage('currentProblemFractionMultDiv');
                 currentWrongAnswers = loadFromStorage('currentWrongAnswersFractionMultDiv') || [];
-                problemHistory = loadFromStorage('problemHistoryFractionMultDiv') || [];
             }
 
             // Event handlers

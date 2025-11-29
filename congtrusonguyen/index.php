@@ -202,12 +202,17 @@ include '../includes/header.php';
                 var mediumText = t('difficulty_medium', 'Trung bình');
                 var hardText = t('difficulty_hard', 'Khó');
                 
+                var hasNegativeText = t('has_negative', 'có số âm');
+                var numberText = t('number', 'số');
+                var toText = t('to', 'đến');
+                var operatorText = t('operator', 'toán tử');
+                
                 if (problemCount < CONFIG.easy.threshold) {
-                    difficultyText = easyText + ' (số ' + CONFIG.easy.min + ' đến ' + CONFIG.easy.max + ', ' + (CONFIG.easy.num_operands - 1) + ' toán tử)';
+                    difficultyText = easyText + ' (' + numberText + ' ' + CONFIG.easy.min + ' ' + toText + ' ' + CONFIG.easy.max + ', ' + (CONFIG.easy.num_operands - 1) + ' ' + operatorText + ')';
                 } else if (problemCount < CONFIG.medium.threshold) {
-                    difficultyText = mediumText + ' (có số âm, ' + CONFIG.medium.min + ' đến ' + CONFIG.medium.max + ', ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' toán tử)';
+                    difficultyText = mediumText + ' (' + hasNegativeText + ', ' + CONFIG.medium.min + ' ' + toText + ' ' + CONFIG.medium.max + ', ' + (CONFIG.medium.num_operands_min - 1) + '-' + (CONFIG.medium.num_operands_max - 1) + ' ' + operatorText + ')';
                 } else {
-                    difficultyText = hardText + ' (có số âm, ' + CONFIG.hard.min + ' đến ' + CONFIG.hard.max + ', ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' toán tử)';
+                    difficultyText = hardText + ' (' + hasNegativeText + ', ' + CONFIG.hard.min + ' ' + toText + ' ' + CONFIG.hard.max + ', ' + (CONFIG.hard.num_operands_min - 1) + '-' + (CONFIG.hard.num_operands_max - 1) + ' ' + operatorText + ')';
                 }
                 
                 $('#difficulty-level').html(difficultyText);

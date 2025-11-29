@@ -72,6 +72,18 @@ return [
     'select_tables' => 'Chọn giới hạn bảng cửu chương:',
     'select_all' => 'Chọn tất cả',
     'start' => 'Bắt đầu',
+    'multiplication_table_2' => 'Cửu chương 2',
+    'multiplication_table_3' => 'Cửu chương 3',
+    'multiplication_table_4' => 'Cửu chương 4',
+    'multiplication_table_5' => 'Cửu chương 5',
+    'multiplication_table_6' => 'Cửu chương 6',
+    'multiplication_table_7' => 'Cửu chương 7',
+    'multiplication_table_8' => 'Cửu chương 8',
+    'multiplication_table_9' => 'Cửu chương 9',
+    'wrong' => 'Sai',
+    'round' => 'Vòng',
+    'numerator_denominator' => 'tử/mẫu',
+    'has_negative_fraction' => 'có phân số âm',
     
     // History
     'no_items_for_date' => 'Không có bài nào trong ngày này',
@@ -79,5 +91,19 @@ return [
     // Footer
     'all_rights_reserved' => 'Bảo lưu mọi quyền.',
     'view_source_on_github' => 'Xem mã nguồn trên GitHub',
+    
+    // Fraction input
+    'numerator' => 'Tử số',
+    'denominator' => 'Mẫu số',
+    
+    // Operators and terms
+    'multiply' => 'nhân',
+    'divide' => 'chia',
+    'only_multiply' => 'chỉ nhân',
+    'only_divide' => 'chỉ chia',
+    'has_negative' => 'có số âm',
+    'number' => 'số',
+    'to' => 'đến',
+    'operator' => 'toán tử',
 ];
 

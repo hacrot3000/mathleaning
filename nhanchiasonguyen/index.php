@@ -12,30 +12,33 @@ include '../includes/header.php';
             <!-- Header with home button and user info -->
             <div class="container-header">
                 <div class="container-header-left">
-                    <a href="../" class="home-btn">🏠 Trang chủ</a>
+                    <a href="../" class="home-btn">🏠 <?php echo $lang['home']; ?></a>
                 </div>
-                <div class="container-header-right" id="user-info-display"></div>
+                <div class="container-header-right">
+                    <div id="user-info-display"></div>
+                    <?php include '../includes/language-switcher.php'; ?>
+                </div>
             </div>
             
-            <h1>Luyện Tập Nhân Chia Số Nguyên</h1>
+            <h1><?php echo $lang['practice_multiply_divide_integers']; ?></h1>
             
             <div style="font-size: 100%; color: #666; margin-bottom: 20px;">
-                <strong>Độ khó:</strong> <span id="difficulty-level"></span> | 
-                <strong>Câu hỏi:</strong> <span id="question-number"></span>
+                <strong><?php echo $lang['difficulty']; ?>:</strong> <span id="difficulty-level"></span> | 
+                <strong><?php echo $lang['question']; ?>:</strong> <span id="question-number"></span>
             </div>
             
             <div class="problem" id="problem-display"></div>
             
             <div>
-                <input type="text" id="answer-input" placeholder="Kết quả" autocomplete="off">
+                <input type="text" id="answer-input" placeholder="<?php echo $lang['result']; ?>" autocomplete="off">
                 <p style="font-size: 70%; color: #999; margin-top: 5px;">
-                    <em>* Kết quả làm tròn đến phần trăm (2 chữ số thập phân)</em>
+                    <em><?php echo $lang['rounding_note']; ?></em>
                 </p>
             </div>
             
             <div>
-                <button class="submit-btn" id="submit-btn">Kiểm tra</button>
-                <button class="submit-btn" id="skip-btn" style="background-color: #ff9800;">Bỏ qua</button>
+                <button class="submit-btn" id="submit-btn"><?php echo $lang['submit']; ?></button>
+                <button class="submit-btn" id="skip-btn" style="background-color: #ff9800;"><?php echo $lang['skip']; ?></button>
             </div>
             
             <div id="feedback" class="feedback" style="display: none;"></div>
@@ -233,16 +236,29 @@ include '../includes/header.php';
                 
                 // Hiển thị độ khó và số câu hỏi
                 var difficultyText = '';
+                var easyText = t('difficulty_easy', 'Dễ');
+                var mediumText = t('difficulty_medium', 'Trung bình');
+                var hardText = t('difficulty_hard', 'Khó');
+                var multiplyText = t('multiply', 'nhân');
+                var divideText = t('divide', 'chia');
+                var multiplyDivideText = multiplyText + '/' + divideText;
+                var onlyMultiplyText = t('only_multiply', 'chỉ nhân');
+                var onlyDivideText = t('only_divide', 'chỉ chia');
+                var hasNegativeText = t('has_negative', 'có số âm');
+                var numberText = t('number', 'số');
+                var operatorText = t('operator', 'toán tử');
+                var toText = t('to', 'đến');
+                
                 var operatorNames = '';
                 if (problemCount < CONFIG.easy.threshold) {
-                    operatorNames = CONFIG.easy.operators.length > 1 ? 'nhân/chia' : (CONFIG.easy.operators[0] === '×' ? 'chỉ nhân' : 'chỉ chia');
-                    difficultyText = 'Dễ (' + operatorNames + ', số ' + CONFIG.easy.min + '-' + CONFIG.easy.max + ')';
+                    operatorNames = CONFIG.easy.operators.length > 1 ? multiplyDivideText : (CONFIG.easy.operators[0] === '×' ? onlyMultiplyText : onlyDivideText);
+                    difficultyText = easyText + ' (' + operatorNames + ', ' + numberText + ' ' + CONFIG.easy.min + '-' + CONFIG.easy.max + ')';
                 } else if (problemCount < CONFIG.medium.threshold) {
-                    operatorNames = CONFIG.medium.operators.length > 1 ? 'nhân/chia' : (CONFIG.medium.operators[0] === '×' ? 'chỉ nhân' : 'chỉ chia');
-                    difficultyText = 'Trung bình (' + operatorNames + ', có số âm, ' + CONFIG.medium.min + ' đến ' + CONFIG.medium.max + ')';
+                    operatorNames = CONFIG.medium.operators.length > 1 ? multiplyDivideText : (CONFIG.medium.operators[0] === '×' ? onlyMultiplyText : onlyDivideText);
+                    difficultyText = mediumText + ' (' + operatorNames + ', ' + hasNegativeText + ', ' + CONFIG.medium.min + ' ' + toText + ' ' + CONFIG.medium.max + ')';
                 } else {
-                    operatorNames = CONFIG.hard.operators.length > 1 ? 'nhân/chia' : (CONFIG.hard.operators[0] === '×' ? 'chỉ nhân' : 'chỉ chia');
-                    difficultyText = 'Khó (' + operatorNames + ', có số âm, ' + CONFIG.hard.min + ' đến ' + CONFIG.hard.max + ')';
+                    operatorNames = CONFIG.hard.operators.length > 1 ? multiplyDivideText : (CONFIG.hard.operators[0] === '×' ? onlyMultiplyText : onlyDivideText);
+                    difficultyText = hardText + ' (' + operatorNames + ', ' + hasNegativeText + ', ' + CONFIG.hard.min + ' ' + toText + ' ' + CONFIG.hard.max + ')';
                 }
                 
                 $('#difficulty-level').html(difficultyText);
@@ -253,14 +269,14 @@ include '../includes/header.php';
                 var userAnswerStr = $('#answer-input').val().trim();
                 
                 if (userAnswerStr === '') {
-                    alert('Vui lòng nhập một số hợp lệ!');
+                    alert(t('enter_valid_number', 'Vui lòng nhập một số hợp lệ!'));
                     return;
                 }
                 
                 var userAnswer = parseFloat(userAnswerStr);
                 
                 if (isNaN(userAnswer)) {
-                    alert('Vui lòng nhập một số hợp lệ!');
+                    alert(t('enter_valid_number', 'Vui lòng nhập một số hợp lệ!'));
                     return;
                 }
                 

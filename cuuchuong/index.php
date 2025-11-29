@@ -16,27 +16,29 @@ include '../includes/header.php';
                 <!-- Header with home button -->
                 <div class="container-header">
                     <div class="container-header-left">
-                        <a href="../" class="home-btn">🏠 Trang chủ</a>
+                        <a href="../" class="home-btn">🏠 <?php echo $lang['home']; ?></a>
                     </div>
-                    <div class="container-header-right"></div>
+                    <div class="container-header-right">
+                        <?php include '../includes/language-switcher.php'; ?>
+                    </div>
                 </div>
-                <h1>🎯 Bảng Cửu Chương</h1>
-                <p style="color: #666; margin-bottom: 30px;">Chọn giới hạn bảng cửu chương:</p>
+                <h1>🎯 <?php echo $lang['multiplication_table']; ?></h1>
+                <p style="color: #666; margin-bottom: 30px;"><?php echo $lang['select_tables']; ?></p>
                 <form method="GET" action="" class="selection-form">
                     <label for="ccall" style="background-color: #fff3cd; font-weight: bold;">
-                        <input type="checkbox" id="ccall"/> Chọn tất cả
+                        <input type="checkbox" id="ccall"/> <?php echo $lang['select_all']; ?>
                     </label>
                     <br>
-                    <label for="cc2"><input type="checkbox" name="cuuchuong[]" value="2" id="cc2" class="cc-checkbox"/> Cửu chương 2</label>
-                    <label for="cc3"><input type="checkbox" name="cuuchuong[]" value="3" id="cc3" class="cc-checkbox"/> Cửu chương 3</label>
-                    <label for="cc4"><input type="checkbox" name="cuuchuong[]" value="4" id="cc4" class="cc-checkbox"/> Cửu chương 4</label>
-                    <label for="cc5"><input type="checkbox" name="cuuchuong[]" value="5" id="cc5" class="cc-checkbox"/> Cửu chương 5</label>
-                    <label for="cc6"><input type="checkbox" name="cuuchuong[]" value="6" id="cc6" class="cc-checkbox"/> Cửu chương 6</label>
-                    <label for="cc7"><input type="checkbox" name="cuuchuong[]" value="7" id="cc7" class="cc-checkbox"/> Cửu chương 7</label>
-                    <label for="cc8"><input type="checkbox" name="cuuchuong[]" value="8" id="cc8" class="cc-checkbox"/> Cửu chương 8</label>
-                    <label for="cc9"><input type="checkbox" name="cuuchuong[]" value="9" id="cc9" class="cc-checkbox"/> Cửu chương 9</label>
+                    <label for="cc2"><input type="checkbox" name="cuuchuong[]" value="2" id="cc2" class="cc-checkbox"/> <?php echo $lang['multiplication_table_2']; ?></label>
+                    <label for="cc3"><input type="checkbox" name="cuuchuong[]" value="3" id="cc3" class="cc-checkbox"/> <?php echo $lang['multiplication_table_3']; ?></label>
+                    <label for="cc4"><input type="checkbox" name="cuuchuong[]" value="4" id="cc4" class="cc-checkbox"/> <?php echo $lang['multiplication_table_4']; ?></label>
+                    <label for="cc5"><input type="checkbox" name="cuuchuong[]" value="5" id="cc5" class="cc-checkbox"/> <?php echo $lang['multiplication_table_5']; ?></label>
+                    <label for="cc6"><input type="checkbox" name="cuuchuong[]" value="6" id="cc6" class="cc-checkbox"/> <?php echo $lang['multiplication_table_6']; ?></label>
+                    <label for="cc7"><input type="checkbox" name="cuuchuong[]" value="7" id="cc7" class="cc-checkbox"/> <?php echo $lang['multiplication_table_7']; ?></label>
+                    <label for="cc8"><input type="checkbox" name="cuuchuong[]" value="8" id="cc8" class="cc-checkbox"/> <?php echo $lang['multiplication_table_8']; ?></label>
+                    <label for="cc9"><input type="checkbox" name="cuuchuong[]" value="9" id="cc9" class="cc-checkbox"/> <?php echo $lang['multiplication_table_9']; ?></label>
                     <br>
-                    <button type="submit">Bắt đầu</button>
+                    <button type="submit"><?php echo $lang['start']; ?></button>
                 </form>
                 
                 <script type="text/javascript">
@@ -81,11 +83,13 @@ include '../includes/header.php';
                 <!-- Header with home button -->
                 <div class="container-header">
                     <div class="container-header-left">
-                        <a href="../" class="home-btn">🏠 Trang chủ</a>
+                        <a href="../" class="home-btn">🏠 <?php echo $lang['home']; ?></a>
                     </div>
-                    <div class="container-header-right"></div>
+                    <div class="container-header-right">
+                        <?php include '../includes/language-switcher.php'; ?>
+                    </div>
                 </div>
-                <h1>🎯 Bảng Cửu Chương</h1>
+                <h1>🎯 <?php echo $lang['multiplication_table']; ?></h1>
                 
                 <div class="problem-display">
                     <div class="problem-row">
@@ -190,7 +194,9 @@ include '../includes/header.php';
 
                 function updateStatus()
                 {
-                    $('#status').html(passed + "/" + alltest.length + "(Sai:" + failed + ' Vòng:' + currentTest + ')');
+                    var wrongText = typeof LANG !== 'undefined' ? LANG.wrong : 'Sai';
+                    var roundText = typeof LANG !== 'undefined' ? LANG.round : 'Vòng';
+                    $('#status').html(passed + "/" + alltest.length + "(" + wrongText + ":" + failed + ' ' + roundText + ':' + currentTest + ')');
                 }
                 // 3 x 5 =
 

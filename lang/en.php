@@ -72,6 +72,18 @@ return [
     'select_tables' => 'Select multiplication tables:',
     'select_all' => 'Select All',
     'start' => 'Start',
+    'multiplication_table_2' => 'Table 2',
+    'multiplication_table_3' => 'Table 3',
+    'multiplication_table_4' => 'Table 4',
+    'multiplication_table_5' => 'Table 5',
+    'multiplication_table_6' => 'Table 6',
+    'multiplication_table_7' => 'Table 7',
+    'multiplication_table_8' => 'Table 8',
+    'multiplication_table_9' => 'Table 9',
+    'wrong' => 'Wrong',
+    'round' => 'Round',
+    'numerator_denominator' => 'numerator/denominator',
+    'has_negative_fraction' => 'has negative fraction',
     
     // History
     'no_items_for_date' => 'No exercises for this date',
@@ -79,5 +91,19 @@ return [
     // Footer
     'all_rights_reserved' => 'All rights reserved.',
     'view_source_on_github' => 'View Source on GitHub',
+    
+    // Fraction input
+    'numerator' => 'Numerator',
+    'denominator' => 'Denominator',
+    
+    // Operators and terms
+    'multiply' => 'multiply',
+    'divide' => 'divide',
+    'only_multiply' => 'only multiply',
+    'only_divide' => 'only divide',
+    'has_negative' => 'has negative',
+    'number' => 'number',
+    'to' => 'to',
+    'operator' => 'operator',
 ];
 
