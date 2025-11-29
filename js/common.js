@@ -124,3 +124,88 @@ function t(key, defaultValue) {
     return defaultValue || key;
 }
 
+// Disable right-click context menu
+$(document).on('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+});
+
+// Disable common keyboard shortcuts (Ctrl+C, Ctrl+A, Ctrl+V, Ctrl+S, F12, etc.)
+$(document).on('keydown', function(e) {
+    // Disable F12 (Developer Tools)
+    if (e.keyCode === 123) {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Disable Ctrl+Shift+I (Developer Tools)
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Disable Ctrl+Shift+J (Console)
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Disable Ctrl+U (View Source)
+    if (e.ctrlKey && e.keyCode === 85) {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Disable Ctrl+S (Save Page)
+    if (e.ctrlKey && e.keyCode === 83) {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Disable Ctrl+P (Print)
+    if (e.ctrlKey && e.keyCode === 80) {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Allow Ctrl+C, Ctrl+V, Ctrl+A, Ctrl+X only in input fields and textareas
+    var isInputField = $(e.target).is('input, textarea') || $(e.target).closest('input, textarea').length > 0;
+    if (!isInputField) {
+        // Disable Ctrl+C (Copy)
+        if (e.ctrlKey && e.keyCode === 67) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Disable Ctrl+V (Paste)
+        if (e.ctrlKey && e.keyCode === 86) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Disable Ctrl+A (Select All)
+        if (e.ctrlKey && e.keyCode === 65) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Disable Ctrl+X (Cut)
+        if (e.ctrlKey && e.keyCode === 88) {
+            e.preventDefault();
+            return false;
+        }
+    }
+});
+
+// Disable drag and drop
+$(document).on('dragstart', function(e) {
+    e.preventDefault();
+    return false;
+});
+
+// Disable image dragging
+$(document).on('dragstart', 'img', function(e) {
+    e.preventDefault();
+    return false;
+});
+

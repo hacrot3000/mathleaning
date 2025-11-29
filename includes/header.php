@@ -13,7 +13,7 @@
  *   include '../includes/header.php';
  */
 
- $jsVersion = 10;
+ $jsVersion = 11;
 
 // Default values
 $extra_css = isset($extra_css) ? $extra_css : [];
