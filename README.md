@@ -78,58 +78,6 @@ A comprehensive web-based math learning platform designed for primary and lower 
 5. **Access the application:**
    - Open your browser and navigate to: `http://localhost/hoctoan/`
 
-## 📁 Project Structure
-
-```
-hoctoan/
-├── api.php                 # API endpoints for user and history management
-├── config.php             # Configuration for exercise difficulty
-├── db.php                 # Database connection and initialization
-├── lang.php               # Language loader
-├── index.php              # Home page
-│
-├── congtrusonguyen/       # Add/Subtract Integers exercise
-│   └── index.php
-├── nhanchiasonguyen/      # Multiply/Divide Integers exercise
-│   └── index.php
-├── phanso/                # Add/Subtract Fractions exercise
-│   └── index.php
-├── nhanchiaphanso/        # Multiply/Divide Fractions exercise
-│   └── index.php
-├── cuuchuong/             # Multiplication Table exercise
-│   └── index.php
-│
-├── includes/               # Reusable components
-│   ├── header.php         # Common page header
-│   ├── footer.php         # Common page footer
-│   ├── history-section.php # History display component
-│   └── language-switcher.php # Language switcher component
-│
-├── css/                   # Stylesheets
-│   ├── common.css         # Common styles
-│   ├── home.css           # Home page styles
-│   ├── cuuchuong.css      # Multiplication table styles
-│   ├── nhanchiasonguyen.css
-│   ├── phanso.css
-│   └── nhanchiaphanso.css
-│
-├── js/                    # JavaScript files
-│   ├── common.js          # Common utilities
-│   ├── user.js            # User management
-│   └── history.js         # History management
-│
-├── lang/                  # Language files
-│   ├── vi.php             # Vietnamese
-│   └── en.php             # English
-│
-├── lib/                   # Third-party libraries
-│   ├── ion.sound-3.0.7/   # Sound effects library
-│   └── katex-0.16.9/      # Math rendering library
-│
-└── db/                    # Database directory
-    └── hoctoan.db         # SQLite database file
-```
-
 ## ⚙️ Configuration
 
 Edit `config.php` to adjust exercise difficulty:

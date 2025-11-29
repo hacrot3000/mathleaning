@@ -1,26 +1,8 @@
-/* Cửu chương specific styles */
-body {
-    background: #43e97b;
-    background: -webkit-linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    background: -moz-linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    background: -o-linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-}
 
+
+/* Override container styles for cuuchuong */
 .container {
     max-width: 900px;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-radius: 15px;
-    -webkit-box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-}
-
-h1 {
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 2em;
 }
 
 .selection-form {
@@ -166,38 +148,9 @@ h1 {
     font-weight: bold;
 }
 
-.back-link {
-    display: inline-block;
-    margin: 10px;
-    padding: 10px 30px;
-    background-color: #607D8B;
-    color: white;
-    text-decoration: none;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
-}
-
-.back-link:hover {
-    background-color: #455A64;
-    -webkit-transform: translateY(-2px);
-    -moz-transform: translateY(-2px);
-    -ms-transform: translateY(-2px);
-    -o-transform: translateY(-2px);
-    transform: translateY(-2px);
-}
-
 @media (max-width: 768px) {
     .container {
         padding: 20px 15px;
-    }
-    
-    h1 {
-        font-size: 1.5em;
     }
     
     .selection-form {
@@ -244,4 +197,3 @@ h1 {
         margin: 10px auto;
     }
 }
-

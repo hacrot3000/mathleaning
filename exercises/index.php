@@ -133,22 +133,25 @@ $mode = isset($exercise['mode']) ? $exercise['mode'] : null;
 include __DIR__ . '/../includes/header.php';
 
 // Start container and common header HTML
-if ($use_user || $use_history) {
-    ?>
-        <div class="container">
-            <!-- Header with home button and user info -->
-            <div class="container-header">
-                <div class="container-header-left">
-                    <a href="../" class="home-btn">🏠 <?php echo $lang['home']; ?></a>
+// Special handling for cuuchuong - it manages its own container
+if ($type !== 'cuuchuong') {
+    if ($use_user || $use_history) {
+        ?>
+            <div class="container">
+                <!-- Header with home button and user info -->
+                <div class="container-header">
+                    <div class="container-header-left">
+                        <a href="../" class="home-btn">🏠 <?php echo $lang['home']; ?></a>
+                    </div>
+                    <div class="container-header-right">
+                        <?php if ($use_user): ?>
+                        <div id="user-info-display"></div>
+                        <?php endif; ?>
+                        <?php include __DIR__ . '/../includes/language-switcher.php'; ?>
+                    </div>
                 </div>
-                <div class="container-header-right">
-                    <?php if ($use_user): ?>
-                    <div id="user-info-display"></div>
-                    <?php endif; ?>
-                    <?php include __DIR__ . '/../includes/language-switcher.php'; ?>
-                </div>
-            </div>
-    <?php
+        <?php
+    }
 }
 
 // Include the exercise-specific content
@@ -157,13 +160,15 @@ include $exercise_file;
 $exercise_content = ob_get_clean();
 echo $exercise_content;
 
-// Close container and add history section if needed
-if ($use_history) {
-    include __DIR__ . '/../includes/history-section.php';
-}
+// Close container and add history section if needed (except for cuuchuong)
+if ($type !== 'cuuchuong') {
+    if ($use_history) {
+        include __DIR__ . '/../includes/history-section.php';
+    }
 
-if ($use_user || $use_history) {
-    echo '</div> <!-- End container -->';
+    if ($use_user || $use_history) {
+        echo '</div> <!-- End container -->';
+    }
 }
 
 // Include footer

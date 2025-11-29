@@ -1,12 +1,4 @@
 /* Luỹ Thừa Exercise Styles */
-.container {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.problem {
-    font-size: 150%;
-    min-height: 80px;
-}
 
 .submit-btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
