@@ -30,7 +30,8 @@ $config_perfect_threshold = [
     'nhanchiaphanso_mixed' => 20,    // Ngưỡng cho bài tập Nhân Chia Hỗn Số (20 câu đúng ngay lần đầu, thấp hơn vì khó hơn)
     'luythua' => 40,                 // Ngưỡng cho bài tập Luỹ Thừa (40 câu đúng ngay lần đầu)
     'trituyetdoi' => 40,             // Ngưỡng cho bài tập Trị Tuyệt Đối (40 câu đúng ngay lần đầu)
-    'timx' => 35                     // Ngưỡng cho bài tập Tìm X (35 câu đúng ngay lần đầu)
+    'timx' => 25,                    // Ngưỡng cho bài tập Tìm X - Phương Trình Bậc Nhất (35 câu đúng ngay lần đầu)
+    'timx2' => 20                    // Ngưỡng cho bài tập Tìm X - Phương Trình Bậc Hai Đơn Giản (30 câu đúng ngay lần đầu)
 ];
 
 // ============================================================================
@@ -460,13 +461,136 @@ $config_timx = [
 ];
 
 // ============================================================================
+// TIMX2 CONFIGURATION - Tìm X (Phương Trình Bậc Hai Đơn Giản: ax² = b)
+// ============================================================================
+$config_timx2 = [
+    // Độ khó Dễ (Câu 1-3) - Chỉ số nguyên, x² đơn giản
+    'easy' => [
+        'threshold' => 3,           // Số câu hỏi ở độ khó này (câu 1-3)
+        'number_types' => ['integer'], // Chỉ cho phép số nguyên trong phương trình
+        'coefficient_types' => ['integer'], // Hệ số của x² chỉ là số nguyên (ví dụ: 3x², -5x²)
+        'x_appearances' => ['quadratic'], // Chỉ có dạng x²
+        'allow_multiple_x' => false,  // Không cho phép x xuất hiện nhiều lần
+        'allow_absolute_value' => false, // Không cho phép trị tuyệt đối
+        'allow_power' => true,  // Luôn có luỹ thừa (x²)
+        'power_min' => 2,               // Luỹ thừa cố định là 2
+        'power_max' => 2,               // Luỹ thừa cố định là 2
+        'force_power' => true,          // Bắt buộc luỹ thừa (luôn có x²)
+        'allow_parentheses' => false,  // Không cho phép ngoặc
+        'allow_x_in_fraction' => false,  // Không cho phép x trong phân số
+        'integer_min' => 1,             // Hệ số dương để tránh phức tạp
+        'integer_max' => 5,             // Phạm vi nhỏ cho dễ
+        'fraction_min' => 1,            // Chỉ số dương
+        'fraction_max' => 10,           // Phạm vi số
+        'coefficient_min' => 1,         // Hệ số của x² nhỏ nhất (dương)
+        'coefficient_max' => 5,         // Hệ số của x² lớn nhất
+        'constant_min' => 1,            // Hằng số vế phải nhỏ nhất (dương để có nghiệm)
+        'constant_max' => 25            // Hằng số vế phải lớn nhất
+    ],
+    
+    // Độ khó Vừa (Câu 4-7) - Thêm phân số
+    'medium' => [
+        'threshold' => 7,          // Tổng số câu hỏi đến hết độ khó này (câu 1-7)
+        'number_types' => ['integer', 'fraction'], // Cho phép số nguyên và phân số
+        'coefficient_types' => ['integer', 'fraction'], // Hệ số của x² có thể là số nguyên hoặc phân số
+        'x_appearances' => ['quadratic'], // Chỉ có dạng x²
+        'allow_multiple_x' => false,  // Không cho phép x nhiều lần
+        'allow_absolute_value' => false, // Chưa cho phép trị tuyệt đối
+        'allow_power' => true,  // Luôn có x²
+        'power_min' => 2,               // Luỹ thừa cố định là 2
+        'power_max' => 2,               // Luỹ thừa cố định là 2
+        'force_power' => true,          // Bắt buộc x²
+        'allow_parentheses' => false,  // Không cho phép ngoặc
+        'allow_x_in_fraction' => false,  // Không cho phép x trong phân số
+        'integer_min' => 1,             // Phạm vi số nguyên
+        'integer_max' => 10,            // Phạm vi số nguyên
+        'fraction_min' => 1,            // Giá trị nhỏ nhất cho tử/mẫu
+        'fraction_max' => 10,           // Giá trị lớn nhất cho tử/mẫu
+        'coefficient_min' => 1,         // Hệ số của x²
+        'coefficient_max' => 10,        // Hệ số của x²
+        'constant_min' => 1,            // Hằng số vế phải
+        'constant_max' => 25            // Hằng số vế phải
+    ],
+    
+    // Độ khó Khá (Câu 8-10) - Thêm hỗn số, số âm
+    'hard' => [
+        'threshold' => 10,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
+        'number_types' => ['integer', 'decimal', 'fraction', 'mixed'], // Thêm số thập phân và hỗn số
+        'coefficient_types' => ['integer', 'fraction', 'mixed'], // Hệ số có thể là số nguyên, phân số, hoặc hỗn số
+        'x_appearances' => ['quadratic'], // Chỉ có dạng x²
+        'allow_multiple_x' => false,  // Không cho phép x nhiều lần
+        'allow_absolute_value' => false, // Chưa cho phép trị tuyệt đối
+        'allow_power' => true,  // Luôn có x²
+        'power_min' => 2,               // Luỹ thừa cố định là 2
+        'power_max' => 2,               // Luỹ thừa cố định là 2
+        'force_power' => true,          // Bắt buộc x²
+        'allow_parentheses' => false,  // Không cho phép ngoặc
+        'allow_x_in_fraction' => false,  // Không cho phép x trong phân số
+        'integer_min' => -10,           // Có thể âm
+        'integer_max' => 10,            // Phạm vi số nguyên
+        'fraction_min' => -15,          // Phạm vi phân số lớn hơn
+        'fraction_max' => 15,           // Phạm vi phân số lớn hơn
+        'mixed_whole_min' => 1,         // Phần nguyên tối thiểu của hỗn số
+        'mixed_whole_max' => 5,         // Phần nguyên tối đa của hỗn số
+        'mixed_num_max' => 10,          // Tử số tối đa của phần phân số trong hỗn số
+        'mixed_den_min' => 2,           // Mẫu số tối thiểu
+        'mixed_den_max' => 10,          // Mẫu số tối đa
+        'coefficient_min' => 1,         // Hệ số của x² (giữ dương để tránh vô nghiệm)
+        'coefficient_max' => 15,        // Hệ số của x²
+        'constant_min' => 1,            // Hằng số vế phải (giữ dương để có nghiệm)
+        'constant_max' => 50,           // Hằng số vế phải
+        'decimal_places' => 2           // Số chữ số thập phân khi làm tròn nghiệm
+    ],
+    
+    // Độ khó Rất Khó (Câu 11+) - Tất cả các tính năng
+    'expert' => [
+        'number_types' => ['integer', 'decimal', 'fraction', 'mixed'], // Tất cả các loại số
+        'coefficient_types' => ['integer', 'fraction', 'mixed'], // Tất cả các loại hệ số
+        'x_appearances' => ['quadratic'], // Chỉ có dạng x²
+        'allow_multiple_x' => false,  // Không cho phép x nhiều lần
+        'allow_absolute_value' => false, // Không cho phép trị tuyệt đối
+        'allow_power' => true,  // Luôn có x²
+        'power_min' => 2,               // Luỹ thừa cố định là 2
+        'power_max' => 2,               // Luỹ thừa cố định là 2
+        'force_power' => true,          // Bắt buộc x²
+        'allow_parentheses' => false,  // Không cho phép ngoặc
+        'allow_x_in_fraction' => false,  // Không cho phép x trong phân số
+        'integer_min' => -10,           // Phạm vi số nguyên
+        'integer_max' => 10,            // Phạm vi số nguyên
+        'fraction_min' => -10,          // Phạm vi phân số
+        'fraction_max' => 10,           // Phạm vi phân số
+        'mixed_whole_min' => 1,         // Phần nguyên tối thiểu của hỗn số
+        'mixed_whole_max' => 5,         // Phần nguyên tối đa của hỗn số
+        'mixed_num_max' => 10,          // Tử số tối đa
+        'mixed_den_min' => 2,           // Mẫu số tối thiểu
+        'mixed_den_max' => 10,          // Mẫu số tối đa
+        'coefficient_min' => 1,         // Hệ số của x² (giữ dương)
+        'coefficient_max' => 10,        // Hệ số của x²
+        'constant_min' => 1,            // Hằng số vế phải (giữ dương)
+        'constant_max' => 100,          // Hằng số vế phải
+        'decimal_places' => 2           // Số chữ số thập phân khi làm tròn nghiệm
+    ],
+    
+    // Mixed number configuration (cấu hình cho hỗn số)
+    'mixed_number' => [
+        'whole_min' => 1,               // Phần nguyên tối thiểu của hỗn số
+        'whole_max' => 5,               // Phần nguyên tối đa của hỗn số (ví dụ: 2 1/3)
+        'numerator_max' => 10,          // Tử số tối đa của phần phân số (ví dụ: 1/3, tử số là 1)
+        'denominator_min' => 2,         // Mẫu số tối thiểu của phần phân số (không được là 1)
+        'denominator_max' => 10,        // Mẫu số tối đa của phần phân số (ví dụ: 1/10)
+        'probability' => 0.3,           // Xác suất xuất hiện hỗn số (30%)
+        'start_from' => 5               // Bắt đầu xuất hiện hỗn số từ câu hỏi số 5
+    ]
+];
+
+// ============================================================================
 // HÀM EXPORT CONFIG SANG JSON
 // ============================================================================
 // Export config dưới dạng JSON để JavaScript có thể sử dụng
-// Tham số: $config_name - Tên config cần export ('congtru', 'nhanchia', 'phanso', 'nhanchiaphanso', 'luythua', 'trituyetdoi', 'timx', 'general')
+// Tham số: $config_name - Tên config cần export ('congtru', 'nhanchia', 'phanso', 'nhanchiaphanso', 'luythua', 'trituyetdoi', 'timx', 'timx2', 'general')
 // Trả về: Chuỗi JSON chứa cấu hình tương ứng
 function getConfigAsJSON($config_name) {
-    global $config_congtru, $config_nhanchia, $config_general, $config_phanso, $config_nhanchiaphanso, $config_luythua, $config_trituyetdoi, $config_timx;
+    global $config_congtru, $config_nhanchia, $config_general, $config_phanso, $config_nhanchiaphanso, $config_luythua, $config_trituyetdoi, $config_timx, $config_timx2;
     
     $config = null;
     switch ($config_name) {
@@ -490,6 +614,9 @@ function getConfigAsJSON($config_name) {
             break;
         case 'timx':
             $config = $config_timx; // Config cho bài tập Tìm X
+            break;
+        case 'timx2':
+            $config = $config_timx2; // Config cho bài tập Tìm X (Phương Trình Bậc Hai)
             break;
         case 'general':
             $config = $config_general; // Config chung

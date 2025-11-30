@@ -121,7 +121,20 @@ $exercises = [
         'use_user' => true,
         'use_history' => true,
         'config_general' => true,
-        'exercise_type' => 'timx'
+        'exercise_type' => 'timx',
+        'mode' => 'linear'
+    ],
+    'timx2' => [
+        'file' => 'timx.php',
+        'page_title' => 'Tìm X - Phương Trình Bậc Hai Đơn Giản',
+        'config_type' => 'timx2',
+        'extra_css' => ['timx.css'],
+        'use_katex' => true,
+        'use_user' => true,
+        'use_history' => true,
+        'config_general' => true,
+        'exercise_type' => 'timx2',
+        'mode' => 'quadratic'
     ]
 ];
 

@@ -64,6 +64,8 @@ return [
     'absolute_value_practice_desc' => 'Luyện tập tính toán với trị tuyệt đối.<br>Bao gồm số nguyên, thực, phân số, hỗn số và tổ hợp.',
     'find_x_practice' => 'Tìm X - Phương Trình Bậc Nhất',
     'find_x_practice_desc' => 'Giải phương trình bậc nhất một ẩn tìm x.<br>Hệ số có thể là số nguyên, phân số, hỗn số. X có thể xuất hiện trong ngoặc, trị tuyệt đối, luỹ thừa lẻ.',
+    'find_x2_practice' => 'Tìm X - Phương Trình Bậc Hai Đơn Giản',
+    'find_x2_practice_desc' => 'Giải phương trình bậc hai dạng đơn giản ax² = b.<br>Hệ số có thể là số nguyên, phân số, hỗn số. Phương trình có thể có 2 nghiệm hoặc vô nghiệm.',
     
     // Exercise pages
     'practice_add_subtract_integers' => 'Luyện Tập Cộng Trừ Số Nguyên',
@@ -75,6 +77,7 @@ return [
     'practice_power' => 'Luyện Tập Luỹ Thừa',
     'practice_absolute_value' => 'Luyện Tập Trị Tuyệt Đối',
     'practice_find_x' => 'Tìm X - Phương Trình Bậc Nhất',
+    'practice_find_x2' => 'Tìm X - Phương Trình Bậc Hai Đơn Giản',
     'two_solutions_note' => '* Một số phương trình có thể có 2 nghiệm, vui lòng nhập cả hai.',
     'difficulty_expert' => 'Rất khó',
     

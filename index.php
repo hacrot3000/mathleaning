@@ -147,6 +147,14 @@ $lang_code = getLangCode();
                             <?php echo $lang['find_x_practice_desc']; ?>
                         </div>
                     </a>
+                    
+                    <a href="exercises/?type=timx2" class="feature-card">
+                        <div class="feature-icon">x² = ?</div>
+                        <div class="feature-title"><?php echo $lang['find_x2_practice']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['find_x2_practice_desc']; ?>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>

@@ -64,6 +64,8 @@ return [
     'absolute_value_practice_desc' => 'Practice calculations with absolute values.<br>Includes integers, decimals, fractions, mixed numbers and compositions.',
     'find_x_practice' => 'Find X - Linear Equations',
     'find_x_practice_desc' => 'Solve linear equations with one variable to find x.<br>Coefficients can be integers, fractions, or mixed numbers. X can appear in parentheses, absolute values, or odd powers.',
+    'find_x2_practice' => 'Find X - Simple Quadratic Equations',
+    'find_x2_practice_desc' => 'Solve simple quadratic equations of the form ax² = b.<br>Coefficients can be integers, fractions, or mixed numbers. Equations may have 2 solutions or no solution.',
     
     // Exercise pages
     'practice_add_subtract_integers' => 'Practice Add/Subtract Integers',
@@ -75,6 +77,7 @@ return [
     'practice_power' => 'Practice Powers/Exponents',
     'practice_absolute_value' => 'Practice Absolute Value',
     'practice_find_x' => 'Find X - Linear Equations',
+    'practice_find_x2' => 'Find X - Simple Quadratic Equations',
     'two_solutions_note' => '* Some equations may have 2 solutions, please enter both.',
     'difficulty_expert' => 'Expert',
     

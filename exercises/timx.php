@@ -1,5 +1,9 @@
 <!-- Exercise content: Tìm X -->
-<h1><?php echo $lang['practice_find_x']; ?></h1>
+<?php
+// Mode will be set by index.php
+$QUADRATIC_MODE = ($mode === 'quadratic');
+?>
+<h1><?php echo $QUADRATIC_MODE ? $lang['practice_find_x2'] : $lang['practice_find_x']; ?></h1>
 
 <div style="font-size: 100%; color: #666; margin-bottom: 20px;">
     <strong><?php echo $lang['difficulty']; ?>:</strong> <span id="difficulty-level"></span>
@@ -31,9 +35,11 @@
     var problemHistory = [];
     var problemCount = 0;
     var historyManager = null;
-    var storage = createLocalStorageManager('timx');
-    var problemCountManager = createProblemCountManager('timx');
-    var hasTwoSolutions = false; // Có 2 nghiệm (khi có trị tuyệt đối)
+    var QUADRATIC_MODE = <?php echo $QUADRATIC_MODE ? 'true' : 'false'; ?>;
+    var storageKey = QUADRATIC_MODE ? 'timx2' : 'timx';
+    var storage = createLocalStorageManager(storageKey);
+    var problemCountManager = createProblemCountManager(storageKey);
+    var hasTwoSolutions = false; // Có 2 nghiệm (khi có trị tuyệt đối hoặc phương trình bậc 2)
 
     // Initialize
     $(function () {
@@ -371,8 +377,8 @@
             xLatex = '\\dfrac{' + numLatex + '}{' + (term.coefficient.den || term.coefficient.value) + '}';
         } else {
             // x thông thường
-            if (term.xPower > 1 && term.xPower % 2 === 1) {
-                // Luỹ thừa lẻ
+            if (term.xPower > 1) {
+                // Luỹ thừa (bao gồm cả chẵn và lẻ)
                 xLatex = 'x^{' + term.xPower + '}';
             } else {
                 xLatex = 'x';
@@ -413,7 +419,8 @@
             }
             xText = '(' + numText + ')/' + term.coefficient.den;
         } else {
-            if (term.xPower > 1 && term.xPower % 2 === 1) {
+            if (term.xPower > 1) {
+                // Luỹ thừa (bao gồm cả chẵn và lẻ)
                 xText = 'x^' + term.xPower;
             } else {
                 xText = 'x';
@@ -525,92 +532,208 @@
         
         hasTwoSolutions = false;
         
-        // Determine x power (must be consistent)
-        var xPower = 1; // Default
-        if (config.allow_power && Math.random() < (config.power_probability || 0)) {
-            // Generate odd power only
-            var oddPowers = [];
-            for (var p = config.power_min || 1; p <= (config.power_max || 5); p++) {
-                if (p % 2 === 1) {
-                    oddPowers.push(p);
-                }
-            }
-            if (oddPowers.length > 0) {
-                xPower = oddPowers[getRndInteger(0, oddPowers.length - 1)];
-            }
-        }
-        
-        // Determine if x appears multiple times
-        var multipleX = config.allow_multiple_x && Math.random() < (config.multiple_x_probability || 0);
-        
         // Generate left side terms
         var leftTerms = [];
         var rightTerms = [];
         
-        // Left side: at least one x term
-        var numXTermsLeft = multipleX ? getRndInteger(1, 2) : 1;
-        for (var i = 0; i < numXTermsLeft; i++) {
-            leftTerms.push(generateTerm(config, true, xPower, false));
-        }
-        
-        // Add constant terms to left side
-        var numConstantsLeft = getRndInteger(0, 1);
-        for (var i = 0; i < numConstantsLeft; i++) {
-            leftTerms.push(generateConstantTerm(config));
-        }
-        
-        // Right side: may have x terms if multipleX
-        if (multipleX) {
-            var numXTermsRight = getRndInteger(0, 1);
-            for (var i = 0; i < numXTermsRight; i++) {
-                // Đảm bảo x trong phân số không nằm sau phép chia
-                // Nếu có x trong phân số, chỉ đặt ở vế trái hoặc đầu vế phải
-                var xInFraction = config.allow_x_in_fraction && Math.random() < (config.x_in_fraction_probability || 0);
-                // Nếu x trong phân số và đã có term ở right, không thêm nữa
-                if (xInFraction && rightTerms.length > 0) {
-                    xInFraction = false;
+        if (QUADRATIC_MODE) {
+            // Phương trình bậc 2 đơn giản: ax² = b
+            // Left side: chỉ có một term ax²
+            var xPower = config.force_power ? 2 : 2; // Luôn là x²
+            var coefficient = generateCoefficient(config);
+            
+            // Đảm bảo hệ số dương để có nghiệm
+            var coeffValue = calculateCoefficient(coefficient);
+            if (coeffValue < 0) {
+                if (coefficient.type === 'integer') {
+                    coefficient.value = Math.abs(coefficient.value);
+                } else if (coefficient.type === 'fraction') {
+                    coefficient.num = Math.abs(coefficient.num);
+                } else if (coefficient.type === 'mixed') {
+                    coefficient.whole = Math.abs(coefficient.whole);
                 }
-                rightTerms.push(generateTerm(config, true, xPower, xInFraction));
             }
-        }
-        
-        // Right side: at least one constant term
-        var numConstantsRight = getRndInteger(1, 2);
-        for (var i = 0; i < numConstantsRight; i++) {
-            rightTerms.push(generateConstantTerm(config));
-        }
-        
-        // Đảm bảo phân số chứa x không nằm sau phép chia
-        // Kiểm tra và điều chỉnh: nếu có x trong phân số ở vế phải và có term trước nó, di chuyển lên đầu
-        var xInFractionIndex = -1;
-        for (var i = 0; i < rightTerms.length; i++) {
-            if (rightTerms[i].hasX && rightTerms[i].xInFraction && i > 0) {
-                xInFractionIndex = i;
-                break;
+            
+            leftTerms.push({
+                coefficient: coefficient,
+                hasX: true,
+                xPower: 2,
+                xInFraction: false,
+                hasAbsolute: false,
+                hasParentheses: false
+            });
+            
+            // Right side: chỉ có hằng số
+            var constant = generateConstantTerm(config);
+            var constValue = calculateConstantValue(constant);
+            
+            // Đảm bảo constant không âm (>= 0)
+            if (constValue < 0) {
+                if (constant.type === 'integer' || constant.type === 'decimal') {
+                    constant.value = Math.abs(constant.value);
+                } else if (constant.type === 'fraction') {
+                    constant.num = Math.abs(constant.num);
+                } else if (constant.type === 'mixed') {
+                    constant.mixedWhole = Math.abs(constant.mixedWhole);
+                }
+                constValue = calculateConstantValue(constant);
             }
+            
+            // Ở các độ khó Medium trở lên, bắt buộc constant > 0 (không cho phép ax² = 0)
+            if (difficultyLevel !== 'easy') {
+                var attempts = 0;
+                while (Math.abs(constValue) < 0.01 && attempts < 10) {
+                    // Regenerate constant nếu = 0
+                    constant = generateConstantTerm(config);
+                    constValue = calculateConstantValue(constant);
+                    
+                    // Đảm bảo không âm
+                    if (constValue < 0) {
+                        if (constant.type === 'integer' || constant.type === 'decimal') {
+                            constant.value = Math.abs(constant.value);
+                        } else if (constant.type === 'fraction') {
+                            constant.num = Math.abs(constant.num);
+                        } else if (constant.type === 'mixed') {
+                            constant.mixedWhole = Math.abs(constant.mixedWhole);
+                        }
+                        constValue = calculateConstantValue(constant);
+                    }
+                    
+                    // Nếu vẫn = 0, set = 1
+                    if (Math.abs(constValue) < 0.01) {
+                        if (constant.type === 'integer' || constant.type === 'decimal') {
+                            constant.value = 1;
+                        } else if (constant.type === 'fraction') {
+                            constant.num = 1;
+                        } else if (constant.type === 'mixed') {
+                            constant.mixedWhole = 1;
+                        }
+                        constValue = 1;
+                    }
+                    
+                    attempts++;
+                }
+            }
+            
+            rightTerms.push(constant);
+            
+            // Solve: ax² = b => x² = b/a => x = ±√(b/a)
+            coeffValue = calculateCoefficient(leftTerms[0].coefficient);
+            constValue = calculateConstantValue(rightTerms[0]);
+            
+            var ratio = constValue / coeffValue;
+            if (ratio < 0) {
+                // Vô nghiệm - regenerate
+                generateNewProblem();
+                return;
+            }
+            
+            var sqrtValue = Math.sqrt(ratio);
+            sqrtValue = roundToTwoDecimals(sqrtValue);
+            
+            var solutions;
+            // Nếu b = 0, chỉ có 1 nghiệm x = 0
+            if (Math.abs(constValue) < 0.0001) {
+                solutions = [0];
+                hasTwoSolutions = false;
+            } else {
+                // Nếu b > 0, có 2 nghiệm x = ±√(b/a)
+                solutions = [sqrtValue, roundToTwoDecimals(-sqrtValue)];
+                hasTwoSolutions = true;
+            }
+            
+            currentProblem = {
+                leftTerms: leftTerms,
+                rightTerms: rightTerms,
+                solutions: solutions,
+                xPower: 2,
+                difficulty: difficultyLevel
+            };
+        } else {
+            // Phương trình bậc 1 (logic gốc)
+            // Determine x power (must be consistent)
+            var xPower = 1; // Default
+            if (config.allow_power && Math.random() < (config.power_probability || 0)) {
+                // Generate odd power only
+                var oddPowers = [];
+                for (var p = config.power_min || 1; p <= (config.power_max || 5); p++) {
+                    if (p % 2 === 1) {
+                        oddPowers.push(p);
+                    }
+                }
+                if (oddPowers.length > 0) {
+                    xPower = oddPowers[getRndInteger(0, oddPowers.length - 1)];
+                }
+            }
+            
+            // Determine if x appears multiple times
+            var multipleX = config.allow_multiple_x && Math.random() < (config.multiple_x_probability || 0);
+            
+            // Left side: at least one x term
+            var numXTermsLeft = multipleX ? getRndInteger(1, 2) : 1;
+            for (var i = 0; i < numXTermsLeft; i++) {
+                leftTerms.push(generateTerm(config, true, xPower, false));
+            }
+            
+            // Add constant terms to left side
+            var numConstantsLeft = getRndInteger(0, 1);
+            for (var i = 0; i < numConstantsLeft; i++) {
+                leftTerms.push(generateConstantTerm(config));
+            }
+            
+            // Right side: may have x terms if multipleX
+            if (multipleX) {
+                var numXTermsRight = getRndInteger(0, 1);
+                for (var i = 0; i < numXTermsRight; i++) {
+                    // Đảm bảo x trong phân số không nằm sau phép chia
+                    // Nếu có x trong phân số, chỉ đặt ở vế trái hoặc đầu vế phải
+                    var xInFraction = config.allow_x_in_fraction && Math.random() < (config.x_in_fraction_probability || 0);
+                    // Nếu x trong phân số và đã có term ở right, không thêm nữa
+                    if (xInFraction && rightTerms.length > 0) {
+                        xInFraction = false;
+                    }
+                    rightTerms.push(generateTerm(config, true, xPower, xInFraction));
+                }
+            }
+            
+            // Right side: at least one constant term
+            var numConstantsRight = getRndInteger(1, 2);
+            for (var i = 0; i < numConstantsRight; i++) {
+                rightTerms.push(generateConstantTerm(config));
+            }
+            
+            // Đảm bảo phân số chứa x không nằm sau phép chia
+            // Kiểm tra và điều chỉnh: nếu có x trong phân số ở vế phải và có term trước nó, di chuyển lên đầu
+            var xInFractionIndex = -1;
+            for (var i = 0; i < rightTerms.length; i++) {
+                if (rightTerms[i].hasX && rightTerms[i].xInFraction && i > 0) {
+                    xInFractionIndex = i;
+                    break;
+                }
+            }
+            if (xInFractionIndex > 0) {
+                // Di chuyển term có x trong phân số lên đầu
+                var xTerm = rightTerms.splice(xInFractionIndex, 1)[0];
+                rightTerms.unshift(xTerm);
+            }
+            
+            // Solve equation
+            var solutions = solveEquation(leftTerms, rightTerms);
+            
+            if (!solutions || solutions.length === 0) {
+                // Regenerate if no solution
+                generateNewProblem();
+                return;
+            }
+            
+            currentProblem = {
+                leftTerms: leftTerms,
+                rightTerms: rightTerms,
+                solutions: solutions,
+                xPower: xPower,
+                difficulty: difficultyLevel
+            };
         }
-        if (xInFractionIndex > 0) {
-            // Di chuyển term có x trong phân số lên đầu
-            var xTerm = rightTerms.splice(xInFractionIndex, 1)[0];
-            rightTerms.unshift(xTerm);
-        }
-        
-        // Solve equation
-        var solutions = solveEquation(leftTerms, rightTerms);
-        
-        if (!solutions || solutions.length === 0) {
-            // Regenerate if no solution
-            generateNewProblem();
-            return;
-        }
-        
-        currentProblem = {
-            leftTerms: leftTerms,
-            rightTerms: rightTerms,
-            solutions: solutions,
-            xPower: xPower,
-            difficulty: difficultyLevel
-        };
         
         currentWrongAnswers = [];
         
@@ -676,7 +799,17 @@
         renderMath(latex, 'problem-display');
         
         // Show/hide second input based on number of solutions
+        // Check if two solutions are actually different (not just 0 and -0)
         hasTwoSolutions = currentProblem.solutions.length > 1;
+        if (hasTwoSolutions && currentProblem.solutions.length === 2) {
+            var sol1 = roundToTwoDecimals(currentProblem.solutions[0]);
+            var sol2 = roundToTwoDecimals(currentProblem.solutions[1]);
+            if (Math.abs(sol1 - sol2) < 0.01) {
+                // Hai nghiệm giống nhau (ví dụ: 0 và -0), chỉ tính là 1 nghiệm
+                hasTwoSolutions = false;
+            }
+        }
+        
         if (hasTwoSolutions) {
             $('#answer-input-2').show();
             $('#two-solutions-note').show();
@@ -729,9 +862,16 @@
         var solutions = currentProblem.solutions.map(function(s) { return roundToTwoDecimals(s); });
         
         if (hasTwoSolutions && solutions.length === 2) {
+            // Phương trình có 2 nghiệm, yêu cầu nhập cả 2
+            if (answer2Str === '' || answer2 === null) {
+                // Chưa nhập nghiệm thứ 2, hiển thị cảnh báo
+                alert(t('two_solutions_note', 'Phương trình này có 2 nghiệm, vui lòng nhập cả hai!'));
+                return;
+            }
+            
             // Check if both answers match (order doesn't matter)
             var matches1 = Math.abs(answer1 - solutions[0]) < 0.01 || Math.abs(answer1 - solutions[1]) < 0.01;
-            var matches2 = answer2 !== null && (Math.abs(answer2 - solutions[0]) < 0.01 || Math.abs(answer2 - solutions[1]) < 0.01);
+            var matches2 = Math.abs(answer2 - solutions[0]) < 0.01 || Math.abs(answer2 - solutions[1]) < 0.01;
             
             if (matches1 && matches2 && Math.abs(answer1 - answer2) > 0.01) {
                 correct = true;
