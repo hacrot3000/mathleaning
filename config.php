@@ -29,7 +29,7 @@ $config_general = [
 $config_congtru = [
     // Độ khó Dễ (Câu 1-5)
     'easy' => [
-        'threshold' => 5,           // Số câu hỏi ở độ khó này
+        'threshold' => 3,           // Số câu hỏi ở độ khó này
         'min' => -15,               // Số nhỏ nhất
         'max' => 15,                // Số lớn nhất
         'num_operands' => 2,        // Số toán hạng (2 = 1 toán tử)
@@ -38,7 +38,7 @@ $config_congtru = [
     
     // Độ khó Trung bình (Câu 6-15)
     'medium' => [
-        'threshold' => 10,          // Tổng câu hỏi đến hết độ khó này
+        'threshold' => 7,          // Tổng câu hỏi đến hết độ khó này
         'min' => -50,
         'max' => 50,
         'num_operands_min' => 2,    // Số toán hạng tối thiểu
@@ -60,7 +60,7 @@ $config_congtru = [
 $config_nhanchia = [
     // Độ khó Dễ (Câu 1-5) - Chỉ nhân
     'easy' => [
-        'threshold' => 5,
+        'threshold' => 4,
         'min' => 2,                 // Số nhỏ nhất
         'max' => 12,                // Số lớn nhất (bảng nhân cơ bản)
         'operators' => ['×'],       // Chỉ nhân
@@ -69,7 +69,7 @@ $config_nhanchia = [
     
     // Độ khó Trung bình (Câu 6-15) - Nhân và chia
     'medium' => [
-        'threshold' => 10,
+        'threshold' => 8,
         'min' => -12,
         'max' => 12,
         'operators' => ['×', '÷'],  // Cả nhân và chia
