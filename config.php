@@ -112,7 +112,7 @@ $config_nhanchia = [
 $config_phanso = [
     // Độ khó Dễ (Câu 1-5)
     'easy' => [
-        'threshold' => 5,           // Số câu hỏi ở độ khó này (câu 1-5)
+        'threshold' => 4,           // Số câu hỏi ở độ khó này (câu 1-5)
         'min' => -15,               // Giá trị nhỏ nhất cho tử số và mẫu số của phân số
         'max' => 15,                // Giá trị lớn nhất cho tử số và mẫu số của phân số
         'num_operands' => 2,        // Số toán hạng cố định (2 phân số = 1 toán tử, ví dụ: 1/2 + 3/4)
@@ -121,7 +121,7 @@ $config_phanso = [
     
     // Độ khó Trung bình (Câu 6-10)
     'medium' => [
-        'threshold' => 10,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
+        'threshold' => 7,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
         'min' => -10,               // Giá trị nhỏ nhất cho tử/mẫu (phạm vi nhỏ hơn để dễ tính toán)
         'max' => 10,                // Giá trị lớn nhất cho tử/mẫu
         'num_operands_min' => 2,    // Số toán hạng tối thiểu (có thể có 2 hoặc 3 phân số)
@@ -156,7 +156,7 @@ $config_phanso = [
 $config_nhanchiaphanso = [
     // Độ khó Dễ (Câu 1-5) - Chỉ phép nhân
     'easy' => [
-        'threshold' => 5,           // Số câu hỏi ở độ khó này (câu 1-5)
+        'threshold' => 3,           // Số câu hỏi ở độ khó này (câu 1-5)
         'min' => -10,               // Giá trị nhỏ nhất cho tử số và mẫu số
         'max' => 10,                // Giá trị lớn nhất cho tử số và mẫu số
         'num_operands' => 2,        // Số toán hạng cố định (2 phân số = 1 toán tử)
@@ -165,7 +165,7 @@ $config_nhanchiaphanso = [
     
     // Độ khó Trung bình (Câu 6-10) - Có cả nhân và chia
     'medium' => [
-        'threshold' => 10,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
+        'threshold' => 7,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
         'min' => -10,               // Giá trị nhỏ nhất cho tử/mẫu
         'max' => 10,                // Giá trị lớn nhất cho tử/mẫu
         'num_operands_min' => 2,    // Số toán hạng tối thiểu
@@ -200,7 +200,7 @@ $config_nhanchiaphanso = [
 $config_luythua = [
     // Độ khó Dễ (Câu 1-5) - Chỉ số nguyên và số thực
     'easy' => [
-        'threshold' => 5,           // Số câu hỏi ở độ khó này (câu 1-5)
+        'threshold' => 3,           // Số câu hỏi ở độ khó này (câu 1-5)
         'num_operands_min' => 2,    // Số toán hạng tối thiểu (ví dụ: 2^3 + 5)
         'num_operands_max' => 3,    // Số toán hạng tối đa (ví dụ: 2^3 + 5 - 3^2, có 3 toán hạng = 2 toán tử)
         'number_types' => ['integer'], // Chỉ cho phép số nguyên (không có phân số, hỗn số)
@@ -215,7 +215,7 @@ $config_luythua = [
     
     // Độ khó Vừa (Câu 6-10) - Thêm phân số
     'medium' => [
-        'threshold' => 10,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
+        'threshold' => 7,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
         'num_operands_min' => 2,    // Số toán hạng tối thiểu
         'num_operands_max' => 3,    // Số toán hạng tối đa
         'number_types' => ['integer', 'decimal', 'fraction'], // Cho phép số nguyên, số thập phân, và phân số
@@ -232,7 +232,7 @@ $config_luythua = [
     
     // Độ khó Khá (Câu 11-15) - Thêm hỗn số
     'hard' => [
-        'threshold' => 15,          // Tổng số câu hỏi đến hết độ khó này (câu 1-15)
+        'threshold' => 10,          // Tổng số câu hỏi đến hết độ khó này (câu 1-15)
         'num_operands_min' => 2,    // Số toán hạng tối thiểu
         'num_operands_max' => 4,    // Số toán hạng tối đa tăng lên 4 (ví dụ: 2^3 + 5 - 3^2 + 1/2)
         'number_types' => ['integer', 'decimal', 'fraction', 'mixed'], // Thêm hỗn số vào danh sách
@@ -281,7 +281,7 @@ $config_luythua = [
 $config_trituyetdoi = [
     // Độ khó Dễ (Câu 1-5) - Chỉ số nguyên và số thực
     'easy' => [
-        'threshold' => 5,           // Số câu hỏi ở độ khó này (câu 1-5)
+        'threshold' => 3,           // Số câu hỏi ở độ khó này (câu 1-5)
         'num_operands_min' => 2,    // Số toán hạng tối thiểu (ví dụ: |2| + 5)
         'num_operands_max' => 3,    // Số toán hạng tối đa (ví dụ: |2| + 5 - |3|)
         'number_types' => ['integer'], // Chỉ cho phép số nguyên
@@ -294,7 +294,7 @@ $config_trituyetdoi = [
     
     // Độ khó Vừa (Câu 6-10) - Thêm phân số
     'medium' => [
-        'threshold' => 10,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
+        'threshold' => 7,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
         'num_operands_min' => 2,    // Số toán hạng tối thiểu
         'num_operands_max' => 3,    // Số toán hạng tối đa
         'number_types' => ['integer', 'decimal', 'fraction'], // Cho phép số nguyên, số thập phân, và phân số
@@ -309,7 +309,7 @@ $config_trituyetdoi = [
     
     // Độ khó Khá (Câu 11-15) - Thêm hỗn số
     'hard' => [
-        'threshold' => 15,          // Tổng số câu hỏi đến hết độ khó này (câu 1-15)
+        'threshold' => 10,          // Tổng số câu hỏi đến hết độ khó này (câu 1-15)
         'num_operands_min' => 2,    // Số toán hạng tối thiểu
         'num_operands_max' => 4,    // Số toán hạng tối đa tăng lên 4
         'number_types' => ['integer', 'decimal', 'fraction', 'mixed'], // Thêm hỗn số
@@ -354,7 +354,7 @@ $config_trituyetdoi = [
 $config_timx = [
     // Độ khó Dễ (Câu 1-5) - Chỉ số nguyên, x đơn giản
     'easy' => [
-        'threshold' => 5,           // Số câu hỏi ở độ khó này (câu 1-5)
+        'threshold' => 3,           // Số câu hỏi ở độ khó này (câu 1-5)
         'number_types' => ['integer'], // Chỉ cho phép số nguyên trong phương trình
         'coefficient_types' => ['integer'], // Hệ số của x chỉ là số nguyên (ví dụ: 3x, -5x)
         'x_appearances' => ['simple'], // x xuất hiện đơn giản (không có ngoặc, trị tuyệt đối, luỹ thừa)
@@ -372,7 +372,7 @@ $config_timx = [
     
     // Độ khó Vừa (Câu 6-10) - Thêm phân số, x có thể nhiều lần
     'medium' => [
-        'threshold' => 10,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
+        'threshold' => 7,          // Tổng số câu hỏi đến hết độ khó này (câu 1-10)
         'number_types' => ['integer', 'fraction'], // Cho phép số nguyên và phân số
         'coefficient_types' => ['integer', 'fraction'], // Hệ số của x có thể là số nguyên hoặc phân số
         'x_appearances' => ['simple', 'multiple'], // x có thể xuất hiện đơn giản hoặc nhiều lần
@@ -395,7 +395,7 @@ $config_timx = [
     
     // Độ khó Khá (Câu 11-15) - Thêm hỗn số, luỹ thừa lẻ, trị tuyệt đối
     'hard' => [
-        'threshold' => 15,          // Tổng số câu hỏi đến hết độ khó này (câu 1-15)
+        'threshold' => 10,          // Tổng số câu hỏi đến hết độ khó này (câu 1-15)
         'number_types' => ['integer', 'decimal', 'fraction', 'mixed'], // Thêm số thập phân và hỗn số
         'coefficient_types' => ['integer', 'fraction', 'mixed'], // Hệ số có thể là số nguyên, phân số, hoặc hỗn số
         'x_appearances' => ['simple', 'multiple', 'power', 'absolute'], // x có thể có nhiều dạng

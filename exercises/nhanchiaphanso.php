@@ -139,6 +139,36 @@ $FORCE_MIXED_MODE = ($mode === 'mixed');
             }
         }
         
+        // Ensure at most 1 integer (den = 1), rest must be proper fractions
+        var integerCount = 0;
+        for (var i = 0; i < fractions.length; i++) {
+            if (fractions[i].den === 1) {
+                integerCount++;
+            }
+        }
+        
+        // If all are integers, convert some to fractions
+        if (integerCount > 1) {
+            var indicesToConvert = [];
+            for (var i = 0; i < fractions.length; i++) {
+                if (fractions[i].den === 1) {
+                    indicesToConvert.push(i);
+                }
+            }
+            
+            // Shuffle and convert all but one to fractions
+            for (var i = 0; i < indicesToConvert.length - 1; i++) {
+                var idx = indicesToConvert[i];
+                var num = fractions[idx].num;
+                var den = getRndInteger(2, Math.max(2, Math.abs(maxVal)));
+                fractions[idx] = {
+                    num: num * den + getRndInteger(1, den - 1),
+                    den: den,
+                    normalized: true
+                };
+            }
+        }
+        
         var result = fractions[0];
         for (var i = 0; i < operators.length; i++) {
             if (operators[i] === '×') {
