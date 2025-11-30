@@ -9,8 +9,8 @@
 // Cấu hình ngưỡng "Perfect Answers" (câu trả lời đúng ngay lần đầu) cho mỗi exercise type
 // Khi số câu đúng ngay lần đầu >= ngưỡng này, tab ngày đó sẽ được highlight màu xanh
 $config_perfect_threshold = [
-    'congtrusonguyen' => 50,        // Ngưỡng cho Cộng Trừ Số Nguyên
-    'nhanchiasonguyen' => 50,       // Ngưỡng cho Nhân Chia Số Nguyên
+    'congtrusonguyen' => 35,        // Ngưỡng cho Cộng Trừ Số Nguyên
+    'nhanchiasonguyen' => 35,       // Ngưỡng cho Nhân Chia Số Nguyên
     'phanso' => 30,                  // Ngưỡng cho Cộng Trừ Phân Số
     'phanso_mixed' => 30,            // Ngưỡng cho Cộng Trừ Hỗn Số
     'nhanchiaphanso' => 30,          // Ngưỡng cho Nhân Chia Phân Số
@@ -19,6 +19,11 @@ $config_perfect_threshold = [
     'trituyetdoi' => 40              // Ngưỡng cho Trị Tuyệt Đối
 ];
 
+// Cấu hình chung
+$config_general = [
+    'decimal_places' => 2,          // Số chữ số thập phân tối đa cho phép chia
+    'division_integer_ratio' => 0.7 // Tỉ lệ kết quả chia là số nguyên (70%)
+];
 
 // Cấu hình cho Cộng Trừ Số Nguyên
 $config_congtru = [
@@ -33,9 +38,9 @@ $config_congtru = [
     
     // Độ khó Trung bình (Câu 6-15)
     'medium' => [
-        'threshold' => 15,          // Tổng câu hỏi đến hết độ khó này
-        'min' => -99,
-        'max' => 99,
+        'threshold' => 10,          // Tổng câu hỏi đến hết độ khó này
+        'min' => -50,
+        'max' => 50,
         'num_operands_min' => 2,    // Số toán hạng tối thiểu
         'num_operands_max' => 3,    // Số toán hạng tối đa
         'require_negative' => true
@@ -43,8 +48,8 @@ $config_congtru = [
     
     // Độ khó Khó (Câu 16+)
     'hard' => [
-        'min' => -1000,             // Có thể thay đổi thành -100, -500, v.v.
-        'max' => 1000,              // Có thể thay đổi thành 100, 500, v.v.
+        'min' => -100,             // Có thể thay đổi thành -100, -500, v.v.
+        'max' => 100,              // Có thể thay đổi thành 100, 500, v.v.
         'num_operands_min' => 2,
         'num_operands_max' => 3,
         'require_negative' => true
@@ -64,7 +69,7 @@ $config_nhanchia = [
     
     // Độ khó Trung bình (Câu 6-15) - Nhân và chia
     'medium' => [
-        'threshold' => 15,
+        'threshold' => 10,
         'min' => -12,
         'max' => 12,
         'operators' => ['×', '÷'],  // Cả nhân và chia
@@ -73,35 +78,30 @@ $config_nhanchia = [
     
     // Độ khó Khó (Câu 16+)
     'hard' => [
-        'min' => -50,               // Có thể thay đổi thành -100, -200, v.v.
-        'max' => 50,                // Có thể thay đổi thành 100, 200, v.v.
+        'min' => -20,               // Có thể thay đổi thành -100, -200, v.v.
+        'max' => 30,                // Có thể thay đổi thành 100, 200, v.v.
         'operators' => ['×', '÷'],
         'require_negative' => true
     ]
 ];
 
-// Cấu hình chung
-$config_general = [
-    'decimal_places' => 2,          // Số chữ số thập phân tối đa cho phép chia
-    'division_integer_ratio' => 0.7 // Tỉ lệ kết quả chia là số nguyên (70%)
-];
 
 // Cấu hình cho Cộng Trừ Phân Số
 $config_phanso = [
     // Độ khó Dễ (Câu 1-5)
     'easy' => [
         'threshold' => 5,           // Số câu hỏi ở độ khó này
-        'min' => -20,               // Giá trị nhỏ nhất cho tử/mẫu
-        'max' => 20,                // Giá trị lớn nhất cho tử/mẫu
+        'min' => -15,               // Giá trị nhỏ nhất cho tử/mẫu
+        'max' => 15,                // Giá trị lớn nhất cho tử/mẫu
         'num_operands' => 2,        // Số toán hạng (2 = 1 toán tử)
         'require_negative' => false // Bắt buộc có phân số âm
     ],
     
     // Độ khó Trung bình (Câu 6-15)
     'medium' => [
-        'threshold' => 15,          // Tổng câu hỏi đến hết độ khó này
-        'min' => -50,
-        'max' => 50,
+        'threshold' => 10,          // Tổng câu hỏi đến hết độ khó này
+        'min' => -30,
+        'max' => 30,
         'num_operands_min' => 2,    // Số toán hạng tối thiểu
         'num_operands_max' => 3,    // Số toán hạng tối đa
         'require_negative' => true
@@ -109,8 +109,8 @@ $config_phanso = [
     
     // Độ khó Khó (Câu 16+)
     'hard' => [
-        'min' => -100,              // Có thể thay đổi giới hạn tùy ý
-        'max' => 100,               // Có thể thay đổi giới hạn tùy ý
+        'min' => -50,              // Có thể thay đổi giới hạn tùy ý
+        'max' => 50,               // Có thể thay đổi giới hạn tùy ý
         'num_operands_min' => 2,
         'num_operands_max' => 3,
         'require_negative' => true
@@ -118,13 +118,13 @@ $config_phanso = [
     
     // Cấu hình hỗn số (Mixed Numbers)
     'mixed_number' => [
-        'start_from' => 12,         // Bắt đầu xuất hiện hỗn số từ câu thứ n
+        'start_from' => 7,         // Bắt đầu xuất hiện hỗn số từ câu thứ n
         'probability' => 0.3,       // Xác suất xuất hiện hỗn số (30%)
         'whole_min' => 1,           // Phần nguyên tối thiểu
         'whole_max' => 6,          // Phần nguyên tối đa
-        'numerator_max' => 30,      // Tử số tối đa (2 chữ số)
-        'denominator_min' => 5,     // Mẫu số tối thiểu
-        'denominator_max' => 15     // Mẫu số tối đa
+        'numerator_max' => 15,      // Tử số tối đa (2 chữ số)
+        'denominator_min' => 2,     // Mẫu số tối thiểu
+        'denominator_max' => 12     // Mẫu số tối đa
     ]
 ];
 
@@ -141,7 +141,7 @@ $config_nhanchiaphanso = [
     
     // Độ khó Trung bình (Câu 6-15) - Nhân và chia
     'medium' => [
-        'threshold' => 15,          // Tổng câu hỏi đến hết độ khó này
+        'threshold' => 10,          // Tổng câu hỏi đến hết độ khó này
         'min' => -20,
         'max' => 20,
         'num_operands_min' => 2,    // Số toán hạng tối thiểu
@@ -160,13 +160,13 @@ $config_nhanchiaphanso = [
     
     // Cấu hình hỗn số (Mixed Numbers)
     'mixed_number' => [
-        'start_from' => 12,         // Bắt đầu xuất hiện hỗn số từ câu thứ n
+        'start_from' => 7,         // Bắt đầu xuất hiện hỗn số từ câu thứ n
         'probability' => 0.3,       // Xác suất xuất hiện hỗn số (30%)
         'whole_min' => 1,           // Phần nguyên tối thiểu
         'whole_max' => 6,          // Phần nguyên tối đa
-        'numerator_max' => 30,      // Tử số tối đa (2 chữ số)
-        'denominator_min' => 5,     // Mẫu số tối thiểu
-        'denominator_max' => 15     // Mẫu số tối đa
+        'numerator_max' => 15,      // Tử số tối đa (2 chữ số)
+        'denominator_min' => 2,     // Mẫu số tối thiểu
+        'denominator_max' => 12     // Mẫu số tối đa
     ]
 ];
 
@@ -174,7 +174,7 @@ $config_nhanchiaphanso = [
 $config_luythua = [
     // Độ khó Dễ (Câu 1-10) - Chỉ số nguyên và số thực
     'easy' => [
-        'threshold' => 10,
+        'threshold' => 5,
         'num_operands_min' => 2,
         'num_operands_max' => 3,        // 1-2 toán tử
         'number_types' => ['integer'], // Chỉ số nguyên
@@ -189,7 +189,7 @@ $config_luythua = [
     
     // Độ khó Vừa (Câu 11-25) - Thêm phân số
     'medium' => [
-        'threshold' => 20,
+        'threshold' => 10,
         'num_operands_min' => 2,
         'num_operands_max' => 3,
         'number_types' => ['integer', 'decimal', 'fraction'],
@@ -206,7 +206,7 @@ $config_luythua = [
     
     // Độ khó Khá (Câu 26-40) - Thêm hỗn số
     'hard' => [
-        'threshold' => 30,
+        'threshold' => 15,
         'num_operands_min' => 2,
         'num_operands_max' => 4,
         'number_types' => ['integer', 'decimal', 'fraction', 'mixed'],
@@ -253,7 +253,7 @@ $config_luythua = [
 $config_trituyetdoi = [
     // Độ khó Dễ (Câu 1-10) - Chỉ số nguyên và số thực
     'easy' => [
-        'threshold' => 10,
+        'threshold' => 5,
         'num_operands_min' => 2,
         'num_operands_max' => 3,        // 1-2 toán tử
         'number_types' => ['integer'], // Chỉ số nguyên
@@ -266,7 +266,7 @@ $config_trituyetdoi = [
     
     // Độ khó Vừa (Câu 11-25) - Thêm phân số
     'medium' => [
-        'threshold' => 20,
+        'threshold' => 10,
         'num_operands_min' => 2,
         'num_operands_max' => 3,
         'number_types' => ['integer', 'decimal', 'fraction'],
@@ -281,7 +281,7 @@ $config_trituyetdoi = [
     
     // Độ khó Khá (Câu 26-40) - Thêm hỗn số
     'hard' => [
-        'threshold' => 30,
+        'threshold' => 15,
         'num_operands_min' => 2,
         'num_operands_max' => 4,
         'number_types' => ['integer', 'decimal', 'fraction', 'mixed'],
@@ -307,13 +307,13 @@ $config_trituyetdoi = [
         'allow_composite' => true,
         'composite_probability' => 0.4, // 40% số hạng là tổ hợp
         'absolute_probability' => 0.8,
-        'integer_min' => -20,
-        'integer_max' => 20,
-        'fraction_min' => -15,
-        'fraction_max' => 15,
+        'integer_min' => -15,
+        'integer_max' => 15,
+        'fraction_min' => -10,
+        'fraction_max' => 10,
         'mixed_whole_min' => 1,
         'mixed_whole_max' => 5,
-        'mixed_num_max' => 20,
+        'mixed_num_max' => 15,
         'mixed_den_min' => 2,
         'mixed_den_max' => 10,
         'decimal_places' => 2
