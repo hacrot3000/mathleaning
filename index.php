@@ -139,6 +139,14 @@ $lang_code = getLangCode();
                             <?php echo $lang['absolute_value_practice_desc']; ?>
                         </div>
                     </a>
+                    
+                    <a href="exercises/timx" class="feature-card" style="background: #f093fb; background: -webkit-linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); background: -moz-linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); background: -o-linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="feature-icon">x = ?</div>
+                        <div class="feature-title"><?php echo $lang['find_x_practice']; ?></div>
+                        <div class="feature-description">
+                            <?php echo $lang['find_x_practice_desc']; ?>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>

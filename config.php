@@ -16,7 +16,8 @@ $config_perfect_threshold = [
     'nhanchiaphanso' => 30,          // Ngưỡng cho Nhân Chia Phân Số
     'nhanchiaphanso_mixed' => 20,    // Ngưỡng cho Nhân Chia Hỗn Số
     'luythua' => 40,                 // Ngưỡng cho Luỹ Thừa
-    'trituyetdoi' => 40              // Ngưỡng cho Trị Tuyệt Đối
+    'trituyetdoi' => 40,             // Ngưỡng cho Trị Tuyệt Đối
+    'timx' => 35                     // Ngưỡng cho Tìm X
 ];
 
 // Cấu hình chung
@@ -320,9 +321,118 @@ $config_trituyetdoi = [
     ]
 ];
 
+// Cấu hình cho Tìm X (Phương trình bậc nhất một ẩn)
+$config_timx = [
+    // Độ khó Dễ (Câu 1-10) - Chỉ số nguyên, x đơn giản
+    'easy' => [
+        'threshold' => 5,
+        'number_types' => ['integer'], // Chỉ số nguyên
+        'coefficient_types' => ['integer'], // Hệ số chỉ là số nguyên
+        'x_appearances' => ['simple'], // x xuất hiện đơn giản (không có ngoặc, trị tuyệt đối, luỹ thừa)
+        'x_appearance_probability' => 1.0, // 100% x xuất hiện dạng simple
+        'allow_multiple_x' => false, // Không cho phép x xuất hiện nhiều lần
+        'allow_absolute_value' => false, // Không cho phép trị tuyệt đối
+        'allow_power' => false, // Không cho phép luỹ thừa
+        'allow_parentheses' => false, // Không cho phép ngoặc
+        'allow_x_in_fraction' => false, // Không cho phép x trong phân số
+        'integer_min' => -15,
+        'integer_max' => 15,
+        'coefficient_min' => -10,
+        'coefficient_max' => 10
+    ],
+    
+    // Độ khó Vừa (Câu 11-25) - Thêm phân số, x có thể nhiều lần
+    'medium' => [
+        'threshold' => 10,
+        'number_types' => ['integer', 'fraction'],
+        'coefficient_types' => ['integer', 'fraction'],
+        'x_appearances' => ['simple', 'multiple'], // x có thể xuất hiện nhiều lần
+        'x_appearance_probability' => 0.7, // 70% x xuất hiện dạng simple, 30% multiple
+        'multiple_x_probability' => 0.4, // 40% có x xuất hiện nhiều lần
+        'allow_multiple_x' => true,
+        'allow_absolute_value' => false,
+        'allow_power' => false,
+        'allow_parentheses' => true, // Cho phép ngoặc
+        'parentheses_probability' => 0.3, // 30% có ngoặc
+        'allow_x_in_fraction' => true, // Cho phép x trong phân số
+        'x_in_fraction_probability' => 0.2, // 20% có x trong phân số
+        'integer_min' => -20,
+        'integer_max' => 20,
+        'fraction_min' => -10,
+        'fraction_max' => 10,
+        'coefficient_min' => -15,
+        'coefficient_max' => 15
+    ],
+    
+    // Độ khó Khá (Câu 26-40) - Thêm hỗn số, luỹ thừa lẻ, trị tuyệt đối
+    'hard' => [
+        'threshold' => 15,
+        'number_types' => ['integer', 'decimal', 'fraction', 'mixed'],
+        'coefficient_types' => ['integer', 'fraction', 'mixed'],
+        'x_appearances' => ['simple', 'multiple', 'power', 'absolute'],
+        'x_appearance_probability' => 0.5, // 50% simple, 50% các dạng khác
+        'multiple_x_probability' => 0.5,
+        'power_probability' => 0.3, // 30% có luỹ thừa
+        'absolute_probability' => 0.2, // 20% có trị tuyệt đối
+        'allow_multiple_x' => true,
+        'allow_absolute_value' => true,
+        'allow_power' => true,
+        'power_min' => 1, // Luỹ thừa tối thiểu
+        'power_max' => 5, // Luỹ thừa tối đa (chỉ lẻ: 1, 3, 5)
+        'allow_parentheses' => true,
+        'parentheses_probability' => 0.4,
+        'allow_x_in_fraction' => true,
+        'x_in_fraction_probability' => 0.3,
+        'integer_min' => -20,
+        'integer_max' => 20,
+        'fraction_min' => -15,
+        'fraction_max' => 15,
+        'mixed_whole_min' => 1,
+        'mixed_whole_max' => 5,
+        'mixed_num_max' => 20,
+        'mixed_den_min' => 2,
+        'mixed_den_max' => 10,
+        'coefficient_min' => -15,
+        'coefficient_max' => 15,
+        'decimal_places' => 2
+    ],
+    
+    // Độ khó Rất Khó (Câu 41+) - Tất cả các tính năng
+    'expert' => [
+        'number_types' => ['integer', 'decimal', 'fraction', 'mixed'],
+        'coefficient_types' => ['integer', 'fraction', 'mixed'],
+        'x_appearances' => ['simple', 'multiple', 'power', 'absolute', 'parentheses', 'fraction'],
+        'x_appearance_probability' => 0.3, // 30% simple, 70% các dạng khác
+        'multiple_x_probability' => 0.6,
+        'power_probability' => 0.4,
+        'absolute_probability' => 0.3,
+        'allow_multiple_x' => true,
+        'allow_absolute_value' => true,
+        'allow_power' => true,
+        'power_min' => 1,
+        'power_max' => 7, // Chỉ lẻ: 1, 3, 5, 7
+        'allow_parentheses' => true,
+        'parentheses_probability' => 0.5,
+        'allow_x_in_fraction' => true,
+        'x_in_fraction_probability' => 0.4,
+        'integer_min' => -20,
+        'integer_max' => 20,
+        'fraction_min' => -15,
+        'fraction_max' => 15,
+        'mixed_whole_min' => 1,
+        'mixed_whole_max' => 5,
+        'mixed_num_max' => 20,
+        'mixed_den_min' => 2,
+        'mixed_den_max' => 10,
+        'coefficient_min' => -15,
+        'coefficient_max' => 15,
+        'decimal_places' => 2
+    ]
+];
+
 // Export config dưới dạng JSON để JavaScript có thể sử dụng
 function getConfigAsJSON($config_name) {
-    global $config_congtru, $config_nhanchia, $config_general, $config_phanso, $config_nhanchiaphanso, $config_luythua, $config_trituyetdoi;
+    global $config_congtru, $config_nhanchia, $config_general, $config_phanso, $config_nhanchiaphanso, $config_luythua, $config_trituyetdoi, $config_timx;
     
     $config = null;
     switch ($config_name) {
@@ -343,6 +453,9 @@ function getConfigAsJSON($config_name) {
             break;
         case 'trituyetdoi':
             $config = $config_trituyetdoi;
+            break;
+        case 'timx':
+            $config = $config_timx;
             break;
         case 'general':
             $config = $config_general;

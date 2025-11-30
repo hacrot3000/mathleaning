@@ -1,0 +1,45 @@
+/* CSS for Tìm X exercise */
+
+/* Style input fields to match other exercises */
+#answer-input-1,
+#answer-input-2 {
+    font-size: 200%;
+    padding: 10px 20px;
+    width: 272px;
+    text-align: center;
+    border: 3px solid #4facfe;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+#answer-input-1:focus,
+#answer-input-2:focus {
+    border-color: #00f2fe;
+    outline: none;
+}
+
+/* Override button colors to match theme */
+.submit-btn {
+    background-color: #4facfe;
+}
+
+.submit-btn:hover {
+    background-color: #00f2fe;
+}
+
+/* History section colors */
+.history h3 {
+    border-bottom-color: #4facfe;
+}
+
+.history-item {
+    border-left-color: #4facfe;
+}
+
+.history-problem {
+    color: #4facfe;
+}
+

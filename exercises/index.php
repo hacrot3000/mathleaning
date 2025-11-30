@@ -111,6 +111,17 @@ $exercises = [
         'use_history' => true,
         'config_general' => true,
         'exercise_type' => 'trituyetdoi'
+    ],
+    'timx' => [
+        'file' => 'timx.php',
+        'page_title' => 'Tìm X - Phương Trình Bậc Nhất',
+        'config_type' => 'timx',
+        'extra_css' => ['timx.css'],
+        'use_katex' => true,
+        'use_user' => true,
+        'use_history' => true,
+        'config_general' => true,
+        'exercise_type' => 'timx'
     ]
 ];
 
